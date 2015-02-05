@@ -1,0 +1,32 @@
+apply from: project.file('gradle/scala.gradle')
+apply from: project.file('gradle/ide.gradle')
+apply from: project.file('gradle/package.gradle')
+apply from: project.file('gradle/GitVersion.gradle')
+apply from: project.file('gradle/maven.gradle')
+
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
+group = 'at.pria.koza'
+
+basePom {
+    project {
+        name project.name
+        description ''
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.+'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.1'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
