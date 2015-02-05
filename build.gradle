@@ -3,6 +3,7 @@ apply from: project.file('gradle/ide.gradle')
 apply from: project.file('gradle/package.gradle')
 apply from: project.file('gradle/GitVersion.gradle')
 apply from: project.file('gradle/maven.gradle')
+apply from: project.file('gradle/proto.gradle')
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -28,5 +29,10 @@ dependencies {
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'https://maven.eveoh.nl/content/repositories/releases' }
+    }
+    
+    dependencies {
+        classpath 'ws.antonov.gradle.plugins:gradle-plugin-protobuf:0.9.1'
     }
 }

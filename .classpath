@@ -3,9 +3,11 @@
 	<classpathentry kind="output" path="build/classes/main"/>
 
 	<classpathentry kind="src" path="src/main/scala"/>
+	<classpathentry excluding="**/*.proto" kind="src" path="src/main/proto"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 
 	<classpathentry kind="src" path="src/test/scala" output="build/classes/test"/>
+	<classpathentry excluding="**/*.proto" kind="src" path="src/test/proto"/>
 	<classpathentry kind="src" path="src/test/resources" output="build/classes/test"/>
 
 	<classpathentry kind="src" path="build/generated-sources/main">
