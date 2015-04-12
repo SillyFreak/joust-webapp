@@ -1,4 +1,0 @@
-apply plugin: 'protobuf'
-
-generateTestProto.include("src/main/proto")
-generateTestProto.include("build/extracted-protos/main")
