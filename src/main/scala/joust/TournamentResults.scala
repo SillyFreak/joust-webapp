@@ -21,13 +21,26 @@ class TournamentResults(t: Tournament) {
   }
   def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
 
-  def seedingScore(team: Team) = {
-    val scores =
-      (for {
-        round <- 0 until t.numOfSeedingRounds
-        result <- seedingRoundResult(t.seedingRoundsMap(team, round))
-      } yield result.score)
-        .sorted
+  def seedingScores(team: Team) =
+    for {
+      round <- 0 until t.numOfSeedingRounds
+      result <- seedingRoundResult(t.seedingRoundsMap(team, round))
+    } yield result.score
+
+  def seedingMax(team: Team) = {
+    val scores = seedingScores(team).sorted
+
+    val finished = scores.size == t.numOfSeedingRounds
+    val score = scores.last
+
+    //the seeding score is final, regular result
+    if (finished) Right(score)
+    //the seeding score is preliminary, exceptional result
+    else Left(score)
+  }
+
+  def seedingAvg(team: Team) = {
+    val scores = seedingScores(team).sorted
 
     val finished = scores.size == t.numOfSeedingRounds
     val dropped = scores.takeRight(2)
@@ -44,7 +57,7 @@ class TournamentResults(t: Tournament) {
   private[this] def buildSeedingRanking() = {
     var scores = collection.mutable.ListBuffer[(Team, Double)]()
     for (team <- t.teams) {
-      seedingScore(team) match {
+      seedingAvg(team) match {
         case Right(score) =>
           scores += (team -> score)
         case Left(_) =>
