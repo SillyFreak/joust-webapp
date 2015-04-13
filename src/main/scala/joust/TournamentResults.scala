@@ -55,19 +55,13 @@ class TournamentResults(t: Tournament) {
   private[this] var _seedingRanking: Option[List[Team]] = None
 
   private[this] def buildSeedingRanking() = {
-    var scores = collection.mutable.ListBuffer[(Team, Double)]()
-    for (team <- t.teams) {
-      seedingAvg(team) match {
-        case Right(score) =>
-          scores += (team -> score)
-        case Left(_) =>
-          //seeding is not finished
-          throw new IllegalStateException()
+    t.teams.sortBy {
+      seedingAvg(_) match {
+        case Right(score) => -score
+        //seeding is not finished
+        case Left(_)      => throw new IllegalStateException()
       }
     }
-    scores.toList
-      .sortBy { case (team, score) => -score }
-      .map { case (team, score) => team }
   }
 
   def seedingRanking: Option[List[Team]] =
