@@ -14,13 +14,13 @@ sealed trait TeamSource {
   def team: Option[TeamLike]
 }
 case class SeedingRank(val rank: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.seedingRank(rank)
+  def team = t.results.seedingRank(rank)
 }
 case class BracketMatchWinner(val bracketMatch: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.bracketMatchWinner(bracketMatch)
+  def team = t.results.bracketMatchWinner(bracketMatch)
 }
 case class BracketMatchLoser(val bracketMatch: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.bracketMatchLoser(bracketMatch)
+  def team = t.results.bracketMatchLoser(bracketMatch)
 }
 
 case class AllianceMatch(val id: Int, val aTeam: Team, val bTeam: Team)
