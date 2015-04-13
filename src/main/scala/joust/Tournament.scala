@@ -35,7 +35,8 @@ class Tournament(val teams: List[Team]) {
 
   val bracketMatches = BracketBuilder.matches
 
-  val results = new TournamentResults(this)
+  private[this] var _results = new TournamentResults(this)
+  def results = _results
 
   private object BracketBuilder {
     // the bracket size n is the lowest power of two that fits all teams, i.e.

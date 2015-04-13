@@ -15,14 +15,19 @@ package joust
  */
 class TournamentResults(t: Tournament) {
   private[this] val seedingRoundResults = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
-  def seedingRoundResult(sr: SeedingRound, score: Int) = seedingRoundResults(sr) = SeedingRoundResult(sr.id, score)
+  def seedingRoundResult(sr: SeedingRound, score: Int) = {
+    _seedingRanking = None
+    seedingRoundResults(sr) = SeedingRoundResult(sr.id, score)
+  }
   def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
 
   private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
   def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
   def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
 
-  def seedingRanking: Option[List[Team]] = {
+  private[this] var _seedingRanking: Option[List[Team]] = None
+
+  private[this] def buildSeedingRanking() = {
     var scores = collection.mutable.ListBuffer[(Team, Int)]()
     for (team <- t.teams) {
       var teamScore = 0
@@ -30,20 +35,35 @@ class TournamentResults(t: Tournament) {
         seedingRoundResult(t.seedingRoundsMap(team, round)) match {
           case None =>
             //seeding is not finished
-            return None
+            throw new IllegalStateException()
           case Some(SeedingRoundResult(_, score)) =>
             teamScore += score
         }
         scores += (team -> teamScore)
       }
     }
-    Some(scores.toList.sortBy { case (team, score) => -score }.map { case (team, score) => team })
+    scores.toList
+      .sortBy { case (team, score) => -score }
+      .map { case (team, score) => team }
   }
+
+  def seedingRanking: Option[List[Team]] =
+    _seedingRanking match {
+      case ranking @ Some(_) =>
+        ranking
+      case None => try {
+        _seedingRanking = Some(buildSeedingRanking())
+        _seedingRanking
+      } catch {
+        case ex: IllegalStateException => None
+      }
+    }
 
   def seedingRank(rank: Int): Option[TeamLike] =
     for {
       ranks <- seedingRanking
     } yield ranks.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+
   def bracketMatchWinner(id: Int): Option[TeamLike] =
     for {
       result <- bracketMatchResult(t.bracketMatches(id))
@@ -52,6 +72,7 @@ class TournamentResults(t: Tournament) {
         (if (result.winnerSideA) game.aTeamSource else game.bTeamSource).team
       }
     } yield team
+
   def bracketMatchLoser(id: Int): Option[TeamLike] =
     for {
       result <- bracketMatchResult(t.bracketMatches(id))
