@@ -89,6 +89,35 @@ class TournamentResults(t: Tournament) {
   def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
   def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
 
+  def deScore(team: Team): Either[Int, Int] = {
+    var finished = true
+    var score = -1
+    for (game <- t.bracketMatches) {
+      val result = bracketMatchResult(game)
+      finished &= result.nonEmpty
+      for (a <- game.aTeamSource.team; b <- game.bTeamSource.team)
+        //games are in increasing ID order -> last match ID is max
+        if (a == team || b == team) score = game.id
+    }
+
+    //the DE score is final, regular result
+    if (finished) Right(score)
+    //the DE score is preliminary, exceptional result
+    else Left(score)
+  }
+
+  private[this] var _deRanking = new Cached({
+    t.teams.sortBy {
+      deScore(_) match {
+        case Right(score) => -score
+        //DE is not finished
+        case Left(_)      => throw new IllegalStateException()
+      }
+    }
+  })
+
+  def deRanking: Option[List[Team]] = _deRanking.value
+
   def bracketMatchWinner(id: Int): Option[TeamLike] =
     for {
       result <- bracketMatchResult(t.bracketMatches(id))
