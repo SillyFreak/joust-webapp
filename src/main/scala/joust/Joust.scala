@@ -27,8 +27,8 @@ object Joust {
         .map { x => Team(x, "") }
 
     val t = new Tournament(teams)
-    for (s <- t.seedingRounds) {
-      t.results.seedingRoundResult_=(s.id, 16 - s.id % 17)
+    for (s <- t.seedingRoundsList) {
+      t.results.seedingRoundResult(s, 16 - s.id % 17)
     }
     for (m <- t.bracketMatches) {
       val a = m.aTeamSource.team.get
@@ -39,7 +39,7 @@ object Joust {
         case (_, ByeTeam)             => true
         case (Team(a, _), Team(b, _)) => Integer.parseInt(a, 0x10) < Integer.parseInt(b, 0x10)
       }
-      t.results.bracketMatchResult_=(m.id, winnerSideA)
+      t.results.bracketMatchResult(m, winnerSideA)
     }
     for (BracketMatch(id, a, b) <- t.bracketMatches) {
       println(s"${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.results.bracketMatchWinner(id).get.id}")

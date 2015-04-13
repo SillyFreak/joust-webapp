@@ -14,23 +14,27 @@ package joust
  * @author SillyFreak
  */
 class TournamentResults(t: Tournament) {
-  private[this] val seedingRoundResults = collection.mutable.Map[Int, SeedingRoundResult]()
-  def seedingRoundResult_=(id: Int, score: Int) = seedingRoundResults(id) = SeedingRoundResult(id, score)
-  def seedingRoundResult(id: Int) = seedingRoundResults.get(id)
+  private[this] val seedingRoundResults = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
+  def seedingRoundResult(sr: SeedingRound, score: Int) = seedingRoundResults(sr) = SeedingRoundResult(sr.id, score)
+  def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
 
-  private[this] val bracketMatchResults = collection.mutable.Map[Int, BracketMatchResult]()
-  def bracketMatchResult_=(id: Int, winnerSideA: Boolean) = bracketMatchResults(id) = BracketMatchResult(id, winnerSideA)
-  def bracketMatchResult(id: Int) = bracketMatchResults.get(id)
+  private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
+  def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
+  def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
 
   def seedingRanking: Option[List[Team]] = {
-    val scores = collection.mutable.Map[Team, Int](t.teams.map { t => (t, 0) }: _*)
-    for (SeedingRound(id, _, team) <- t.seedingRounds) {
-      seedingRoundResult(id) match {
-        case None =>
-          //seeding is not finished
-          return None
-        case Some(SeedingRoundResult(_, score)) =>
-          scores(team) += score
+    var scores = collection.mutable.ListBuffer[(Team, Int)]()
+    for (team <- t.teams) {
+      var teamScore = 0
+      for (round <- 0 until t.numOfSeedingRounds) {
+        seedingRoundResult(t.seedingRoundsMap(team, round)) match {
+          case None =>
+            //seeding is not finished
+            return None
+          case Some(SeedingRoundResult(_, score)) =>
+            teamScore += score
+        }
+        scores += (team -> teamScore)
       }
     }
     Some(scores.toList.sortBy { case (team, score) => -score }.map { case (team, score) => team })
@@ -42,7 +46,7 @@ class TournamentResults(t: Tournament) {
     } yield ranks.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
   def bracketMatchWinner(id: Int): Option[TeamLike] =
     for {
-      result <- bracketMatchResult(id)
+      result <- bracketMatchResult(t.bracketMatches(id))
       team <- {
         val game = t.bracketMatches(id)
         (if (result.winnerSideA) game.aTeamSource else game.bTeamSource).team
@@ -50,7 +54,7 @@ class TournamentResults(t: Tournament) {
     } yield team
   def bracketMatchLoser(id: Int): Option[TeamLike] =
     for {
-      result <- bracketMatchResult(id)
+      result <- bracketMatchResult(t.bracketMatches(id))
       team <- {
         val game = t.bracketMatches(id)
         (if (result.winnerSideA) game.bTeamSource else game.aTeamSource).team

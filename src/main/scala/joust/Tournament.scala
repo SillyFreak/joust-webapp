@@ -17,15 +17,20 @@ import scala.collection.mutable.ArrayBuffer
  * @author SillyFreak
  */
 class Tournament(val teams: List[Team]) {
-  val seedingRounds = {
-    var id = -1
-    for (
-      round <- 0 until 3;
-      team <- teams
-    ) yield {
+  final val numOfSeedingRounds = 3
+
+  val (seedingRoundsList, seedingRoundsMap) = {
+    val list = List.newBuilder[SeedingRound]
+    val map = Map.newBuilder[(Team, Int), SeedingRound]
+
+    var id = 0
+    for (round <- 0 until numOfSeedingRounds; team <- teams) yield {
+      val sr = SeedingRound(id, round, team)
       id += 1
-      SeedingRound(id, round, team)
+      list += sr
+      map += (team, round) -> sr
     }
+    (list.result(), map.result())
   }
 
   val bracketMatches = BracketBuilder.matches
