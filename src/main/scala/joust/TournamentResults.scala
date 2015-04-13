@@ -27,7 +27,7 @@ class TournamentResults(t: Tournament) {
       result <- seedingRoundResult(t.seedingRoundsMap(team, round))
     } yield result.score
 
-  def seedingMax(team: Team) = {
+  def seedingMax(team: Team): Either[Int, Int] = {
     val scores = seedingScores(team).sorted
 
     val finished = scores.size == t.numOfSeedingRounds
@@ -39,7 +39,7 @@ class TournamentResults(t: Tournament) {
     else Left(score)
   }
 
-  def seedingAvg(team: Team) = {
+  def seedingAvg(team: Team): Either[Double, Double] = {
     val scores = seedingScores(team).sorted
 
     val finished = scores.size == t.numOfSeedingRounds
