@@ -21,25 +21,35 @@ class TournamentResults(t: Tournament) {
   }
   def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
 
-  private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
-  def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
-  def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
+  def seedingScore(team: Team) = {
+    val scores =
+      (for {
+        round <- 0 until t.numOfSeedingRounds
+        result <- seedingRoundResult(t.seedingRoundsMap(team, round))
+      } yield result.score)
+        .sorted
+
+    val finished = scores.size == t.numOfSeedingRounds
+    val dropped = scores.takeRight(2)
+    val score = dropped.sum.toDouble / dropped.size
+
+    //the seeding score is final, regular result
+    if (finished) Right(score)
+    //the seeding score is preliminary, exceptional result
+    else Left(score)
+  }
 
   private[this] var _seedingRanking: Option[List[Team]] = None
 
   private[this] def buildSeedingRanking() = {
-    var scores = collection.mutable.ListBuffer[(Team, Int)]()
+    var scores = collection.mutable.ListBuffer[(Team, Double)]()
     for (team <- t.teams) {
-      var teamScore = 0
-      for (round <- 0 until t.numOfSeedingRounds) {
-        seedingRoundResult(t.seedingRoundsMap(team, round)) match {
-          case None =>
-            //seeding is not finished
-            throw new IllegalStateException()
-          case Some(SeedingRoundResult(_, score)) =>
-            teamScore += score
-        }
-        scores += (team -> teamScore)
+      seedingScore(team) match {
+        case Right(score) =>
+          scores += (team -> score)
+        case Left(_) =>
+          //seeding is not finished
+          throw new IllegalStateException()
       }
     }
     scores.toList
@@ -63,6 +73,10 @@ class TournamentResults(t: Tournament) {
     for {
       ranks <- seedingRanking
     } yield ranks.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+
+  private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
+  def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
+  def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
 
   def bracketMatchWinner(id: Int): Option[TeamLike] =
     for {
