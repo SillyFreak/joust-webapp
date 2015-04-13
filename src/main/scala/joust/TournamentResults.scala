@@ -16,7 +16,7 @@ package joust
 class TournamentResults(t: Tournament) {
   private[this] val seedingRoundResults = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
   def seedingRoundResult(sr: SeedingRound, score: Int) = {
-    _seedingRanking = None
+    _seedingRanking.clear()
     seedingRoundResults(sr) = SeedingRoundResult(sr.id, score)
   }
   def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
@@ -52,9 +52,23 @@ class TournamentResults(t: Tournament) {
     else Left(score)
   }
 
-  private[this] var _seedingRanking: Option[List[Team]] = None
+  private[this] class Cached[A](a: => A) {
+    private[this] var _value: Option[A] = None
 
-  private[this] def buildSeedingRanking() = {
+    def clear() = _value = None
+    def value = _value match {
+      case value @ Some(_) =>
+        value
+      case None => try {
+        _value = Some(a)
+        _value
+      } catch {
+        case ex: IllegalStateException => None
+      }
+    }
+  }
+
+  private[this] var _seedingRanking = new Cached({
     t.teams.sortBy {
       seedingAvg(_) match {
         case Right(score) => -score
@@ -62,19 +76,9 @@ class TournamentResults(t: Tournament) {
         case Left(_)      => throw new IllegalStateException()
       }
     }
-  }
+  })
 
-  def seedingRanking: Option[List[Team]] =
-    _seedingRanking match {
-      case ranking @ Some(_) =>
-        ranking
-      case None => try {
-        _seedingRanking = Some(buildSeedingRanking())
-        _seedingRanking
-      } catch {
-        case ex: IllegalStateException => None
-      }
-    }
+  def seedingRanking: Option[List[Team]] = _seedingRanking.value
 
   def seedingRank(rank: Int): Option[TeamLike] =
     for {
