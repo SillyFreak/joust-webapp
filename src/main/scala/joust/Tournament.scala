@@ -19,29 +19,28 @@ import scala.collection.mutable.ArrayBuffer
 class Tournament(val teams: List[Team]) {
   final val numOfSeedingRounds = 3
 
-  val (seedingRoundsList, seedingRoundsMap) = {
-    val list = List.newBuilder[SeedingRound]
-    val map = Map.newBuilder[(Team, Int), SeedingRound]
+  private[this] object Seeding {
+    private[this] val _list = List.newBuilder[SeedingRound]
+    private[this] val _map = Map.newBuilder[(Team, Int), SeedingRound]
 
-    var id = 0
-    for (round <- 0 until numOfSeedingRounds; team <- teams) yield {
-      val sr = SeedingRound(id, round, team)
-      id += 1
-      list += sr
-      map += (team, round) -> sr
+    {
+      var id = 0
+      for (round <- 0 until numOfSeedingRounds; team <- teams) yield {
+        val sr = SeedingRound(id, round, team)
+        id += 1
+        _list += sr
+        _map += (team, round) -> sr
+      }
     }
-    (list.result(), map.result())
+
+    val list = _list.result()
+    val map = _map.result()
   }
 
-  val bracketMatches = BracketBuilder.matches
+  val seedingRoundsList = Seeding.list
+  val seedingRoundsMap = Seeding.map
 
-  private[this] var _seedingResults = new SeedingResults(this)
-  def seedingResults = _seedingResults
-
-  private[this] var _results = new BracketResults(this)
-  def results = _results
-
-  private object BracketBuilder {
+  private[this] object Bracket {
     // the bracket size n is the lowest power of two that fits all teams, i.e.
     // 2^(ceil(log2(n)))
     val bracketSize = Integer.highestOneBit(teams.size - 1) * 2
@@ -185,4 +184,14 @@ class Tournament(val teams: List[Team]) {
       } yield game
     }
   }
+
+  val bracketMatches = Bracket.matches
+
+  private[this] var _seedingResults = new SeedingResults(this)
+
+  def seedingResults = _seedingResults
+
+  private[this] var _results = new BracketResults(this)
+
+  def results = _results
 }
