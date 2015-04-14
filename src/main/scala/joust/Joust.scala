@@ -28,7 +28,7 @@ object Joust {
 
     val t = new Tournament(teams)
     for (s <- t.seedingRoundsList) {
-      t.seedingResults.seedingRoundResult(s, 16 - s.id % 17)
+      t.seedingResults.result(s, 16 - s.id % 17)
     }
     for (m <- t.bracketMatches) {
       val a = m.aTeamSource.team.get

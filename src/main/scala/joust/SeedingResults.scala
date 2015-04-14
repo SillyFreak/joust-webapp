@@ -9,24 +9,26 @@ package joust
 case class SeedingRoundResult(val id: Int, val score: Int)
 
 class SeedingResults(t: Tournament) {
-  private[this] val seedingRoundResults = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
-  def seedingRoundResult(sr: SeedingRound, score: Int) = {
-    _seedingRanking.clear()
-    seedingRoundResults(sr) = SeedingRoundResult(sr.id, score)
+  private[this] val results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
+  def result(sr: SeedingRound, score: Int) = {
+    _ranking.clear()
+    results(sr) = SeedingRoundResult(sr.id, score)
   }
-  def seedingRoundResult(sr: SeedingRound) = seedingRoundResults.get(sr)
+  def result(sr: SeedingRound) = results.get(sr)
 
-  def seedingScores(team: Team) =
+  //a list of scores of all seeding rounds the team has already had
+  def scores(team: Team) =
     for {
       round <- 0 until t.numOfSeedingRounds
-      result <- seedingRoundResult(t.seedingRoundsMap(team, round))
+      result <- result(t.seedingRoundsMap(team, round))
     } yield result.score
 
-  def seedingMax(team: Team): Either[Int, Int] = {
-    val scores = seedingScores(team).sorted
+  //the maximum score, Either final or preliminary
+  def max(team: Team): Either[Int, Int] = {
+    val scores = this.scores(team).sorted
 
     val finished = scores.size == t.numOfSeedingRounds
-    val score = scores.last
+    val score = if (scores.isEmpty) 0 else scores.last
 
     //the seeding score is final, regular result
     if (finished) Right(score)
@@ -34,12 +36,13 @@ class SeedingResults(t: Tournament) {
     else Left(score)
   }
 
-  def seedingAvg(team: Team): Either[Double, Double] = {
-    val scores = seedingScores(team).sorted
+  //the average of the best two rounds, Either final or preliminary
+  def avg(team: Team): Either[Double, Double] = {
+    val scores = this.scores(team).sorted
 
     val finished = scores.size == t.numOfSeedingRounds
     val dropped = scores.takeRight(2)
-    val score = dropped.sum.toDouble / dropped.size
+    val score = if (dropped.isEmpty) 0 else dropped.sum.toDouble / dropped.size
 
     //the seeding score is final, regular result
     if (finished) Right(score)
@@ -47,20 +50,20 @@ class SeedingResults(t: Tournament) {
     else Left(score)
   }
 
-  private[this] var _seedingRanking = new Cached({
+  private[this] var _ranking = new Cached({
     t.teams.sortBy {
-      seedingAvg(_) match {
+      avg(_) match {
         case Right(score) => -score
-        //seeding is not finished
-        case Left(_)      => throw new IllegalStateException()
+        case Left(score)  => -score
       }
     }
   })
 
-  def seedingRanking: Option[List[Team]] = _seedingRanking.value
+  //the list of teams, ordered by average score
+  //TODO what about teams with same number of points?
+  def ranking: List[Team] = _ranking.value.get
 
-  def seedingRank(rank: Int): Option[TeamLike] =
-    for {
-      ranks <- seedingRanking
-    } yield ranks.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+  //the team with the specified rank, or ByeTeam if there are less teams
+  def teamByRank(rank: Int): TeamLike =
+    ranking.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
 }
