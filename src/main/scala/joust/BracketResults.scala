@@ -10,15 +10,15 @@ case class BracketMatchResult(val id: Int, val winnerSideA: Boolean)
 
 class BracketResults(t: Tournament) {
 
-  private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
-  def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)
-  def bracketMatchResult(bm: BracketMatch) = bracketMatchResults.get(bm)
+  private[this] val results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
+  def result(bm: BracketMatch, winnerSideA: Boolean) = results(bm) = BracketMatchResult(bm.id, winnerSideA)
+  def result(bm: BracketMatch) = results.get(bm)
 
-  def deScore(team: Team): Either[Int, Int] = {
+  def score(team: Team): Either[Int, Int] = {
     var finished = true
     var score = -1
     for (game <- t.bracketMatches) {
-      val result = bracketMatchResult(game)
+      val result = this.result(game)
       finished &= result.nonEmpty
       for (a <- game.aTeamSource.team; b <- game.bTeamSource.team)
         //games are in increasing ID order -> last match ID is max
@@ -31,30 +31,29 @@ class BracketResults(t: Tournament) {
     else Left(score)
   }
 
-  private[this] var _deRanking = new Cached({
+  private[this] var _ranking = new Cached({
     t.teams.sortBy {
-      deScore(_) match {
+      score(_) match {
         case Right(score) => -score
-        //DE is not finished
-        case Left(_)      => throw new IllegalStateException()
+        case Left(score)  => -score
       }
     }
   })
 
-  def deRanking: Option[List[Team]] = _deRanking.value
+  def ranking = _ranking.value.get
 
-  def bracketMatchWinner(id: Int): Option[TeamLike] =
+  def winner(id: Int): Option[TeamLike] =
     for {
-      result <- bracketMatchResult(t.bracketMatches(id))
+      result <- this.result(t.bracketMatches(id))
       team <- {
         val game = t.bracketMatches(id)
         (if (result.winnerSideA) game.aTeamSource else game.bTeamSource).team
       }
     } yield team
 
-  def bracketMatchLoser(id: Int): Option[TeamLike] =
+  def loser(id: Int): Option[TeamLike] =
     for {
-      result <- bracketMatchResult(t.bracketMatches(id))
+      result <- this.result(t.bracketMatches(id))
       team <- {
         val game = t.bracketMatches(id)
         (if (result.winnerSideA) game.bTeamSource else game.aTeamSource).team

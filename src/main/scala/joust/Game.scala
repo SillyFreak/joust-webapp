@@ -17,10 +17,10 @@ case class SeedingRank(val rank: Int)(implicit t: Tournament) extends TeamSource
   def team = Some(t.seedingResults.teamByRank(rank))
 }
 case class BracketMatchWinner(val bracketMatch: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.results.bracketMatchWinner(bracketMatch)
+  def team = t.bracketResults.winner(bracketMatch)
 }
 case class BracketMatchLoser(val bracketMatch: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.results.bracketMatchLoser(bracketMatch)
+  def team = t.bracketResults.loser(bracketMatch)
 }
 
 case class AllianceMatch(val id: Int, val aTeam: Team, val bTeam: Team)

@@ -193,5 +193,5 @@ class Tournament(val teams: List[Team]) {
 
   private[this] var _results = new BracketResults(this)
 
-  def results = _results
+  def bracketResults = _results
 }

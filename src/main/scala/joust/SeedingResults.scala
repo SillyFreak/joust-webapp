@@ -61,7 +61,7 @@ class SeedingResults(t: Tournament) {
 
   //the list of teams, ordered by average score
   //TODO what about teams with same number of points?
-  def ranking: List[Team] = _ranking.value.get
+  def ranking = _ranking.value.get
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =

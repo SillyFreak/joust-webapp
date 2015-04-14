@@ -39,10 +39,10 @@ object Joust {
         case (_, ByeTeam)             => true
         case (Team(a, _), Team(b, _)) => Integer.parseInt(a, 0x10) < Integer.parseInt(b, 0x10)
       }
-      t.results.bracketMatchResult(m, winnerSideA)
+      t.bracketResults.result(m, winnerSideA)
     }
     for (BracketMatch(id, a, b) <- t.bracketMatches) {
-      println(s"${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.results.bracketMatchWinner(id).get.id}")
+      println(s"${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.bracketResults.winner(id).get.id}")
     }
   }
 }
