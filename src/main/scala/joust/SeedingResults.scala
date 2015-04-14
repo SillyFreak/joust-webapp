@@ -51,19 +51,26 @@ class SeedingResults(t: Tournament) {
   }
 
   private[this] var _ranking = new Cached({
-    t.teams.sortBy {
-      avg(_) match {
-        case Right(score) => -score
-        case Left(score)  => -score
-      }
+    var finished = true
+
+    val avgs = t.teams.map { team =>
+      team -> (avg(team) match {
+        case Right(score) => score
+        case Left(score)  => finished = false; score
+      })
     }
+
+    val places = avgs.map {
+      case (team, teamAvg) => (team, avgs.count { case (_, avg) => avg > teamAvg })
+    }
+
+    places.sortBy { case (_, place) => place }
   })
 
   //the list of teams, ordered by average score
-  //TODO what about teams with same number of points?
   def ranking = _ranking.value.get
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =
-    ranking.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+    ranking.map { case (team, _) => team }.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
 }
