@@ -1,19 +1,14 @@
 /**
- * TournamentResults.scala
+ * BracketResults.scala
  *
  * Created on 13.04.2015
  */
+
 package joust
 
-/**
- * <p>
- * {@code TournamentResults}
- * </p>
- *
- * @version V0.0 13.04.2015
- * @author SillyFreak
- */
-class TournamentResults(t: Tournament) {
+case class BracketMatchResult(val id: Int, val winnerSideA: Boolean)
+
+class BracketResults(t: Tournament) {
 
   private[this] val bracketMatchResults = collection.mutable.Map[BracketMatch, BracketMatchResult]()
   def bracketMatchResult(bm: BracketMatch, winnerSideA: Boolean) = bracketMatchResults(bm) = BracketMatchResult(bm.id, winnerSideA)

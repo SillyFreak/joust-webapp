@@ -38,7 +38,7 @@ class Tournament(val teams: List[Team]) {
   private[this] var _seedingResults = new SeedingResults(this)
   def seedingResults = _seedingResults
 
-  private[this] var _results = new TournamentResults(this)
+  private[this] var _results = new BracketResults(this)
   def results = _results
 
   private object BracketBuilder {
