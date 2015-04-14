@@ -14,7 +14,7 @@ sealed trait TeamSource {
   def team: Option[TeamLike]
 }
 case class SeedingRank(val rank: Int)(implicit t: Tournament) extends TeamSource {
-  def team = t.results.seedingRank(rank)
+  def team = t.seedingResults.seedingRank(rank)
 }
 case class BracketMatchWinner(val bracketMatch: Int)(implicit t: Tournament) extends TeamSource {
   def team = t.results.bracketMatchWinner(bracketMatch)
