@@ -20,16 +20,32 @@ object Joust {
   def main(args: Array[String]): Unit = {
     val teams =
       List(
-        "0000", "0001", "0002", "0003",
-        "0004", "0005", "0006", "0007",
-        "0008", "0009", "000a", "000b",
-        "000c", "000d", "000e", "000f", "0010")
-        .map { x => Team(x, "") }
+        ("0000", 9, 9, 1),
+        ("0001", 9, 8, 1),
+        ("0002", 9, 7, 1),
+        ("0003", 9, 6, 1),
+        ("0004", 9, 5, 1),
+        ("0005", 9, 4, 1),
+        ("0006", 9, 3, 1),
+        ("0007", 9, 2, 1),
+        ("0008", 9, 1, 1),
+        ("0009", 8, 1, 1),
+        ("000a", 7, 1, 1),
+        ("000b", 6, 1, 1),
+        ("000c", 5, 1, 1),
+        ("000d", 4, 1, 1),
+        ("000e", 3, 1, 1),
+        ("000f", 2, 1, 1),
+        ("0010", 1, 1, 1))
+        .map { case (x, s1, s2, s3) => (Team(x, ""), s1, s2, s3) }
 
-    val t = new Tournament(teams)
-    for (s <- t.seedingRoundsList) {
-      t.seedingResults.result(s, 16 - s.id % 17)
+    val t = new Tournament(teams.map { case (x, _, _, _) => x })
+    for ((team, s1, s2, s3) <- teams) {
+      t.seedingResults.result(t.seedingRoundsMap(team, 0), s1)
+      t.seedingResults.result(t.seedingRoundsMap(team, 1), s2)
+      t.seedingResults.result(t.seedingRoundsMap(team, 2), s3)
     }
+
     for (m <- t.bracketMatches) {
       val a = m.aTeamSource.team.get
       val b = m.bTeamSource.team.get
