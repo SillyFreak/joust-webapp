@@ -9,12 +9,12 @@ package joust
 case class SeedingRoundResult(val id: Int, val score: Int)
 
 class SeedingResults(t: Tournament) {
-  private[this] val results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
+  private[this] val _results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
   def result(sr: SeedingRound, score: Int) = {
     _ranking.clear()
-    results(sr) = SeedingRoundResult(sr.id, score)
+    _results(sr) = SeedingRoundResult(sr.id, score)
   }
-  def result(sr: SeedingRound) = results.get(sr)
+  def result(sr: SeedingRound) = _results.get(sr)
 
   //a list of scores of all seeding rounds the team has already had
   def scores(team: Team) =
