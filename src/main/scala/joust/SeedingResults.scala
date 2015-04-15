@@ -50,27 +50,40 @@ class SeedingResults(t: Tournament) {
     else Left(score)
   }
 
+  //the list of teams, ordered by score
+  //List[(team, max, avg, rank, score)]
   private[this] var _ranking = new Cached({
-    var finished = true
+    val count = t.teams.size.asInstanceOf[Double]
 
-    val avgs = t.teams.map { team =>
-      team -> (avg(team) match {
-        case Right(score) => score
-        case Left(score)  => finished = false; score
-      })
+    val _scores = t.teams.map { team =>
+      (max(team), avg(team)) match {
+        case (Right(max), Right(avg)) => (team, max, avg)
+        case (Left(max), Left(avg))   => (team, max, avg)
+        case x                        => throw new MatchError(x)
+      }
     }
 
-    val places = avgs.map {
-      case (team, teamAvg) => (team, avgs.count { case (_, avg) => avg > teamAvg })
+    val seedingMax = _scores.map { case (_, max, _) => max }.max
+
+    val scores = _scores.map {
+      case (team, teamMax, teamAvg) =>
+        val rank = _scores.count { case (_, _, avg) => avg > teamAvg }
+
+        //TODO this double-calculation is clearly a bug in the original Joust
+
+        // .5 * ( teamcount - seedrank +1)/teamcount + .5 *(seedavg/tmtseedmax) as seedscore
+        val _score = .5 * (count - rank) / count + .5 * teamAvg / seedingMax
+        // $seed = (3 / 4) * (($teamcount - $team -> seedrank + 1) / $teamcount) + (1 / 4) * ($team -> seedavg / $team -> tmtseedmax);
+        val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
+
+        (team, teamMax, teamAvg, rank, score)
     }
 
-    places.sortBy { case (_, place) => place }
+    scores.sortBy { case (_, _, _, _, score) => -score }
   })
-
-  //the list of teams, ordered by average score
   def ranking = _ranking.value.get
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =
-    ranking.map { case (team, _) => team }.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+    ranking.map { case (team, _, _, _, _) => team }.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
 }
