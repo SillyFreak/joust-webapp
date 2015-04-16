@@ -23,4 +23,16 @@ case class BracketMatchLoser(val bracketMatch: Int)(implicit t: Tournament) exte
   def team = t.bracketResults.loser(bracketMatch)
 }
 
+//special team sources for the final matches
+case class FinalMatchWinner(val finalMatch: Int, val main: Int)(implicit t: Tournament) extends TeamSource {
+  def team =
+    for (finalWinner <- t.bracketResults.winner(finalMatch); mainWinner <- t.bracketResults.winner(main))
+      yield if (finalWinner == mainWinner) ByeTeam else finalWinner
+}
+case class FinalMatchLoser(val finalMatch: Int, val consolation: Int)(implicit t: Tournament) extends TeamSource {
+  def team =
+    for (finalLoser <- t.bracketResults.loser(finalMatch); consolationWinner <- t.bracketResults.winner(consolation))
+      yield if (finalLoser == consolationWinner) ByeTeam else finalLoser
+}
+
 case class AllianceMatch(val id: Int, val aTeam: Team, val bTeam: Team)

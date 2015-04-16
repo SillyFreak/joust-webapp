@@ -178,8 +178,8 @@ class Tournament(val teams: List[Team]) {
                 BracketMatchWinner(mPrev.first),
                 BracketMatchWinner(cPrev.first)),
               BracketMatch(first + 1, ord,
-                BracketMatchWinner(first),
-                BracketMatchLoser(first)))
+                FinalMatchWinner(first, mPrev.first),
+                FinalMatchLoser(first, cPrev.first)))
 
           case x => throw new MatchError(x)
         }
