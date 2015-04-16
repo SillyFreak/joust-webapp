@@ -65,7 +65,7 @@ object Joust {
     }
 
     for (BracketMatch(id, ord, a, b) <- t.bracketMatches) {
-      println(s"${ord.formatted("%2d")} ${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.bracketResults.winner(id).get.id}")
+      printf("%2d %02d: %25s - %-25s -- %s - %s -- %s%n", ord, id, a, b, a.team.get.id, b.team.get.id, t.bracketResults.winner(id).get.id)
     }
   }
 }
