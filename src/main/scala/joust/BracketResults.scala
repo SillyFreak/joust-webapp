@@ -16,6 +16,11 @@ class BracketResults(t: Tournament) {
   }
   def result(bm: BracketMatch) = _results.get(bm)
 
+  def clear() = {
+    _ranking.clear()
+    _results.clear()
+  }
+
   def score(team: Team): Either[Int, Int] = {
     var finished = true
     var score = -1
@@ -35,7 +40,7 @@ class BracketResults(t: Tournament) {
 
   //the list of teams, ordered by rank
   //List[(team, rank, score)]
-  private[this] var _ranking = new Cached({
+  private[this] val _ranking = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>

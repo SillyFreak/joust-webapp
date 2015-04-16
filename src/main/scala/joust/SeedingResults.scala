@@ -16,6 +16,12 @@ class SeedingResults(t: Tournament) {
   }
   def result(sr: SeedingRound) = _results.get(sr)
 
+  def clear() = {
+    _ranking.clear()
+    _results.clear()
+    t.bracketResults.clear()
+  }
+
   //a list of scores of all seeding rounds the team has already had
   def scores(team: Team) =
     for {
@@ -52,7 +58,7 @@ class SeedingResults(t: Tournament) {
 
   //the list of teams, ordered by score
   //List[(team, max, avg, rank, score)]
-  private[this] var _ranking = new Cached({
+  private[this] val _ranking = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>

@@ -192,11 +192,7 @@ class Tournament(val teams: List[Team]) {
 
   val bracketMatches = Bracket.matches
 
-  private[this] var _seedingResults = new SeedingResults(this)
+  val seedingResults = new SeedingResults(this)
 
-  def seedingResults = _seedingResults
-
-  private[this] var _results = new BracketResults(this)
-
-  def bracketResults = _results
+  val bracketResults = new BracketResults(this)
 }
