@@ -49,12 +49,17 @@ object Joust {
     for (m <- t.bracketMatches) {
       val a = m.aTeamSource.team.get
       val b = m.bTeamSource.team.get
-      val winnerSideA = (a, b) match {
-        case (ByeTeam, ByeTeam)       => true
-        case (ByeTeam, _)             => false
-        case (_, ByeTeam)             => true
-        case (Team(a, _), Team(b, _)) => Integer.parseInt(a, 0x10) < Integer.parseInt(b, 0x10)
-      }
+      val winnerSideA =
+        if (m.id == 61)
+          //make 0000 lose the first final, so that there is a second, for testing
+          false
+        else
+          (a, b) match {
+            case (ByeTeam, ByeTeam)       => true
+            case (ByeTeam, _)             => false
+            case (_, ByeTeam)             => true
+            case (Team(a, _), Team(b, _)) => Integer.parseInt(a, 0x10) < Integer.parseInt(b, 0x10)
+          }
       t.bracketResults.result(m, winnerSideA)
     }
 
