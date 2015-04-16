@@ -75,11 +75,6 @@ class SeedingResults(t: Tournament) {
       case (team, teamMax, teamAvg) =>
         val rank = _scores.count { case (_, _, avg) => avg > teamAvg }
 
-        //TODO this double-calculation is clearly a bug in the original Joust
-
-        // .5 * ( teamcount - seedrank +1)/teamcount + .5 *(seedavg/tmtseedmax) as seedscore
-        val _score = .5 * (count - rank) / count + .5 * teamAvg / seedingMax
-        // $seed = (3 / 4) * (($teamcount - $team -> seedrank + 1) / $teamcount) + (1 / 4) * ($team -> seedavg / $team -> tmtseedmax);
         val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
 
         (team, teamMax, teamAvg, rank, score)
