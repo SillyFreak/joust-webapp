@@ -9,10 +9,12 @@ package joust
 case class BracketMatchResult(val id: Int, val winnerSideA: Boolean)
 
 class BracketResults(t: Tournament) {
-
-  private[this] val results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
-  def result(bm: BracketMatch, winnerSideA: Boolean) = results(bm) = BracketMatchResult(bm.id, winnerSideA)
-  def result(bm: BracketMatch) = results.get(bm)
+  private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
+  def result(bm: BracketMatch, winnerSideA: Boolean) = _results(bm) = {
+    _ranking.clear()
+    BracketMatchResult(bm.id, winnerSideA)
+  }
+  def result(bm: BracketMatch) = _results.get(bm)
 
   def score(team: Team): Either[Int, Int] = {
     var finished = true
@@ -31,13 +33,27 @@ class BracketResults(t: Tournament) {
     else Left(score)
   }
 
+  //the list of teams, ordered by rank
+  //List[(team, rank, score)]
   private[this] var _ranking = new Cached({
-    t.teams.sortBy {
-      score(_) match {
-        case Right(score) => -score
-        case Left(score)  => -score
+    val count = t.teams.size.asInstanceOf[Double]
+
+    val _scores = t.teams.map { team =>
+      score(team) match {
+        case Right(score) => (team, score)
+        case Left(score)  => (team, score)
       }
     }
+
+    val scores = _scores.map {
+      case (team, teamScore) =>
+        val rank = _scores.count { case (_, score) => score > teamScore }
+        val score = (count - rank) / count
+
+        (team, rank, score)
+    }
+
+    scores.sortBy { case (_, rank, _) => rank }
   })
 
   def ranking = _ranking.value.get
