@@ -62,10 +62,10 @@ class Tournament(val teams: List[Team]) {
     case class FirstRound(val count: Int) extends Round {
       val first = 0
     }
-    case class MainRound(val prev: Round, val first: Int, val count: Int) extends Round
-    case class ConsolationRound1(val odd: Boolean, val prev: Round, val first: Int, val count: Int) extends Round
-    case class ConsolationRound2(val odd: Boolean, val mPrev: Round, val cPrev: Round, val first: Int, val count: Int) extends Round
-    case class FinalRound(val mPrev: Round, val cPrev: Round, val first: Int) extends Round {
+    case class MainRound(val ord: Int, val prev: Round, val first: Int, val count: Int) extends Round
+    case class ConsolationRound1(val ord: Int, val odd: Boolean, val prev: Round, val first: Int, val count: Int) extends Round
+    case class ConsolationRound2(val ord: Int, val odd: Boolean, val mPrev: Round, val cPrev: Round, val first: Int, val count: Int) extends Round
+    case class FinalRound(val ord: Int, val mPrev: Round, val cPrev: Round, val first: Int) extends Round {
       val count = 2
     }
 
@@ -84,14 +84,16 @@ class Tournament(val teams: List[Team]) {
       var mPrev: Round = firstRound
       var cPrev: Round = firstRound
       var odd = true
+      var ord = 1
       do {
         n /= 2
-        mPrev = add(MainRound(mPrev, first, n))
-        cPrev = add(ConsolationRound1(odd, cPrev, first, n))
-        cPrev = add(ConsolationRound2(odd, mPrev, cPrev, first, n))
+        mPrev = add(MainRound(ord + 0, mPrev, first, n))
+        cPrev = add(ConsolationRound1(ord + 1, odd, cPrev, first, n))
+        cPrev = add(ConsolationRound2(ord + 2, odd, mPrev, cPrev, first, n))
         odd = !odd
+        ord += 3
       } while (n > 1)
-      add(FinalRound(mPrev, cPrev, first))
+      add(FinalRound(ord, mPrev, cPrev, first))
 
       List(rounds: _*)
     }
@@ -121,40 +123,40 @@ class Tournament(val teams: List[Team]) {
               }
             }
             for (((a, b), id) <- firstMatches(bracketSize).zipWithIndex) yield {
-              BracketMatch(id, SeedingRank(a), SeedingRank(b))
+              BracketMatch(id, 0, SeedingRank(a), SeedingRank(b))
             }
 
-          case MainRound(prev, first, count) =>
+          case MainRound(ord, prev, first, count) =>
             // a main round consists of the winners of the matches of the
             // previous main/first round
 
             for (i <- List(0 until count: _*)) yield {
-              BracketMatch(first + i,
+              BracketMatch(first + i, ord,
                 BracketMatchWinner(prev.first + 2 * i),
                 BracketMatchWinner(prev.first + 2 * i + 1))
             }
 
-          case ConsolationRound1(odd, prev: FirstRound, first, count) =>
+          case ConsolationRound1(ord, odd, prev: FirstRound, first, count) =>
             // the first consolation round, type 1, consists of the losers of
             // the matches of the first round
 
             for (i <- List(0 until count: _*)) yield {
-              BracketMatch(first + i,
+              BracketMatch(first + i, ord,
                 BracketMatchLoser(prev.first + 2 * i),
                 BracketMatchLoser(prev.first + 2 * i + 1))
             }
 
-          case ConsolationRound1(odd, prev: ConsolationRound2, first, count) =>
+          case ConsolationRound1(ord, odd, prev: ConsolationRound2, first, count) =>
             // other consolation rounds, type 1, consist of the winners of
             // the matches of the previous consolation round
 
             for (i <- List(0 until count: _*)) yield {
               val a = BracketMatchWinner(prev.first + 2 * i)
               val b = BracketMatchWinner(prev.first + 2 * i + 1)
-              BracketMatch(first + i, a, b)
+              BracketMatch(first + i, ord, a, b)
             }
 
-          case ConsolationRound2(odd, mPrev: MainRound, cPrev: ConsolationRound1, first, count) =>
+          case ConsolationRound2(ord, odd, mPrev: MainRound, cPrev: ConsolationRound1, first, count) =>
             // consolation rounds, type 2, consist of the losers of the matches
             // of the previous main round, and the winners of the matches of
             // the previous consolation round
@@ -162,20 +164,20 @@ class Tournament(val teams: List[Team]) {
             for (i <- List(0 until count: _*)) yield {
               val a = BracketMatchWinner(cPrev.first + i)
               val b = BracketMatchLoser((mPrev.first + i) ^ (if (count > 1) 1 else 0))
-              if (odd) BracketMatch(first + i, a, b)
-              else BracketMatch(first + i, b, a)
+              if (odd) BracketMatch(first + i, ord, a, b)
+              else BracketMatch(first + i, ord, b, a)
             }
 
-          case FinalRound(mPrev, cPrev, first) =>
+          case FinalRound(ord, mPrev, cPrev, first) =>
             // the final round consists of one or two final matches: if the
             // consolation winner wins the first final match, there is a second
             // final to determine the winner
 
             List(
-              BracketMatch(first,
+              BracketMatch(first, ord,
                 BracketMatchWinner(mPrev.first),
                 BracketMatchWinner(cPrev.first)),
-              BracketMatch(first + 1,
+              BracketMatch(first + 1, ord,
                 BracketMatchWinner(first),
                 BracketMatchLoser(first)))
 

@@ -8,7 +8,7 @@ package joust
 
 case class SeedingRound(val id: Int, val round: Int, val team: Team)
 
-case class BracketMatch(val id: Int, val aTeamSource: TeamSource, val bTeamSource: TeamSource)
+case class BracketMatch(val id: Int, val ord: Int, val aTeamSource: TeamSource, val bTeamSource: TeamSource)
 
 sealed trait TeamSource {
   def team: Option[TeamLike]

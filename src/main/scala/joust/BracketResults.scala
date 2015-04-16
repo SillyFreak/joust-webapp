@@ -24,7 +24,7 @@ class BracketResults(t: Tournament) {
       finished &= result.nonEmpty
       for (a <- game.aTeamSource.team; b <- game.bTeamSource.team)
         //games are in increasing ID order -> last match ID is max
-        if (a == team || b == team) score = game.id
+        if (a == team || b == team) score = game.ord
     }
 
     //the DE score is final, regular result

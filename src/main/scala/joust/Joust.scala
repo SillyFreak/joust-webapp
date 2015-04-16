@@ -64,8 +64,8 @@ object Joust {
       printf("%s | %2d %s %d %f - %f | %2d - %f%n", team.id, rank, scores, max, avg, score, deRank, deScore)
     }
 
-    //for (BracketMatch(id, a, b) <- t.bracketMatches) {
-    //  println(s"${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.bracketResults.winner(id).get.id}")
-    //}
+    for (BracketMatch(id, ord, a, b) <- t.bracketMatches) {
+      println(s"${ord.formatted("%2d")} ${id.formatted("%02d")}:\t$a\t-  $b\t-- ${a.team.get.id} - ${b.team.get.id} -- ${t.bracketResults.winner(id).get.id}")
+    }
   }
 }
