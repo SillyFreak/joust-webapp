@@ -66,7 +66,7 @@ class Tournament(val teams: List[Team]) {
     case class ConsolationRound1(val ord: Int, val odd: Boolean, val prev: Round, val first: Int, val count: Int) extends Round
     case class ConsolationRound2(val ord: Int, val odd: Boolean, val mPrev: Round, val cPrev: Round, val first: Int, val count: Int) extends Round
     case class FinalRound(val ord: Int, val mPrev: Round, val cPrev: Round, val first: Int) extends Round {
-      val count = 2
+      val count = 3
     }
 
     val rounds = {
@@ -179,7 +179,10 @@ class Tournament(val teams: List[Team]) {
                 BracketMatchWinner(cPrev.first)),
               BracketMatch(first + 1, ord,
                 FinalMatchWinner(first, mPrev.first),
-                FinalMatchLoser(first, cPrev.first)))
+                FinalMatchLoser(first, cPrev.first)),
+              BracketMatch(first + 2, ord + 1,
+                BracketWinner(first, first + 1),
+                ByeTeamSource))
 
           case x => throw new MatchError(x)
         }
