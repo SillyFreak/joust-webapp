@@ -45,6 +45,9 @@ object Joust {
       t.seedingResults.result(t.seedingRoundsMap(team, 0), s1)
       t.seedingResults.result(t.seedingRoundsMap(team, 1), s2)
       t.seedingResults.result(t.seedingRoundsMap(team, 2), s3)
+
+      t.documentationResults.PeriodDoc.result(team, s1, s2, s3)
+      t.documentationResults.OnsiteDoc.result(team, 0)
     }
     for (m <- t.bracketMatches) {
       val a = m.aTeamSource.team.get
@@ -63,10 +66,11 @@ object Joust {
       t.bracketResults.result(m, winnerSideA)
     }
 
-    for ((team, max, avg, rank, score) <- t.seedingResults.ranking) {
+    for ((team, max, avg, seedingRank, seedingScore) <- t.seedingResults.ranking) {
       val scores = t.seedingResults.scores(team)
       val (_, deRank, deScore) = t.bracketResults.ranking.find { case (t, _, _) => t == team }.get
-      printf("%s | %2d %s %d %f - %f | %2d - %f%n", team.id, rank, scores, max, avg, score, deRank, deScore)
+      val (_, _, _, _, _, docRank, docScore) = t.documentationResults.ranking.find { case (t, _, _, _, _, _, _) => t == team }.get
+      printf("%s | %2d %s %d %f - %f | %2d - %f | %2d - %f%n", team.id, seedingRank, scores, max, avg, seedingScore, deRank, deScore, docRank, docScore)
     }
 
     for (BracketMatch(id, ord, a, b) <- t.bracketMatches) {
