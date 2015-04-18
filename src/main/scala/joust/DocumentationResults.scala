@@ -41,7 +41,7 @@ class DocumentationResults(t: Tournament) {
   private[this] val _ranking = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
-    val __scores = t.teams.map { team =>
+    val _scores = t.teams.map { team =>
       val (p1, p2, p3) = PeriodDoc.result(team) match {
         case Some(PeriodDocResult(_, p1, p2, p3)) => (p1, p2, p3)
         case None                                 => (0, 0, 0)
@@ -51,32 +51,29 @@ class DocumentationResults(t: Tournament) {
         case None                            => 0
       }
 
-      (team, p1, p2, p3, p4)
-    }
+      val score =
+        List(
+          (0.30, 300, p1),
+          (0.30, 300, p2),
+          (0.10, 200, p3),
+          (0.30, 100, p4))
+          .foldLeft(0d) { case (sum, (weight, max, score)) => sum + weight * score / max }
 
-    val _scores = __scores.map {
-      case (team, p1, p2, p3, p4) =>
-        val p1Rank = __scores.count { case (_, p, _, _, _) => p > p1 }
-        val p2Rank = __scores.count { case (_, _, p, _, _) => p > p2 }
-        val p3Rank = __scores.count { case (_, _, _, p, _) => p > p3 }
-        val p4Rank = __scores.count { case (_, _, _, _, p) => p > p4 }
-
-        val score =
-          List(
-            (0.30, 300, p1),
-            (0.30, 300, p2),
-            (0.10, 200, p3),
-            (0.30, 100, p4))
-            .foldLeft(0d) { case (sum, (weight, max, score)) => sum + weight * score / max }
-
-        (team, p1Rank, p2Rank, p3Rank, p4Rank, score)
+      (team, p1, p2, p3, p4, score)
     }
 
     val scores = _scores.map {
-      case (team, p1Rank, p2Rank, p3Rank, p4Rank, score) =>
+      case (team, p1, p2, p3, p4, score) =>
+        val p1Rank = _scores.count { case (_, p, _, _, _, _) => p > p1 }
+        val p2Rank = _scores.count { case (_, _, p, _, _, _) => p > p2 }
+        val p3Rank = _scores.count { case (_, _, _, p, _, _) => p > p3 }
+        val p4Rank = _scores.count { case (_, _, _, _, p, _) => p > p4 }
+
         val rank = _scores.count { case (_, _, _, _, _, sc) => sc > score }
+
         (team, p1Rank, p2Rank, p3Rank, p4Rank, rank, score)
     }
+
     scores.sortBy { case (_, _, _, _, _, _, score) => -score }
   })
   def ranking = _ranking.value.get
