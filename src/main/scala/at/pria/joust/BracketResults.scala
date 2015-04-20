@@ -12,6 +12,11 @@ case class BracketMatchResult(
   @BeanProperty val id: Int,
   @BeanProperty val winnerSideA: Boolean)
 
+case class BracketScore(
+  @BeanProperty val team: Team,
+  @BeanProperty val score: Double,
+  @BeanProperty val rank: Int)
+
 class BracketResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
   def result(bm: BracketMatch, winnerSideA: Boolean) = _results(bm) = {
@@ -64,20 +69,20 @@ class BracketResults(t: Tournament) {
         val rank = _scores.count { case (_, score) => score > teamScore }
         val score = (count - rank) / count
 
-        (team, rank, score)
+        BracketScore(team, score, rank)
     }
 
-    scores.sortBy { case (_, _, score) => -score }
+    scores.sortBy { sc => sc.rank }
   })
 
   def ranking = _ranking.value.get
 
   //Java interop
   private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, Double]()
-    for ((team, _, score) <- ranking)
-      result.put(team, score)
-    result: java.util.Map[Team, Double]
+    val result = new java.util.LinkedHashMap[Team, BracketScore]()
+    for (sc <- ranking)
+      result.put(sc.team, sc)
+    result: java.util.Map[Team, BracketScore]
   })
   def getRanking() = _jRanking.value.get
 

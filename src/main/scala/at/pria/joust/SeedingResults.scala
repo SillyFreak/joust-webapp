@@ -12,6 +12,16 @@ case class SeedingRoundResult(
   @BeanProperty val id: Int,
   @BeanProperty val score: Int)
 
+case class SeedingScore(
+  @BeanProperty val team: Team,
+  @BeanProperty val s1: Int,
+  @BeanProperty val s2: Int,
+  @BeanProperty val s3: Int,
+  @BeanProperty val max: Int,
+  @BeanProperty val avg: Double,
+  @BeanProperty val score: Double,
+  @BeanProperty val rank: Int)
+
 class SeedingResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
   def result(sr: SeedingRound, score: Int) = {
@@ -85,23 +95,23 @@ class SeedingResults(t: Tournament) {
 
         val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
 
-        (team, teamMax, teamAvg, rank, score)
+        SeedingScore(team, 0, 0, 0, teamMax, teamAvg, score, rank)
     }
 
-    scores.sortBy { case (_, _, _, _, score) => -score }
+    scores.sortBy { sc => sc.rank }
   })
   def ranking = _ranking.value.get
 
   //Java interop
   private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, Double]()
-    for ((team, _, _, _, score) <- ranking)
-      result.put(team, score)
-    result: java.util.Map[Team, Double]
+    val result = new java.util.LinkedHashMap[Team, SeedingScore]()
+    for (sc <- ranking)
+      result.put(sc.team, sc)
+    result: java.util.Map[Team, SeedingScore]
   })
   def getRanking() = _jRanking.value.get
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =
-    ranking.map { case (team, _, _, _, _) => team }.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
+    ranking.map { sc => sc.team }.applyOrElse(rank, { case _ => ByeTeam }: PartialFunction[Int, TeamLike])
 }

@@ -17,6 +17,19 @@ case class OnsiteDocResult(
   @BeanProperty val team: Team,
   @BeanProperty val onsiteScore: Int)
 
+case class DocumentationScore(
+  @BeanProperty val team: Team,
+  @BeanProperty val p1Score: Int,
+  @BeanProperty val p1Rank: Int,
+  @BeanProperty val p2Score: Int,
+  @BeanProperty val p2Rank: Int,
+  @BeanProperty val p3Score: Int,
+  @BeanProperty val p3Rank: Int,
+  @BeanProperty val onsiteScore: Int,
+  @BeanProperty val onsiteRank: Int,
+  @BeanProperty val score: Double,
+  @BeanProperty val rank: Int)
+
 class DocumentationResults(t: Tournament) {
   @BeanProperty object PeriodDoc {
     private[this] val _results = collection.mutable.Map[Team, PeriodDocResult]()
@@ -56,7 +69,7 @@ class DocumentationResults(t: Tournament) {
 
   //the list of teams, ordered by score
   //List[(team, p1rank, p2rank, p3rank, p4rank, rank, score)]
-  private[this] val _ranking: Cached[List[(Team, Int, Int, Int, Int, Int, Double)]] = new Cached({
+  private[this] val _ranking: Cached[List[DocumentationScore]] = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>
@@ -89,19 +102,19 @@ class DocumentationResults(t: Tournament) {
 
         val rank = _scores.count { case (_, _, _, _, _, sc) => sc > score }
 
-        (team, p1Rank, p2Rank, p3Rank, p4Rank, rank, score)
+        DocumentationScore(team, p1, p1Rank, p2, p2Rank, p3, p3Rank, p4, p4Rank, score, rank)
     }
 
-    scores.sortBy { case (_, _, _, _, _, _, score) => -score }
+    scores.sortBy { sc => sc.rank }
   })
   def ranking = _ranking.value.get
 
   //Java interop
   private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, Double]()
-    for ((team, _, _, _, _, _, score) <- ranking)
-      result.put(team, score)
-    result: java.util.Map[Team, Double]
+    val result = new java.util.LinkedHashMap[Team, DocumentationScore]()
+    for (sc <- ranking)
+      result.put(sc.team, sc)
+    result: java.util.Map[Team, DocumentationScore]
   })
   def getRanking() = _jRanking.value.get
 }

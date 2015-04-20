@@ -66,11 +66,16 @@ object Joust {
       t.bracketResults.result(m, winnerSideA)
     }
 
-    for ((team, max, avg, seedingRank, seedingScore) <- t.seedingResults.ranking) {
-      val scores = t.seedingResults.scores(team)
-      val (_, deRank, deScore) = t.bracketResults.ranking.find { case (t, _, _) => t == team }.get
-      val (_, _, _, _, _, docRank, docScore) = t.documentationResults.ranking.find { case (t, _, _, _, _, _, _) => t == team }.get
-      printf("%s | %2d %s %d %f - %f | %2d - %f | %2d - %f%n", team.id, seedingRank, scores, max, avg, seedingScore, deRank, deScore, docRank, docScore)
+    for (team <- t.teams) {
+      val seeding = t.seedingResults.ranking.find { sc => sc.team == team }.get
+      val bracket = t.bracketResults.ranking.find { sc => sc.team == team }.get
+      val documen = t.documentationResults.ranking.find { sc => sc.team == team }.get
+      val overall = t.overallResults.ranking.find { sc => sc.team == team }.get
+      printf("%s | %2d - %f | %2d - %f | %2d - %f | %2d - %f%n", team.id,
+        seeding.rank, seeding.score,
+        bracket.rank, bracket.score,
+        documen.rank, documen.score,
+        overall.rank, overall.score)
     }
 
     for (BracketMatch(id, ord, a, b) <- t.bracketMatches) {

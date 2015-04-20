@@ -6,42 +6,47 @@
 
 package at.pria.joust
 
-/**
- * <p>
- * {@code OverallResults}
- * </p>
- *
- * @version V0.0 20.04.2015
- * @author SillyFreak
- */
+import scala.beans.BeanProperty
+
+case class OverallScore(
+  @BeanProperty val team: Team,
+  @BeanProperty val seedingScore: Double,
+  @BeanProperty val seedingRank: Int,
+  @BeanProperty val bracketScore: Double,
+  @BeanProperty val bracketRank: Int,
+  @BeanProperty val documentationScore: Double,
+  @BeanProperty val documentationRank: Int,
+  @BeanProperty val score: Double,
+  @BeanProperty val rank: Int)
+
 class OverallResults(t: Tournament) {
   //the list of teams, ordered by score
   //List[(team, seeding score/rank, DE score/rank, doc score/rank, overall score/rank)]
   private[this] val _ranking = new Cached({
-    val seeding = Map(t.seedingResults.ranking.map { case (team, _, _, rank, score) => (team, (score, rank)) }: _*)
-    val bracket = Map(t.bracketResults.ranking.map { case (team, rank, score) => (team, (score, rank)) }: _*)
-    val doc = Map(t.documentationResults.ranking.map { case (team, _, _, _, _, rank, score) => (team, (score, rank)) }: _*)
+    val seeding = Map(t.seedingResults.ranking.map { sc => (sc.team, (sc.score, sc.rank)) }: _*)
+    val bracket = Map(t.bracketResults.ranking.map { sc => (sc.team, (sc.score, sc.rank)) }: _*)
+    val doc = Map(t.documentationResults.ranking.map { sc => (sc.team, (sc.score, sc.rank)) }: _*)
 
     val scores = t.teams.map { team =>
       val (sScore, sRank) = seeding(team)
       val (bScore, bRank) = bracket(team)
       val (dScore, dRank) = doc(team)
 
-      (team, sScore, sRank, bScore, bRank, dScore, dRank,
+      OverallScore(team, sScore, sRank, bScore, bRank, dScore, dRank,
         sScore + bScore + dScore, sRank + bRank + dRank)
     }
 
-    scores.sortBy { case (_, _, _, _, _, _, _, score, _) => -score }
+    scores.sortBy { sc => sc.rank }
   })
 
   def ranking = _ranking.value.get
 
   //Java interop
   private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, Double]()
-    for ((team, _, _, _, _, _, _, score, _) <- ranking)
-      result.put(team, score)
-    result: java.util.Map[Team, Double]
+    val result = new java.util.LinkedHashMap[Team, OverallScore]()
+    for (sc <- ranking)
+      result.put(sc.team, sc)
+    result: java.util.Map[Team, OverallScore]
   })
   def getRanking() = _jRanking.value.get
 }
