@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import static scala.collection.JavaConversions.*;
-
 @Controller
 public class TeamsController {
     @Autowired
@@ -16,7 +14,7 @@ public class TeamsController {
 
     @RequestMapping(value = "/admin/teams/", method = RequestMethod.GET)
     public String greetingForm(Model model) {
-        model.addAttribute("teams", asJavaCollection(tournament.teams()));
+        model.addAttribute("tournament", tournament);
         return "joust/teams_admin";
     }
 }
