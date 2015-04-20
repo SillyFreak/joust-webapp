@@ -98,18 +98,19 @@ class SeedingResults(t: Tournament) {
         SeedingScore(team, 0, 0, 0, teamMax, teamAvg, score, rank)
     }
 
-    scores.sortBy { sc => sc.rank }
+    val result = scores.sortBy { sc => sc.rank }
+
+    //Java interop
+    val jResult = new java.util.LinkedHashMap[Team, SeedingScore]()
+    for (sc <- result)
+      jResult.put(sc.team, sc)
+
+    (result, jResult: java.util.Map[Team, SeedingScore])
   })
-  def ranking = _ranking.value.get
+  def ranking = _ranking.value.get._1
 
   //Java interop
-  private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, SeedingScore]()
-    for (sc <- ranking)
-      result.put(sc.team, sc)
-    result: java.util.Map[Team, SeedingScore]
-  })
-  def getRanking() = _jRanking.value.get
+  def getRanking() = _ranking.value.get._2
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =

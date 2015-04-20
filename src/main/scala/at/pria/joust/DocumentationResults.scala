@@ -69,7 +69,7 @@ class DocumentationResults(t: Tournament) {
 
   //the list of teams, ordered by score
   //List[(team, p1rank, p2rank, p3rank, p4rank, rank, score)]
-  private[this] val _ranking: Cached[List[DocumentationScore]] = new Cached({
+  private[this] val _ranking: Cached[(List[DocumentationScore], java.util.Map[Team, DocumentationScore])] = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>
@@ -105,16 +105,17 @@ class DocumentationResults(t: Tournament) {
         DocumentationScore(team, p1, p1Rank, p2, p2Rank, p3, p3Rank, p4, p4Rank, score, rank)
     }
 
-    scores.sortBy { sc => sc.rank }
+    val result = scores.sortBy { sc => sc.rank }
+
+    //Java interop
+    val jResult = new java.util.LinkedHashMap[Team, DocumentationScore]()
+    for (sc <- result)
+      jResult.put(sc.team, sc)
+
+    (result, jResult: java.util.Map[Team, DocumentationScore])
   })
-  def ranking = _ranking.value.get
+  def ranking = _ranking.value.get._1
 
   //Java interop
-  private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, DocumentationScore]()
-    for (sc <- ranking)
-      result.put(sc.team, sc)
-    result: java.util.Map[Team, DocumentationScore]
-  })
-  def getRanking() = _jRanking.value.get
+  def getRanking() = _ranking.value.get._2
 }

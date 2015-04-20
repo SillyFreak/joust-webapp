@@ -31,7 +31,6 @@ class BracketResults(t: Tournament) {
 
   def clear() = {
     _ranking.clear()
-    _jRanking.clear()
     _results.clear()
   }
 
@@ -72,19 +71,20 @@ class BracketResults(t: Tournament) {
         BracketScore(team, score, rank)
     }
 
-    scores.sortBy { sc => sc.rank }
+    val result = scores.sortBy { sc => sc.rank }
+
+    //Java interop
+    val jResult = new java.util.LinkedHashMap[Team, BracketScore]()
+    for (sc <- result)
+      jResult.put(sc.team, sc)
+
+    (result, jResult: java.util.Map[Team, BracketScore])
   })
 
-  def ranking = _ranking.value.get
+  def ranking = _ranking.value.get._1
 
   //Java interop
-  private[this] val _jRanking = new Cached({
-    val result = new java.util.LinkedHashMap[Team, BracketScore]()
-    for (sc <- ranking)
-      result.put(sc.team, sc)
-    result: java.util.Map[Team, BracketScore]
-  })
-  def getRanking() = _jRanking.value.get
+  def getRanking() = _ranking.value.get._2
 
   def winner(id: Int): Option[TeamLike] =
     for {
