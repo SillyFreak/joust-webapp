@@ -1,5 +1,7 @@
 package at.pria.joust.webapp.config;
 
+import at.pria.joust.Team;
+import at.pria.joust.Tournament;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +13,11 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static scala.collection.JavaConversions.*;
+
 @Configuration
 @ComponentScan
 public class RootConfiguration extends WebMvcConfigurerAdapter {
@@ -19,8 +26,6 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/login/").setViewName("accounts/login");
         registry.addViewController("/admin/").setViewName("admin/admin");
         registry.addViewController("/user/").setViewName("user/user");
-
-        registry.addViewController("/admin/teams/").setViewName("joust/teams_admin");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
@@ -43,5 +48,16 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
                 "classpath:i18n/error",
                 "classpath:i18n/joust");
         return ms;
+    }
+
+    @Bean
+    public Tournament tournament() {
+        List<Team> teams = new ArrayList<Team>();
+        teams.add(new Team("15-0000", "TGM"));
+        teams.add(new Team("15-0001", "TGM"));
+
+        Tournament t = new Tournament(collectionAsScalaIterable(teams).toList());
+
+        return t;
     }
 }

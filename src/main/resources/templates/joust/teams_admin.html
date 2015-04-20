@@ -22,9 +22,9 @@
                     <th th:text="#{teams.seeding(2)}">S2</th>
                     <th th:text="#{teams.seeding(3)}">S3</th>
                 </tr>
-                <tr>
-                    <td>15-0000</td>
-                    <td>TGM</td>
+                <tr th:each="team : ${teams}" th:object="${team}">
+                    <td th:text="*{id()}">15-0000</td>
+                    <td th:text="*{name()}">TGM</td>
                     <td>schueler@student.tgm.ac.at</td>
                     <td>300</td>
                     <td>300</td>
