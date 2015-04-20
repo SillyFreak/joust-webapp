@@ -96,6 +96,7 @@ class SeedingResults(t: Tournament) {
 
         val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
 
+        //TODO seeding round results
         SeedingScore(team, 0, 0, 0, teamMax, teamAvg, score, rank)
     }
 
