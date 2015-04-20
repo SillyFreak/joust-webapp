@@ -13,7 +13,7 @@ class DocumentationResults(t: Tournament) {
   object PeriodDoc {
     private[this] val _results = collection.mutable.Map[Team, PeriodDocResult]()
     def result(team: Team, p1: Int, p2: Int, p3: Int) = {
-      //_ranking.clear()
+      _ranking.clear()
       _results(team) = PeriodDocResult(team, p1, p2, p3)
     }
     def result(team: Team) = _results.get(team)
@@ -26,20 +26,20 @@ class DocumentationResults(t: Tournament) {
   object OnsiteDoc {
     private[this] val _results = collection.mutable.Map[Team, OnsiteDocResult]()
     def result(team: Team, score: Int) = {
-      //_ranking.clear()
+      _ranking.clear()
       _results(team) = OnsiteDocResult(team, score)
     }
     def result(team: Team) = _results.get(team)
 
     def clear() = {
-      //_ranking.clear()
+      _ranking.clear()
       _results.clear()
     }
   }
 
   //the list of teams, ordered by score
   //List[(team, p1rank, p2rank, p3rank, p4rank, rank, score)]
-  private[this] val _ranking = new Cached({
+  private[this] val _ranking: Cached[List[(Team, Int, Int, Int, Int, Int, Double)]] = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>
