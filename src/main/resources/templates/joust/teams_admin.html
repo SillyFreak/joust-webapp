@@ -26,13 +26,17 @@
                     <td th:text="*{id}">15-0000</td>
                     <td th:text="*{name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
-                    <td>300</td>
-                    <td>300</td>
-                    <td>200</td>
-                    <td>100</td>
-                    <td>---</td>
-                    <td>---</td>
-                    <td>---</td>
+<!--/*/ <th:block th:object="${tournament.documentationResults.ranking[#object]}"> /*/-->
+                    <td th:text="*{p1Score}">300</td>
+                    <td th:text="*{p2Score}">300</td>
+                    <td th:text="*{p3Score}">200</td>
+                    <td th:text="*{onsiteScore}">100</td>
+<!--/*/ </th:block> /*/-->
+<!--/*/ <th:block th:object="${tournament.seedingResults.ranking[#object]}"> /*/-->
+                    <td th:text="*{s1}">---</td>
+                    <td th:text="*{s2}">---</td>
+                    <td th:text="*{s3}">---</td>
+<!--/*/ </th:block> /*/-->
                 </tr>
             </tbody>
         </table>
