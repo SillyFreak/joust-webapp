@@ -1,23 +1,10 @@
-apply from: project.file('gradle/scala.gradle')
-apply from: project.file('gradle/ide.gradle')
-apply from: project.file('gradle/package.gradle')
-apply from: project.file('gradle/GitVersion.gradle')
-apply from: project.file('gradle/maven.gradle')
-
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
-group = 'at.pria.joust'
-
-basePom {
-    project {
-        name project.name
-        description ''
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
     }
-}
-
-repositories {
-    mavenCentral()
-    mavenLocal()
+    dependencies {
+    }
 }
 
 dependencies {
@@ -25,9 +12,3 @@ dependencies {
     testCompile 'org.scalatest:scalatest_2.11:2.2.1'
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.eveoh.nl/content/repositories/releases' }
-    }
-}
