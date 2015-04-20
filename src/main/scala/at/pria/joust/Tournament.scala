@@ -8,6 +8,7 @@ package at.pria.joust
 
 import scala.collection.mutable.ArrayBuffer
 import scala.beans.BeanProperty
+import scala.collection.JavaConversions._
 
 /**
  * <p>
@@ -17,8 +18,9 @@ import scala.beans.BeanProperty
  * @version V0.0 12.04.2015
  * @author SillyFreak
  */
-class Tournament(
-    @BeanProperty val teams: List[Team]) {
+class Tournament(val teams: List[Team]) {
+  def getTeams() = new java.util.ArrayList(asJavaCollection(teams))
+
   final val numOfSeedingRounds = 3
 
   private[this] object Seeding {
