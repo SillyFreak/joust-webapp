@@ -4,7 +4,7 @@
  * Created on 20.04.2015
  */
 
-package joust
+package at.pria.joust
 
 /**
  * <p>

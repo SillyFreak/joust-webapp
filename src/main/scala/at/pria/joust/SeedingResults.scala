@@ -4,7 +4,7 @@
  * Created on 14.04.2015
  */
 
-package joust
+package at.pria.joust
 
 case class SeedingRoundResult(val id: Int, val score: Int)
 

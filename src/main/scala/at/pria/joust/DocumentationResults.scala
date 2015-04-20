@@ -4,7 +4,7 @@
  * Created on 16.04.2015
  */
 
-package joust
+package at.pria.joust
 
 case class PeriodDocResult(val team: Team, val p1Score: Int, val p2Score: Int, val p3Score: Int)
 case class OnsiteDocResult(val team: Team, val onsiteScore: Int)

@@ -4,7 +4,7 @@
  * Created on 12.04.2015
  */
 
-package joust
+package at.pria.joust
 
 import scala.collection.mutable.ArrayBuffer
 

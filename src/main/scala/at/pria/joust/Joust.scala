@@ -4,7 +4,7 @@
  * Created on 11.04.2015
  */
 
-package joust
+package at.pria.joust
 
 import scala.annotation.tailrec
 

@@ -4,7 +4,7 @@
  * Created on 13.04.2015
  */
 
-package joust
+package at.pria.joust
 
 case class BracketMatchResult(val id: Int, val winnerSideA: Boolean)
 
