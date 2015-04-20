@@ -6,4 +6,8 @@
 
 package at.pria.joust
 
-case class AllianceMatchResult(val id: Int, val score: Int)
+import scala.beans.BeanProperty
+
+case class AllianceMatchResult(
+  @BeanProperty val id: Int,
+  @BeanProperty val score: Int)

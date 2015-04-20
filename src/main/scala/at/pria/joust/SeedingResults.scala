@@ -6,7 +6,11 @@
 
 package at.pria.joust
 
-case class SeedingRoundResult(val id: Int, val score: Int)
+import scala.beans.BeanProperty
+
+case class SeedingRoundResult(
+  @BeanProperty val id: Int,
+  @BeanProperty val score: Int)
 
 class SeedingResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
@@ -15,6 +19,10 @@ class SeedingResults(t: Tournament) {
     _results(sr) = SeedingRoundResult(sr.id, score)
   }
   def result(sr: SeedingRound) = _results.get(sr)
+
+  //Java interop
+  def setResult(sr: SeedingRound, score: Int) = result(sr, score)
+  def getResult(sr: SeedingRound) = result(sr).getOrElse(null)
 
   def clear() = {
     _ranking.clear()
@@ -83,6 +91,15 @@ class SeedingResults(t: Tournament) {
     scores.sortBy { case (_, _, _, _, score) => -score }
   })
   def ranking = _ranking.value.get
+
+  //Java interop
+  private[this] val _jRanking = new Cached({
+    val result = new java.util.LinkedHashMap[Team, Double]()
+    for ((team, _, _, _, score) <- ranking)
+      result.put(team, score)
+    result: java.util.Map[Team, Double]
+  })
+  def getRanking() = _jRanking.value.get
 
   //the team with the specified rank, or ByeTeam if there are less teams
   def teamByRank(rank: Int): TeamLike =

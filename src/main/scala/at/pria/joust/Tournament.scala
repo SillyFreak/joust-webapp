@@ -7,6 +7,7 @@
 package at.pria.joust
 
 import scala.collection.mutable.ArrayBuffer
+import scala.beans.BeanProperty
 
 /**
  * <p>
@@ -16,7 +17,8 @@ import scala.collection.mutable.ArrayBuffer
  * @version V0.0 12.04.2015
  * @author SillyFreak
  */
-class Tournament(val teams: List[Team]) {
+class Tournament(
+    @BeanProperty val teams: List[Team]) {
   final val numOfSeedingRounds = 3
 
   private[this] object Seeding {
@@ -37,8 +39,8 @@ class Tournament(val teams: List[Team]) {
     val map = _map.result()
   }
 
-  val seedingRoundsList = Seeding.list
-  val seedingRoundsMap = Seeding.map
+  @BeanProperty val seedingRoundsList = Seeding.list
+  @BeanProperty val seedingRoundsMap = Seeding.map
 
   private[this] object Bracket {
     // the bracket size n is the lowest power of two that fits all teams, i.e.
@@ -190,13 +192,13 @@ class Tournament(val teams: List[Team]) {
     }
   }
 
-  val bracketMatches = Bracket.matches
+  @BeanProperty val bracketMatches = Bracket.matches
 
-  val seedingResults = new SeedingResults(this)
+  @BeanProperty val seedingResults = new SeedingResults(this)
 
-  val bracketResults = new BracketResults(this)
+  @BeanProperty val bracketResults = new BracketResults(this)
 
-  val documentationResults = new DocumentationResults(this)
+  @BeanProperty val documentationResults = new DocumentationResults(this)
 
-  val overallResults = new OverallResults(this)
+  @BeanProperty val overallResults = new OverallResults(this)
 }

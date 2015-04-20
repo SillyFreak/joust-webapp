@@ -6,11 +6,19 @@
 
 package at.pria.joust
 
-case class PeriodDocResult(val team: Team, val p1Score: Int, val p2Score: Int, val p3Score: Int)
-case class OnsiteDocResult(val team: Team, val onsiteScore: Int)
+import scala.beans.BeanProperty
+
+case class PeriodDocResult(
+  @BeanProperty val team: Team,
+  @BeanProperty val p1Score: Int,
+  @BeanProperty val p2Score: Int,
+  @BeanProperty val p3Score: Int)
+case class OnsiteDocResult(
+  @BeanProperty val team: Team,
+  @BeanProperty val onsiteScore: Int)
 
 class DocumentationResults(t: Tournament) {
-  object PeriodDoc {
+  @BeanProperty object PeriodDoc {
     private[this] val _results = collection.mutable.Map[Team, PeriodDocResult]()
     def result(team: Team, p1: Int, p2: Int, p3: Int) = {
       _ranking.clear()
@@ -18,18 +26,27 @@ class DocumentationResults(t: Tournament) {
     }
     def result(team: Team) = _results.get(team)
 
+    //Java interop
+    def setResult(team: Team, p1: Int, p2: Int, p3: Int) = result(team, p1, p2, p3)
+    def getResult(team: Team) = result(team).getOrElse(null)
+
     def clear() = {
-      //_ranking.clear()
+      _ranking.clear()
       _results.clear()
     }
   }
-  object OnsiteDoc {
+
+  @BeanProperty object OnsiteDoc {
     private[this] val _results = collection.mutable.Map[Team, OnsiteDocResult]()
     def result(team: Team, score: Int) = {
       _ranking.clear()
       _results(team) = OnsiteDocResult(team, score)
     }
     def result(team: Team) = _results.get(team)
+
+    //Java interop
+    def setResult(team: Team, score: Int) = result(team, score)
+    def getResult(team: Team) = result(team).getOrElse(null)
 
     def clear() = {
       _ranking.clear()
@@ -78,4 +95,13 @@ class DocumentationResults(t: Tournament) {
     scores.sortBy { case (_, _, _, _, _, _, score) => -score }
   })
   def ranking = _ranking.value.get
+
+  //Java interop
+  private[this] val _jRanking = new Cached({
+    val result = new java.util.LinkedHashMap[Team, Double]()
+    for ((team, _, _, _, _, _, score) <- ranking)
+      result.put(team, score)
+    result: java.util.Map[Team, Double]
+  })
+  def getRanking() = _jRanking.value.get
 }

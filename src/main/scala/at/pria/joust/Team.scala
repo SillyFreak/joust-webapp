@@ -6,6 +6,8 @@
 
 package at.pria.joust
 
+import scala.beans.BeanProperty
+
 /**
  * <p>
  * {@code Team}
@@ -15,12 +17,14 @@ package at.pria.joust
  * @author SillyFreak
  */
 sealed trait TeamLike {
-  val id: String
-  val name: String
+  @BeanProperty val id: String
+  @BeanProperty val name: String
 }
 
-case class Team(val id: String, val name: String) extends TeamLike
+case class Team(
+  @BeanProperty val id: String,
+  @BeanProperty val name: String) extends TeamLike
 case object ByeTeam extends TeamLike {
-  val id = "____"
-  val name = "bye"
+  @BeanProperty val id = "____"
+  @BeanProperty val name = "bye"
 }

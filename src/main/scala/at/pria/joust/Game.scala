@@ -6,9 +6,22 @@
 
 package at.pria.joust
 
-case class SeedingRound(val id: Int, val round: Int, val team: Team)
+import scala.beans.BeanProperty
 
-case class BracketMatch(val id: Int, val ord: Int, val aTeamSource: TeamSource, val bTeamSource: TeamSource)
+case class SeedingRound(
+  @BeanProperty val id: Int,
+  @BeanProperty val round: Int,
+  @BeanProperty val team: Team)
+
+case class BracketMatch(
+    @BeanProperty val id: Int,
+    @BeanProperty val ord: Int,
+    val aTeamSource: TeamSource,
+    val bTeamSource: TeamSource) {
+  //Java interop
+  def getATeam() = aTeamSource.team.getOrElse(null)
+  def getBTeam() = bTeamSource.team.getOrElse(null)
+}
 
 sealed trait TeamSource {
   def team: Option[TeamLike]
@@ -45,4 +58,7 @@ case object ByeTeamSource extends TeamSource {
   def team = Some(ByeTeam)
 }
 
-case class AllianceMatch(val id: Int, val aTeam: Team, val bTeam: Team)
+case class AllianceMatch(
+  @BeanProperty val id: Int,
+  @BeanProperty val aTeam: Team,
+  @BeanProperty val bTeam: Team)

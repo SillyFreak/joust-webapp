@@ -35,4 +35,13 @@ class OverallResults(t: Tournament) {
   })
 
   def ranking = _ranking.value.get
+
+  //Java interop
+  private[this] val _jRanking = new Cached({
+    val result = new java.util.LinkedHashMap[Team, Double]()
+    for ((team, _, _, _, _, _, _, score, _) <- ranking)
+      result.put(team, score)
+    result: java.util.Map[Team, Double]
+  })
+  def getRanking() = _jRanking.value.get
 }

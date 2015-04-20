@@ -6,7 +6,11 @@
 
 package at.pria.joust
 
-case class BracketMatchResult(val id: Int, val winnerSideA: Boolean)
+import scala.beans.BeanProperty
+
+case class BracketMatchResult(
+  @BeanProperty val id: Int,
+  @BeanProperty val winnerSideA: Boolean)
 
 class BracketResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
@@ -16,8 +20,13 @@ class BracketResults(t: Tournament) {
   }
   def result(bm: BracketMatch) = _results.get(bm)
 
+  //Java interop
+  def setResult(bm: BracketMatch, winnerSideA: Boolean) = result(bm, winnerSideA)
+  def getResult(bm: BracketMatch) = result(bm).getOrElse(null)
+
   def clear() = {
     _ranking.clear()
+    _jRanking.clear()
     _results.clear()
   }
 
@@ -58,10 +67,19 @@ class BracketResults(t: Tournament) {
         (team, rank, score)
     }
 
-    scores.sortBy { case (_, rank, _) => rank }
+    scores.sortBy { case (_, _, score) => -score }
   })
 
   def ranking = _ranking.value.get
+
+  //Java interop
+  private[this] val _jRanking = new Cached({
+    val result = new java.util.LinkedHashMap[Team, Double]()
+    for ((team, _, score) <- ranking)
+      result.put(team, score)
+    result: java.util.Map[Team, Double]
+  })
+  def getRanking() = _jRanking.value.get
 
   def winner(id: Int): Option[TeamLike] =
     for {
