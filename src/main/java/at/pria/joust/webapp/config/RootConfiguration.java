@@ -19,6 +19,8 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/login/").setViewName("accounts/login");
         registry.addViewController("/admin/").setViewName("admin/admin");
         registry.addViewController("/user/").setViewName("user/user");
+
+        registry.addViewController("/admin/teams/").setViewName("joust/teams_admin");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 

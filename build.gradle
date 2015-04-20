@@ -20,5 +20,7 @@ dependencies {
     compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4:2.1.2.RELEASE'
     compile 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.2.1'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    compile 'at.pria.joust:joust:0.0.0-SNAPSHOT'
 }
 
