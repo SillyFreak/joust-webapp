@@ -197,4 +197,6 @@ class Tournament(val teams: List[Team]) {
   val bracketResults = new BracketResults(this)
 
   val documentationResults = new DocumentationResults(this)
+
+  val overallResults = new OverallResults(this)
 }
