@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title>User</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <h1 th:text="#{user.greet(${#authentication.name})}">Hello, Username</h1>
+        <ul>
+            <li><a th:href="@{changePassword/}" th:text="#{accounts.changePassword}">Change password</a></li>
+            <li><a th:href="@{greeting/}">Add a greeting</a></li>
+        </ul>
+    </article>
+</body>
+</html>

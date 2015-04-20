@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{admin.createUser}">Create User</title>
+</head>
+<body>
+<article layout:fragment="content">
+    <h1 th:text="#{admin.createUser}">Create User</h1>
+        <div class="alert alert-success" th:text="#{admin.createUser.success}">User created successfully!</div>
+    </article>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:title="#{error.title}">Error</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <h1 th:text="|Error - ${status} ${error}|">Error</h1>
+        <p th:text="#{error.__${status}__}">Description</p>
+    </article>
+</body>
+</html>
