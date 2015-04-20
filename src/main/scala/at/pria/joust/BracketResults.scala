@@ -32,6 +32,7 @@ class BracketResults(t: Tournament) {
   def clear() = {
     _ranking.clear()
     _results.clear()
+    t.overallResults.clear()
   }
 
   def score(team: Team): Either[Int, Int] = {

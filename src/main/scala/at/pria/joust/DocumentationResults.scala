@@ -46,6 +46,7 @@ class DocumentationResults(t: Tournament) {
     def clear() = {
       _ranking.clear()
       _results.clear()
+      t.overallResults.clear()
     }
   }
 
@@ -64,6 +65,7 @@ class DocumentationResults(t: Tournament) {
     def clear() = {
       _ranking.clear()
       _results.clear()
+      t.overallResults.clear()
     }
   }
 

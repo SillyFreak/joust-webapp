@@ -38,6 +38,7 @@ class SeedingResults(t: Tournament) {
     _ranking.clear()
     _results.clear()
     t.bracketResults.clear()
+    t.overallResults.clear()
   }
 
   //a list of scores of all seeding rounds the team has already had

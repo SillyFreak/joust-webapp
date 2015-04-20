@@ -20,6 +20,8 @@ case class OverallScore(
   @BeanProperty val rank: Int)
 
 class OverallResults(t: Tournament) {
+  private[joust] def clear() = _ranking.clear()
+
   //the list of teams, ordered by score
   //List[(team, seeding score/rank, DE score/rank, doc score/rank, overall score/rank)]
   private[this] val _ranking = new Cached({
