@@ -53,10 +53,14 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public Tournament tournament() {
         List<Team> teams = new ArrayList<Team>();
-        teams.add(new Team("15-0000", "TGM"));
-        teams.add(new Team("15-0001", "TGM"));
+        Team t1, t2;
+
+        teams.add(t1 = new Team("15-0000", "TGM"));
+        teams.add(t2 = new Team("15-0001", "TGM"));
 
         Tournament t = new Tournament(collectionAsScalaIterable(teams).toList());
+        t.getSeedingResults().setResult(t1, 0, 200);
+        t.getSeedingResults().setResult(t2, 1, 100);
 
         return t;
     }
