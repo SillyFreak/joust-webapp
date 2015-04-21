@@ -41,8 +41,11 @@ class Tournament(val teams: List[Team]) {
     val map = _map.result()
   }
 
-  @BeanProperty val seedingRoundsList = Seeding.list
-  @BeanProperty val seedingRoundsMap = Seeding.map
+  val seedingRoundsList = Seeding.list
+  val seedingRoundsMap = Seeding.map
+
+  //Java interop
+  def getSeedingRounds(): java.util.List[SeedingRound] = new java.util.ArrayList(asJavaCollection(seedingRoundsList))
 
   private[this] object Bracket {
     // the bracket size n is the lowest power of two that fits all teams, i.e.
@@ -194,7 +197,10 @@ class Tournament(val teams: List[Team]) {
     }
   }
 
-  @BeanProperty val bracketMatches = Bracket.matches
+  val bracketMatches = Bracket.matches
+
+  //Java interop
+  def getBracketMatches(): java.util.List[BracketMatch] = new java.util.ArrayList(asJavaCollection(bracketMatches))
 
   @BeanProperty val seedingResults = new SeedingResults(this)
 
