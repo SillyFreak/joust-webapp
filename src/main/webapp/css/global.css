@@ -1,0 +1,175 @@
+div#winners, div#consolation {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#navmenu {
+    padding: 0;
+    margin: 0;
+}
+
+#navmenu ul {
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+    list-style-type: none;
+    list-style-image: none;
+}
+
+#navmenu {
+    margin-top: -10px;
+}
+
+#navmenu li {
+    display: inline-block;
+    margin: 10px 0px 10px 0px;
+}
+
+#navmenu ul li a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #EEEEEE;
+    border-radius: .60em;
+    padding: .4em;
+}
+
+#navmenu ul li a:hover {
+    color: white;
+    background-color: red;
+    border-radius: .60em;
+    padding: .4em;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#header {
+    background-color: #EEE;
+    height: auto;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#header h1 {
+    margin: 0em 0em 0.4em 0em;
+    padding-left: 0.5em;
+}
+
+table.game-table {
+    border-collapse: collapse;
+}
+
+table.game-table td {
+    vertical-align: text-top;
+    text-align: left;
+    border: 1px solid gray;
+}
+
+table.game-table td.victor {
+    background: #FF9;
+}
+
+table#next-up td {
+    vertical-align: text-top;
+    text-align: left;
+    border: 2px solid green;
+}
+
+tr.on-deck td {
+
+    background: blue;
+
+}
+
+table.results {
+    border-spacing: .5em .5em;
+}
+
+table.results th {
+    padding: 0.2em;
+    border-radius: .4em;
+}
+
+table.results tr {
+    border: 1px solid black;
+}
+
+table.results td {
+    text-align: center;
+}
+
+table.awards {
+    border-collapse: collapse;
+}
+
+table.awards td {
+    border: 0;
+    margin: .25em;
+    padding: .25em;;
+    vertical-align: text-top;
+    text-align: left;
+
+}
+
+table.awards th {
+    text-align: right;
+    vertical-align: text-top;
+    color: #000000;
+    font-size: 13px;
+    font-weight: bold;
+    margin: .25em;
+    padding: .25em;;
+}
+
+table.long-awards th {
+    text-align: left;
+    vertical-align: text-top;
+    color: #000000;
+    font-size: 13px;
+    font-weight: bold;
+    margin: .25em;
+    padding: .25em;;
+}
+
+table.scores {
+    border-spacing: 1em .5em;
+}
+
+table.scores td {
+    text-align: center;
+}
+
+tr.cgame td {
+    background-color: red;
+}
+
+tr.cgame td td {
+    color: white;
+}
+
+dt {
+    float: left;
+    clear: left;
+    width: 200px;
+    text-align: right;
+    font-weight: bold;
+    color: green;
+    padding-right: .5em;
+}
+
+dt:after {
+    content: ":";
+}
+
+dd {
+    margin: 0 0 0 110px;
+    padding: 0 0 0.5em 0;
+}
+
+fieldset#fieldset-tournament {
+    border: 0;
+}

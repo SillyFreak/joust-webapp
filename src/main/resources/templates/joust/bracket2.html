@@ -5,37 +5,28 @@
       layout:decorator="layout">
 <head>
     <title th:text="#{teams.name}">Teams</title>
+    <link rel="stylesheet" th:href="@{/css/bracket.css}" />
 </head>
 <body>
     <article layout:fragment="content">
-        <table class="table">
-            <tbody>
-                <tr>
-                    <th th:text="#{bracket.id}">Game</th>
-                    <th th:text="#{bracket.aTeam}">Team A</th>
-                    <th th:text="#{bracket.bTeam}">Team B</th>
-                    <th th:text="#{bracket.winner}">Winner</th>
-                </tr>
 <!--/*/ <th:block th:remove="all"> /*/-->
-                <tr th:remove="tag" th:fragment="team(team)" th:switch="${team}">
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
-                </tr>
+                <div th:remove="tag" th:fragment="team(team)" th:switch="${team}">
+                    <div th:case="null" class="team-name team-unknown" th:text="#{bracket.team.unknown}">unknown</div>
+                    <div th:case="${ByeTeam}" class="team-name team-bye" th:text="#{bracket.team.bye}">bye</div>
+                    <div th:case="*" class="team-name" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</div>
+                </div>
+                <div th:fragment="match(aTeam, bTeam)" class="game">
+                    <div class="team-a"><div th:replace="this::team(${aTeam})">unknown</div></div>
+                    <div class="team-b"><div th:replace="this::team(${bTeam})">unknown</div></div>
+                </div>
 <!--/*/ </th:block> /*/-->
-                <tr th:each="game : ${tournament.bracketMatches}" th:object="${game}">
-                    <td th:text="*{id + 1}">1</td>
-                    <td th:replace="this::team(*{aTeam})">unknown</td>
-                    <td th:replace="this::team(*{bTeam})">unknown</td>
-<!--/*/ <th:block th:object="${tournament.bracketResults.getResult(#object)}"> /*/-->
-                    <td th:if="${#object == null}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-    <!--/*/ <th:block th:if="${#object != null}"> /*/-->
-                    <td th:replace="this::team(${#object.winnerSideA ? game.aTeam : game.bTeam})">unknown</td>
-    <!--/*/ </th:block> /*/-->
-<!--/*/ </th:block> /*/-->
-                </tr>
-            </tbody>
-        </table>
+        <div class="bracket">
+            <div class="round phase-0" id="r1">
+                <div th:remove="tag" th:each="game : ${tournament.bracketMatches}" th:object="${game}">
+                <div th:replace="this::match(*{aTeam}, *{bTeam})"></div>
+                </div>
+            </div>
+        </div>
     </article>
 </body>
 </html>

@@ -1,0 +1,275 @@
+.bracket {
+    font-size: 14pt;
+    width: 66em;
+}
+
+.bracket#winners .round {
+    float: left;
+}
+
+.bracket#consolation .round {
+    float: right;
+}
+
+.bracket .round {
+    width: 6em;
+}
+
+.bracket .round .game {
+    position: relative;
+}
+
+.bracket .round .game .game-number {
+    color: blue;
+    position: absolute;
+    height: 1em;
+}
+
+.bracket .round .game .team-a,
+.bracket .round .game .team-b {
+    position: relative;
+    border-bottom-width: 0.2em;
+    border-bottom-style: solid;
+}
+
+.bracket .round .game .team-a .team-name,
+.bracket .round .game .team-b .team-name {
+    overflow: hidden;
+    position: absolute;
+    bottom: 0.1em;
+    height: 1em;
+    font-size: 70%;
+}
+
+.bracket .round.phase-0 .game .team-b {
+    border-right-width: .2em;
+    border-right-style: solid;
+}
+
+.bracket .round.phase-1 .game .team-b,
+.bracket .round.phase-2 .game .team-b {
+    border-left-width: 0.2em;
+    border-left-style: solid;
+}
+
+.bracket .round.phase-0 .game .game-number {
+    right: 0.4em;
+}
+
+.bracket .round.phase-0 .game .team-a .team-name,
+.bracket .round.phase-0 .game .team-b .team-name {
+    left: 0.2em;
+}
+
+.bracket .round.phase-1 .game .game-number,
+.bracket .round.phase-2 .game .game-number {
+    left: 0.4em;
+}
+
+.bracket .round.phase-1 .game .team-a .team-name,
+.bracket .round.phase-1 .game .team-b .team-name,
+.bracket .round.phase-2 .game .team-a .team-name,
+.bracket .round.phase-2 .game .team-b .team-name {
+    right: 0.2em;
+}
+
+.bracket .round#r1 .game {
+    height: 2.4em;
+}
+
+.bracket .round#r1 .game .team-a,
+.bracket .round#r1 .game .team-b {
+    height: 1em;
+}
+
+.bracket .round#r1 .game .game-number {
+    bottom: 0.35em;
+}
+
+.bracket .round#r2 .game {
+    height: 4.8em;
+}
+
+.bracket .round#r2 .game .team-a {
+    height: 1.6em;
+}
+
+.bracket .round#r2 .game .team-b {
+    height: 2.2em;
+}
+
+.bracket .round#r2 .game .game-number {
+    bottom: 1.4em;
+}
+
+.bracket .round#r2.phase-1 .game .game-number {
+    bottom: 1.6em;
+}
+
+.bracket .round#r2.phase-2 .game .team-a {
+    height: 2.7em;
+}
+
+.bracket .round#r2.phase-2 .game .game-number {
+    bottom: 0.1em;
+}
+
+.bracket .round#r3 .game {
+    height: 9.6em;
+}
+
+.bracket .round#r3 .game .team-a {
+    height: 2.9em;
+}
+
+.bracket .round#r3 .game .team-b {
+    height: 4.6em;
+}
+
+.bracket .round#r3 .game .game-number {
+    bottom: 3.8em;
+}
+
+.bracket .round#r3.phase-1 .game .team-a {
+    height: 3.9em;
+}
+
+.bracket .round#r3.phase-1 .game .game-number {
+    bottom: 3em;
+}
+
+.bracket .round#r3.phase-2 .game .team-a {
+    height: 1.5em;
+}
+
+.bracket .round#r3.phase-2 .game .game-number {
+    bottom: 5.4em;
+}
+
+.bracket .round#r4 .game {
+    height: 19.2em;
+}
+
+.bracket .round#r4 .game .team-a {
+    height: 5.3em;
+}
+
+.bracket .round#r4 .game .team-b {
+    height: 9.4em;
+}
+
+.bracket .round#r4 .game .game-number {
+    bottom: 8.6em;
+}
+
+.bracket .round#r4.phase-1 .game .team-a {
+    height: 3.9em;
+}
+
+.bracket .round#r4.phase-1 .game .game-number {
+    bottom: 10.2em;
+}
+
+.bracket .round#r4.phase-2 .game .team-a {
+    height: 8.5em;
+}
+
+.bracket .round#r4.phase-2 .game .game-number {
+    bottom: 5.5em;
+}
+
+.bracket .round#r5 .game {
+    height: 38.4em;
+}
+
+.bracket .round#r5 .game .team-a {
+    height: 10.1em;
+}
+
+.bracket .round#r5 .game .team-b {
+    height: 19em;
+}
+
+.bracket .round#r5 .game .game-number {
+    bottom: 18.2em;
+}
+
+.bracket .round#r5.phase-1 .game .team-a {
+    height: 13.3em;
+}
+
+.bracket .round#r5.phase-1 .game .game-number {
+    bottom: 14.7em;
+}
+
+.bracket .round#r5.phase-2 .game .team-a {
+    height: 4.1em;
+}
+
+.bracket .round#r5.phase-2 .game .game-number {
+    bottom: 24.6em;
+}
+
+.bracket .round#r6 .game {
+    height: 75.2em;
+}
+
+.bracket .round#r6 .game .team-a {
+    height: 19.7em;
+}
+
+.bracket .round#r6 .game .team-b {
+    height: 38.4em;
+}
+
+.bracket .round#r6 .game .game-number {
+    bottom: 37.4em;
+}
+
+.bracket .round#r6.phase-1 .game .team-a {
+    height: 13.3em;
+}
+
+.bracket .round#r6.phase-1 .game .game-number {
+    bottom: 42.2em;
+}
+
+.bracket .round#r6.phase-2 .game .team-a {
+    height: 32.4em;
+}
+
+.bracket .round#r6.phase-2 .game .game-number {
+    bottom: 24em;
+}
+
+.bracket .round#r7 .game {
+    height: .2em;
+}
+
+.bracket .round#r7 .game .team-a {
+    height: 38.9em;
+}
+
+.bracket .round#r7 .game .team-b {
+    height: 38.4em;
+}
+
+.bracket .round#r7 .game .game-number {
+    bottom: 37.4em;
+}
+
+.bracket .round#r7.phase-1 .game .team-a {
+    height: 13.3em;
+}
+
+.bracket .round#r7.phase-1 .game .game-number {
+    bottom: 42.2em;
+}
+
+.bracket .round#r7.phase-2 .game .team-a {
+    height: 32.4em;
+}
+
+.bracket .round#r7.phase-2 .game .game-number {
+    bottom: 24em;
+}
