@@ -13,8 +13,14 @@ public class TeamsController {
     private Tournament tournament;
 
     @RequestMapping(value = "/admin/teams/", method = RequestMethod.GET)
-    public String greetingForm(Model model) {
+    public String adminTeams(Model model) {
         model.addAttribute("tournament", tournament);
         return "joust/teams_admin";
+    }
+
+    @RequestMapping(value = "/teams/", method = RequestMethod.GET)
+    public String teams(Model model) {
+        model.addAttribute("tournament", tournament);
+        return "joust/teams";
     }
 }
