@@ -47,56 +47,34 @@ class SeedingResults(t: Tournament) {
       round <- 0 until t.numOfSeedingRounds
     } yield result(t.seedingRoundsMap(team, round))
 
-  //the maximum score, Either final or preliminary
-  def max(team: Team): Either[Int, Int] = {
-    val scores = this.scores(team).collect { case Some(x) => x.score }.sorted
-
-    val finished = scores.size == t.numOfSeedingRounds
-    val score = if (scores.isEmpty) 0 else scores.last
-
-    //the seeding score is final, regular result
-    if (finished) Right(score)
-    //the seeding score is preliminary, exceptional result
-    else Left(score)
-  }
-
-  //the average of the best two rounds, Either final or preliminary
-  def avg(team: Team): Either[Double, Double] = {
-    val scores = this.scores(team).collect { case Some(x) => x.score }.sorted
-
-    val finished = scores.size == t.numOfSeedingRounds
-    val dropped = scores.takeRight(2)
-    val score = if (dropped.isEmpty) 0 else dropped.sum.toDouble / dropped.size
-
-    //the seeding score is final, regular result
-    if (finished) Right(score)
-    //the seeding score is preliminary, exceptional result
-    else Left(score)
-  }
-
   //the list of teams, ordered by score
   //List[(team, max, avg, rank, score)]
-  private[this] val _ranking = new Cached({
+  private[this] val _ranking: Cached[(List[SeedingScore], java.util.Map[Team, SeedingScore])] = new Cached({
     val count = t.teams.size.asInstanceOf[Double]
 
     val _scores = t.teams.map { team =>
-      (max(team), avg(team)) match {
-        case (Right(max), Right(avg)) => (team, max, avg)
-        case (Left(max), Left(avg))   => (team, max, avg)
-        case x                        => throw new MatchError(x)
-      }
+      val allScores = this.scores(team).map(_.map(_.score))
+      val scores = allScores.collect { case Some(x) => x }.sorted
+
+      val (max, avg) =
+        if (scores.isEmpty) (0, 0d)
+        else {
+          val dropped = scores.takeRight(2)
+          (dropped.last, dropped.sum.toDouble / dropped.size)
+        }
+
+      (team, allScores(0), allScores(1), allScores(2), max, avg)
     }
 
-    val seedingMax = _scores.map { case (_, max, _) => max }.max
+    val seedingMax = _scores.map { case (_, _, _, _, max, _) => max }.max
 
     val scores = _scores.map {
-      case (team, teamMax, teamAvg) =>
-        val rank = _scores.count { case (_, _, avg) => avg > teamAvg }
+      case (team, s1, s2, s3, teamMax, teamAvg) =>
+        val rank = _scores.count { case (_, _, _, _, _, avg) => avg > teamAvg }
 
         val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
 
-        //TODO seeding round results
-        SeedingScore(team, None, None, None, teamMax, teamAvg, score, rank)
+        SeedingScore(team, s1, s2, s3, teamMax, teamAvg, score, rank)
     }
 
     val result = scores.sortBy { sc => sc.rank }
