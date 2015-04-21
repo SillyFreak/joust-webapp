@@ -26,4 +26,11 @@ public class BracketController {
         model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
         return "joust/bracket";
     }
+
+    @RequestMapping(value = "/bracket2/", method = RequestMethod.GET)
+    public String bracket2(Model model) {
+        model.addAttribute("tournament", tournament);
+        model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
+        return "joust/bracket2";
+    }
 }
