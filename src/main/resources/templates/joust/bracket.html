@@ -16,24 +16,21 @@
                     <th th:text="#{bracket.bTeam}">Team B</th>
                     <th th:text="#{bracket.winner}">Winner</th>
                 </tr>
+<!--/*/ <th:block th:remove="all"> /*/-->
+                <tr th:remove="tag" th:fragment="team(team)" th:switch="${team}">
+                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
+                </tr>
+<!--/*/ </th:block> /*/-->
                 <tr th:each="game : ${tournament.bracketMatches}" th:object="${game}">
                     <td th:text="*{id + 1}">1</td>
-<!--/*/ <th:block th:switch="*{aTeam}"> /*/-->
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(*{aTeam.id}, *{aTeam.name})}">15-0000 TGM</td>
-<!--/*/ </th:block> /*/-->
-<!--/*/ <th:block th:switch="*{bTeam}"> /*/-->
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(*{bTeam.id}, *{bTeam.name})}">15-0000 TGM</td>
-<!--/*/ </th:block> /*/-->
+                    <td th:replace="this::team(*{aTeam})">unknown</td>
+                    <td th:replace="this::team(*{bTeam})">unknown</td>
 <!--/*/ <th:block th:object="${tournament.bracketResults.getResult(#object)}"> /*/-->
                     <td th:if="${#object == null}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-    <!--/*/ <th:block th:if="${#object != null}" th:object="${#object.winnerSideA ? game.aTeam : game.bTeam}" th:switch="${#object}"> /*/-->
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(*{id}, *{name})}">15-0000 TGM</td>
+    <!--/*/ <th:block th:if="${#object != null}"> /*/-->
+                    <td th:replace="this::team(${#object.winnerSideA ? game.aTeam : game.bTeam})">unknown</td>
     <!--/*/ </th:block> /*/-->
 <!--/*/ </th:block> /*/-->
                 </tr>
