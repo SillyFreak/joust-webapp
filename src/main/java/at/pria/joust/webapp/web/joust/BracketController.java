@@ -1,5 +1,6 @@
 package at.pria.joust.webapp.web.joust;
 
+import at.pria.joust.ByeTeam$;
 import at.pria.joust.Tournament;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +16,14 @@ public class BracketController {
     @RequestMapping(value = "/admin/bracket/", method = RequestMethod.GET)
     public String adminBracket(Model model) {
         model.addAttribute("tournament", tournament);
+        model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
         return "joust/bracket_admin";
     }
 
     @RequestMapping(value = "/bracket/", method = RequestMethod.GET)
     public String bracket(Model model) {
         model.addAttribute("tournament", tournament);
+        model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
         return "joust/bracket";
     }
 }

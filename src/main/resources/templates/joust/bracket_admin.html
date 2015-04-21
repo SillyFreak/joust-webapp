@@ -16,9 +16,17 @@
                     <th th:text="#{bracket.bTeam}">Team B</th>
                 </tr>
                 <tr th:each="game : ${tournament.bracketMatches}" th:object="${game}">
-                    <td th:text="*{id}">1</td>
-                    <td th:text="*{aTeam instanceof T(at.pria.joust.Team)} ? |*{aTeam.id} *{aTeam.name}| : (*{aTeam != null} ? 'bye' : 'unknown')">unknown</td>
-                    <td th:text="*{bTeam instanceof T(at.pria.joust.Team)} ? |*{bTeam.id} *{bTeam.name}| : (*{bTeam != null} ? 'bye' : 'unknown')">unknown</td>
+                    <td th:text="*{id + 1}">1</td>
+<!--/*/ <th:block th:switch="*{aTeam}"> /*/-->
+                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:case="*" th:text="#{bracket.team(*{aTeam.id}, *{aTeam.name})}">15-0000 TGM</td>
+<!--/*/ </th:block> /*/-->
+<!--/*/ <th:block th:switch="*{bTeam}"> /*/-->
+                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:case="*" th:text="#{bracket.team(*{bTeam.id}, *{bTeam.name})}">15-0000 TGM</td>
+<!--/*/ </th:block> /*/-->
                 </tr>
             </tbody>
         </table>
