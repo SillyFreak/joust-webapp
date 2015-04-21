@@ -21,6 +21,8 @@
                     <th th:text="#{teams.seeding(1)}">S1</th>
                     <th th:text="#{teams.seeding(2)}">S2</th>
                     <th th:text="#{teams.seeding(3)}">S3</th>
+                    <th th:text="#{teams.seedingAvg}">Seeding Average</th>
+                    <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
                     <td th:text="*{id}">15-0000</td>
@@ -36,6 +38,8 @@
                     <td th:text="*{s1 != -1}? *{s1} : '---'">---</td>
                     <td th:text="*{s2 != -1}? *{s2} : '---'">---</td>
                     <td th:text="*{s3 != -1}? *{s3} : '---'">---</td>
+                    <td th:text="*{avg}">---</td>
+                    <td th:text="*{rank + 1}">---</td>
 <!--/*/ </th:block> /*/-->
                 </tr>
             </tbody>
