@@ -65,7 +65,7 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
         t.getSeedingResults().setResult(t1, 0, 200);
         t.getSeedingResults().setResult(t2, 1, 100);
 
-        t.getBracketResults().setResult(t.getBracketMatches().get(0), true);
+        t.getBracketResults().setResult(t.getBracketMatches().get(1), true);
 
         return t;
     }

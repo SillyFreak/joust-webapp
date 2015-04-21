@@ -30,9 +30,10 @@
 <!--/*/ </th:block> /*/-->
 <!--/*/ <th:block th:object="${tournament.bracketResults.getResult(#object)}"> /*/-->
                     <td th:if="${#object == null}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-    <!--/*/ <th:block th:if="${#object != null}" th:object="${#object.winnerSideA ? game.aTeam : game.bTeam}"> /*/-->
-                    <td th:if="${#object == ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:if="${#object != ByeTeam}" th:text="#{bracket.team(*{id}, *{name})}">15-0000 TGM</td>
+    <!--/*/ <th:block th:if="${#object != null}" th:object="${#object.winnerSideA ? game.aTeam : game.bTeam}" th:switch="${#object}"> /*/-->
+                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:case="*" th:text="#{bracket.team(*{id}, *{name})}">15-0000 TGM</td>
     <!--/*/ </th:block> /*/-->
 <!--/*/ </th:block> /*/-->
                 </tr>
