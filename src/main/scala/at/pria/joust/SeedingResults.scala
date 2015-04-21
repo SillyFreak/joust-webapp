@@ -14,9 +14,9 @@ case class SeedingRoundResult(
 
 case class SeedingScore(
   @BeanProperty val team: Team,
-  @BeanProperty val s1: Int,
-  @BeanProperty val s2: Int,
-  @BeanProperty val s3: Int,
+  @BeanProperty val s1: Option[Int],
+  @BeanProperty val s2: Option[Int],
+  @BeanProperty val s3: Option[Int],
   @BeanProperty val max: Int,
   @BeanProperty val avg: Double,
   @BeanProperty val score: Double,
@@ -45,12 +45,11 @@ class SeedingResults(t: Tournament) {
   def scores(team: Team) =
     for {
       round <- 0 until t.numOfSeedingRounds
-      result <- result(t.seedingRoundsMap(team, round))
-    } yield result.score
+    } yield result(t.seedingRoundsMap(team, round))
 
   //the maximum score, Either final or preliminary
   def max(team: Team): Either[Int, Int] = {
-    val scores = this.scores(team).sorted
+    val scores = this.scores(team).collect { case Some(x) => x.score }.sorted
 
     val finished = scores.size == t.numOfSeedingRounds
     val score = if (scores.isEmpty) 0 else scores.last
@@ -63,7 +62,7 @@ class SeedingResults(t: Tournament) {
 
   //the average of the best two rounds, Either final or preliminary
   def avg(team: Team): Either[Double, Double] = {
-    val scores = this.scores(team).sorted
+    val scores = this.scores(team).collect { case Some(x) => x.score }.sorted
 
     val finished = scores.size == t.numOfSeedingRounds
     val dropped = scores.takeRight(2)
@@ -97,7 +96,7 @@ class SeedingResults(t: Tournament) {
         val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
 
         //TODO seeding round results
-        SeedingScore(team, 0, 0, 0, teamMax, teamAvg, score, rank)
+        SeedingScore(team, None, None, None, teamMax, teamAvg, score, rank)
     }
 
     val result = scores.sortBy { sc => sc.rank }
