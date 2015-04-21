@@ -13,14 +13,18 @@ case class SeedingRoundResult(
   @BeanProperty val score: Int)
 
 case class SeedingScore(
-  @BeanProperty val team: Team,
-  @BeanProperty val s1: Option[Int],
-  @BeanProperty val s2: Option[Int],
-  @BeanProperty val s3: Option[Int],
-  @BeanProperty val max: Int,
-  @BeanProperty val avg: Double,
-  @BeanProperty val score: Double,
-  @BeanProperty val rank: Int)
+    @BeanProperty val team: Team,
+    val s1: Option[Int],
+    val s2: Option[Int],
+    val s3: Option[Int],
+    @BeanProperty val max: Int,
+    @BeanProperty val avg: Double,
+    @BeanProperty val score: Double,
+    @BeanProperty val rank: Int) {
+  def getS1() = s1.getOrElse(-1)
+  def getS2() = s2.getOrElse(-1)
+  def getS3() = s3.getOrElse(-1)
+}
 
 class SeedingResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
