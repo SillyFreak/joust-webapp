@@ -28,15 +28,19 @@ case class SeedingScore(
 
 class SeedingResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[SeedingRound, SeedingRoundResult]()
-  def result(sr: SeedingRound, score: Int) = {
+  def result(team: Team, round: Int, score: Int) = {
+    val sr = t.seedingRoundsMap(team, round)
     _ranking.clear()
     _results(sr) = SeedingRoundResult(sr.id, score)
   }
-  def result(sr: SeedingRound) = _results.get(sr)
+  def result(team: Team, round: Int) = {
+    val sr = t.seedingRoundsMap(team, round)
+    _results.get(sr)
+  }
 
   //Java interop
-  def setResult(sr: SeedingRound, score: Int) = result(sr, score)
-  def getResult(sr: SeedingRound) = result(sr).getOrElse(null)
+  def setResult(team: Team, round: Int, score: Int) = result(team, round, score)
+  def getResult(team: Team, round: Int) = result(team, round).getOrElse(null)
 
   def clear() = {
     _ranking.clear()
@@ -49,7 +53,7 @@ class SeedingResults(t: Tournament) {
   def scores(team: Team) =
     for {
       round <- 0 until t.numOfSeedingRounds
-    } yield result(t.seedingRoundsMap(team, round))
+    } yield result(team, round)
 
   //the list of teams, ordered by score
   //List[(team, max, avg, rank, score)]

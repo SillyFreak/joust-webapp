@@ -42,9 +42,9 @@ object Joust {
 
     val t = new Tournament(teams)
     for ((team, s1, s2, s3) <- seeding) {
-      t.seedingResults.result(t.seedingRoundsMap(team, 0), s1)
-      t.seedingResults.result(t.seedingRoundsMap(team, 1), s2)
-      t.seedingResults.result(t.seedingRoundsMap(team, 2), s3)
+      t.seedingResults.result(team, 0, s1)
+      t.seedingResults.result(team, 1, s2)
+      t.seedingResults.result(team, 2, s3)
 
       t.documentationResults.PeriodDoc.result(team, s1, s2, s3)
       t.documentationResults.OnsiteDoc.result(team, 0)
