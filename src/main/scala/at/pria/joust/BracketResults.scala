@@ -19,9 +19,9 @@ case class BracketScore(
 
 class BracketResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
-  def result(bm: BracketMatch, winnerSideA: Boolean) = _results(bm) = {
+  def result(bm: BracketMatch, winnerSideA: Boolean) = {
     _ranking.clear()
-    BracketMatchResult(bm.id, winnerSideA)
+    _results(bm) = BracketMatchResult(bm.id, winnerSideA)
   }
   def result(bm: BracketMatch) = _results.get(bm)
 

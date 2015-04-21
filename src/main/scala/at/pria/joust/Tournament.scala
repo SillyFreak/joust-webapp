@@ -209,4 +209,12 @@ class Tournament(val teams: List[Team]) {
   @BeanProperty val documentationResults = new DocumentationResults(this)
 
   @BeanProperty val overallResults = new OverallResults(this)
+
+  //autofill bye games
+  for (game <- bracketMatches)
+    (game.aTeamSource.team, game.bTeamSource.team) match {
+      case (Some(ByeTeam), _) => bracketResults.result(game, false)
+      case (_, Some(ByeTeam)) => bracketResults.result(game, true)
+      case _                  => // do nothing
+    }
 }
