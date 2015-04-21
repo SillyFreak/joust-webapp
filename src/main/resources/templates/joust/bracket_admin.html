@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{teams.name}">Teams</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th th:text="#{bracket.id}">Game</th>
+                    <th th:text="#{bracket.aTeam}">Team A</th>
+                    <th th:text="#{bracket.bTeam}">Team B</th>
+                </tr>
+                <tr th:each="game : ${tournament.bracketMatches}" th:object="${game}">
+                    <td th:text="*{id}">1</td>
+                    <td th:text="*{aTeam instanceof T(at.pria.joust.Team)} ? |*{aTeam.id} *{aTeam.name}| : (*{aTeam != null} ? 'bye' : 'unknown')">unknown</td>
+                    <td th:text="*{bTeam instanceof T(at.pria.joust.Team)} ? |*{bTeam.id} *{bTeam.name}| : (*{bTeam != null} ? 'bye' : 'unknown')">unknown</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</body>
+</html>
