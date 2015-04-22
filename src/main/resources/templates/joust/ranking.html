@@ -12,26 +12,52 @@
             <tbody>
                 <tr>
                     <th th:text="#{ranking.id}">Team</th>
-                    <th th:text="#{ranking.overallScore}">Overall Score</th>
                     <th th:text="#{ranking.overallRank}">Overall Rank</th>
-                    <th th:text="#{ranking.docScore}">Doc Score</th>
+                    <th th:text="#{ranking.overallScore}">Overall Score</th>
                     <th th:text="#{ranking.docRank}">Doc Rank</th>
-                    <th th:text="#{ranking.seedScore}">Seeding Score</th>
+                    <th th:text="#{ranking.docScore}">Doc Score</th>
                     <th th:text="#{ranking.seedRank}">Seeding Rank</th>
-                    <th th:text="#{ranking.deScore}">DE Score</th>
+                    <th th:text="#{ranking.seedScore}">Seeding Score</th>
                     <th th:text="#{ranking.deRank}">DE Rank</th>
+                    <th th:text="#{ranking.deScore}">DE Score</th>
                 </tr>
                 <tr th:each="entry : ${tournament.overallResults.ranking}" th:object="${entry.value}">
                     <td th:text="*{team.id}">15-0000</td>
-                    <td th:text="*{score}">0.0</td>
                     <td th:text="*{rank + 1}">1</td>
-                    <td th:text="*{documentationScore}">0.0</td>
+                    <td th:text="*{score}">0.0</td>
                     <td th:text="*{documentationRank + 1}">1</td>
-                    <td th:text="*{seedingScore}">0.0</td>
+                    <td th:text="*{documentationScore}">0.0</td>
                     <td th:text="*{seedingRank + 1}">1</td>
-                    <td th:text="*{bracketScore}">0.0</td>
+                    <td th:text="*{seedingScore}">0.0</td>
                     <td th:text="*{bracketRank + 1}">1</td>
+                    <td th:text="*{bracketScore}">0.0</td>
                 </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <tbody>
+            <tr>
+                <th th:text="#{ranking.rank}">Rank</th>
+                <th th:text="#{ranking.overallRank}">Overall Rank</th>
+                <th th:text="#{ranking.overallScore}">Overall Score</th>
+                <th th:text="#{ranking.docRank}">Doc Rank</th>
+                <th th:text="#{ranking.docScore}">Doc Score</th>
+                <th th:text="#{ranking.seedRank}">Seeding Rank</th>
+                <th th:text="#{ranking.seedScore}">Seeding Score</th>
+                <th th:text="#{ranking.deRank}">DE Rank</th>
+                <th th:text="#{ranking.deScore}">DE Score</th>
+            </tr>
+            <tr th:each="item : ${ranking}" th:object="${item}">
+                <td th:text="${itemStat.count}">1</td>
+                <td th:text="*{overall.team.id}">15-0000</td>
+                <td th:text="*{overall.score}">0.0</td>
+                <td th:text="*{doc.team.id}">15-0000</td>
+                <td th:text="*{doc.score}">0.0</td>
+                <td th:text="*{seed.team.id}">15-0000</td>
+                <td th:text="*{seed.score}">0.0</td>
+                <td th:text="*{de.team.id}">15-0000</td>
+                <td th:text="*{de.score}">0.0</td>
+            </tr>
             </tbody>
         </table>
     </article>
