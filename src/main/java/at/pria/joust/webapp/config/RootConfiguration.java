@@ -43,8 +43,6 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.setBasenames(
-                "classpath:i18n/accounts",
-                "classpath:i18n/admin",
                 "classpath:i18n/error",
                 "classpath:i18n/joust");
         return ms;
