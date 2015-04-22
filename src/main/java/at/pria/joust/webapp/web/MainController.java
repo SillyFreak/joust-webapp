@@ -14,6 +14,7 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
+        //TODO make an "upcoming matches" page
         return "redirect:/teams/";
     }
 
