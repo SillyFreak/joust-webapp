@@ -80,7 +80,7 @@ class SeedingResults(t: Tournament) {
       case (team, s1, s2, s3, teamMax, teamAvg) =>
         val rank = _scores.count { case (_, _, _, _, _, avg) => avg > teamAvg }
 
-        val score = .75 * (count - rank) / count + .25 * teamAvg / seedingMax
+        val score = .75 * (count - rank) / count + .25 * (if (seedingMax == 0) 0 else teamAvg / seedingMax)
 
         SeedingScore(team, s1, s2, s3, teamMax, teamAvg, score, rank)
     }
