@@ -14,8 +14,8 @@
                                     <div th:case="${ByeTeam}" class="team-name team-bye" th:text="#{bracket.team.bye}">bye</div>
                                     <div th:case="*" class="team-name" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</div>
                                 </div>
-                                <div th:fragment="match(game, round)" th:object="${game}" class="game"
-                                     th:classappend="|${(round % 4 == 0 || round % 4 == 3) ? 'game-top' : 'game-bottom'}|">
+                                <div th:fragment="match(game, orientation)" th:object="${game}" class="game"
+                                     th:classappend="${orientation}">
                                     <div class="team-names">
                                         <div class="team-a"><div th:replace="this::team(*{aTeam})">unknown</div></div>
                                         <div class="team-b"><div th:replace="this::team(*{bTeam})">unknown</div></div>
@@ -31,7 +31,7 @@
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
                             <td>
-                                <div th:replace="this::match(${#object}, ${roundStat.index})"></div>
+                                <div th:replace="this::match(${#object}, '')"></div>
                             </td>
                         </tr>
                         </tbody>
@@ -42,7 +42,18 @@
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
                             <td>
-                                <div th:replace="this::match(${#object}, ${roundStat.index})"></div>
+                                <div th:replace="this::match(${#object}, ${(roundStat.index % 4 == 0 || roundStat.index % 4 == 3) ? 'game-top' : 'game-bottom'})"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td th:if="${mode == 'final'}" th:each="round : ${bracket.finalRounds}" th:object="${round}">
+                    <table class="round round-final">
+                        <tbody>
+                        <tr th:each="game : ${round}" th:object="${game}">
+                            <td>
+                                <div th:replace="this::match(${#object}, ${(roundStat.index != 2) ? 'game-top' : 'game-bottom'})"></div>
                             </td>
                         </tr>
                         </tbody>

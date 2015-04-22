@@ -47,9 +47,16 @@ public class BracketController {
         return "joust/bracket2";
     }
 
+    @RequestMapping(value = "/bracket/final/", method = RequestMethod.GET)
+    public String finalBracket(Model model) {
+        model.addAttribute("bracket", new Bracket(tournament));
+        model.addAttribute("mode", "final");
+        model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
+        return "joust/bracket2";
+    }
+
     private static class Bracket {
-        private final List<List<Map<String, Object>>> mainRounds, consolationRounds;
-        private final List<Map<String, Object>> finalGames;
+        private final List<List<Map<String, Object>>> mainRounds, consolationRounds, finalRounds;
         private final List<Map<String, Object>> games;
 
         public Bracket(Tournament t) {
@@ -57,16 +64,20 @@ public class BracketController {
             int ord = -1;
             mainRounds = new LinkedList<List<Map<String, Object>>>();
             consolationRounds = new LinkedList<List<Map<String, Object>>>();
-            finalGames = new LinkedList<Map<String, Object>>();
+            finalRounds = new LinkedList<List<Map<String, Object>>>();
             games = new LinkedList<Map<String, Object>>();
             List<Map<String, Object>> round = null;
             for (BracketMatch m : t.getBracketMatches()) {
-                if (m.getOrd() != ord) {
+                if (m.getId() >= t.getBracketMatches().size() - 3)
+                    finalRounds.add(round = new ArrayList<Map<String, Object>>());
+                else if (m.getOrd() != ord) {
                     ord = m.getOrd();
-                    if (m.getId() >= t.getBracketMatches().size() - 3) round = finalGames;
-                    else if (ord == 0 || (ord - 1) % 3 == 0) mainRounds.add(round = new ArrayList<Map<String, Object>>());
-                    else consolationRounds.add(0, round = new ArrayList<Map<String, Object>>());
+                    if (ord == 0 || (ord - 1) % 3 == 0)
+                        mainRounds.add(round = new ArrayList<Map<String, Object>>());
+                    else
+                        consolationRounds.add(0, round = new ArrayList<Map<String, Object>>());
                 }
+                assert round != null;
                 Map<String, Object> match = new HashMap<String, Object>();
                 match.put("id", m.getId());
                 match.put("aTeam", m.getATeam());
@@ -86,8 +97,8 @@ public class BracketController {
             return consolationRounds;
         }
 
-        public List<Map<String, Object>> getFinalGames() {
-            return finalGames;
+        public List<List<Map<String, Object>>> getFinalRounds() {
+            return finalRounds;
         }
 
         public List<Map<String, Object>> getGames() {
