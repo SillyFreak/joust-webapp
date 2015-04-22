@@ -57,6 +57,14 @@ body {
     border-left-style: solid;
 }
 
+.round-consolation .game-top {
+    margin-bottom: 1.5em;
+}
+
+.round-consolation .game-bottom {
+    margin-top: 1.5em;
+}
+
 .team-names {
     width: 8em;
     overflow: hidden;
