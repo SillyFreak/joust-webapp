@@ -113,9 +113,12 @@ public class BracketController {
     private static class BracketInput {
         private int id;
         private boolean winnerSideA;
+        private boolean resolved;
 
         public void apply(Tournament t) {
-            t.getBracketResults().setResult(t.getBracketMatches().get(id), winnerSideA);
+            BracketMatch match = t.getBracketMatches().get(id);
+            if (!resolved) t.getBracketResults().removeResult(match);
+            else t.getBracketResults().setResult(match, winnerSideA);
         }
 
         public int getId() {
@@ -132,6 +135,14 @@ public class BracketController {
 
         public void setWinnerSideA(boolean winnerSideA) {
             this.winnerSideA = winnerSideA;
+        }
+
+        public boolean isResolved() {
+            return resolved;
+        }
+
+        public void setResolved(boolean resolved) {
+            this.resolved = resolved;
         }
     }
 }
