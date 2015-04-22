@@ -35,9 +35,24 @@
                     <td th:text="*{onsiteScore}">100</td>
 <!--/*/ </th:block> /*/-->
 <!--/*/ <th:block th:object="${tournament.seedingResults.ranking[#object]}"> /*/-->
-                    <td th:text="*{s1 != -1}? *{s1} : '---'">---</td>
-                    <td th:text="*{s2 != -1}? *{s2} : '---'">---</td>
-                    <td th:text="*{s3 != -1}? *{s3} : '---'">---</td>
+                    <td>
+                        <form th:action="@{/admin/teams/}" method="post">
+                            <input type="hidden" id="id" name="id" th:value="|*{team.id}/1|" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s1 != -1}? *{s1} : ''" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/teams/}" method="post">
+                            <input type="hidden" id="id" name="id" th:value="|*{team.id}/2|" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s2 != -1}? *{s2} : ''" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/teams/}" method="post">
+                            <input type="hidden" id="id" name="id" th:value="|*{team.id}/3|" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s3 != -1}? *{s3} : ''" />
+                        </form>
+                    </td>
                     <td th:text="*{avg}">---</td>
                     <td th:text="*{rank + 1}">---</td>
 <!--/*/ </th:block> /*/-->

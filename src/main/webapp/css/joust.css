@@ -27,7 +27,9 @@ body {
     color: lightgrey;
 }
 
-
+input[type="number"] {
+    width: 5em;
+}
 
 
 .bracket {
