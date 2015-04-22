@@ -23,16 +23,11 @@
                     <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
                 </tr>
 <!--/*/ </th:block> /*/-->
-                <tr th:each="game : ${tournament.bracketMatches}" th:object="${game}">
+                <tr th:each="game : ${bracket.games}" th:object="${game}">
                     <td th:text="*{id + 1}">1</td>
                     <td th:replace="this::team(*{aTeam})">unknown</td>
                     <td th:replace="this::team(*{bTeam})">unknown</td>
-<!--/*/ <th:block th:object="${tournament.bracketResults.getResult(#object)}"> /*/-->
-                    <td th:if="${#object == null}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-    <!--/*/ <th:block th:if="${#object != null}"> /*/-->
-                    <td th:replace="this::team(${#object.winnerSideA ? game.aTeam : game.bTeam})">unknown</td>
-    <!--/*/ </th:block> /*/-->
-<!--/*/ </th:block> /*/-->
+                    <td th:replace="this::team(*{winner})">unknown</td>
                 </tr>
             </tbody>
         </table>
