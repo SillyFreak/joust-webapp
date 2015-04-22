@@ -25,8 +25,8 @@
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
-                    <td th:text="*{id}">15-0000</td>
-                    <td th:text="*{name}">TGM</td>
+                    <td th:text="${team.id}">15-0000</td>
+                    <td th:text="${team.name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
 <!--/*/ <th:block th:object="${tournament.documentationResults.ranking[#object]}"> /*/-->
                     <td th:text="*{p1Score}">300</td>
@@ -39,21 +39,21 @@
                         <form th:action="@{/admin/teams/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="0" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s1 != -1}? *{s1} : ''" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s1 != -1 ? s1 : ''}" />
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/teams/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="1" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s2 != -1}? *{s2} : ''" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s2 != -1 ? s2 : ''}" />
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/teams/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="2" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s3 != -1}? *{s3} : ''" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{s3 != -1 ? s3 : ''}" />
                         </form>
                     </td>
                     <td th:text="*{avg}">---</td>
