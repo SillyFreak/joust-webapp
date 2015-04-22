@@ -60,6 +60,18 @@ public class RootConfiguration extends WebMvcConfigurerAdapter {
         teams.add(new Team("15-0002", "TGM"));
         teams.add(new Team("15-0003", "TGM"));
         teams.add(new Team("15-0004", "TGM"));
+        teams.add(new Team("15-0005", "TGM"));
+        teams.add(new Team("15-0006", "TGM"));
+        teams.add(new Team("15-0007", "TGM"));
+        teams.add(new Team("15-0008", "TGM"));
+        teams.add(new Team("15-0009", "TGM"));
+        teams.add(new Team("15-0010", "TGM"));
+        teams.add(new Team("15-0011", "TGM"));
+        teams.add(new Team("15-0012", "TGM"));
+        teams.add(new Team("15-0013", "TGM"));
+        teams.add(new Team("15-0014", "TGM"));
+        teams.add(new Team("15-0015", "TGM"));
+        teams.add(new Team("15-0016", "TGM"));
 
         Tournament t = new Tournament(collectionAsScalaIterable(teams).toList());
         t.getSeedingResults().setResult(t1, 0, 200);

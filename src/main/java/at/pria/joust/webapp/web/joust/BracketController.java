@@ -39,18 +39,24 @@ public class BracketController {
     }
 
     private static class Bracket {
-        private final List<List<Map<String, Object>>> rounds;
+        private final List<List<Map<String, Object>>> mainRounds, consolationRounds;
+        private final List<Map<String, Object>> finalGames;
         private final List<Map<String, Object>> games;
 
         public Bracket(Tournament t) {
+            //ordinals are first, (main, cons, cons)*, final, final, final
             int ord = -1;
-            rounds = new LinkedList<List<Map<String, Object>>>();
+            mainRounds = new LinkedList<List<Map<String, Object>>>();
+            consolationRounds = new LinkedList<List<Map<String, Object>>>();
+            finalGames = new LinkedList<Map<String, Object>>();
             games = new LinkedList<Map<String, Object>>();
             List<Map<String, Object>> round = null;
             for (BracketMatch m : t.getBracketMatches()) {
                 if (m.getOrd() != ord) {
                     ord = m.getOrd();
-                    rounds.add(round = new ArrayList<Map<String, Object>>());
+                    if (m.getId() >= t.getBracketMatches().size() - 3) round = finalGames;
+                    else if (ord == 0 || (ord - 1) % 3 == 0) mainRounds.add(round = new ArrayList<Map<String, Object>>());
+                    else consolationRounds.add(0, round = new ArrayList<Map<String, Object>>());
                 }
                 Map<String, Object> match = new HashMap<String, Object>();
                 match.put("id", m.getId());
@@ -63,8 +69,16 @@ public class BracketController {
             }
         }
 
-        public List<List<Map<String, Object>>> getRounds() {
-            return rounds;
+        public List<List<Map<String, Object>>> getMainRounds() {
+            return mainRounds;
+        }
+
+        public List<List<Map<String, Object>>> getConsolationRounds() {
+            return consolationRounds;
+        }
+
+        public List<Map<String, Object>> getFinalGames() {
+            return finalGames;
         }
 
         public List<Map<String, Object>> getGames() {

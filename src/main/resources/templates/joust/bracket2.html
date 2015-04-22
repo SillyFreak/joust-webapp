@@ -25,8 +25,19 @@
         <table class="bracket">
             <tbody>
             <tr>
-                <td th:each="round : ${bracket.rounds}" th:object="${round}">
+                <td th:each="round : ${bracket.mainRounds}" th:object="${round}">
                     <table class="round round-main">
+                        <tbody>
+                        <tr th:each="game : ${round}" th:object="${game}">
+                            <td>
+                                <div th:replace="this::match(${#object})"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td th:each="round : ${bracket.consolationRounds}" th:object="${round}">
+                    <table class="round round-consolation">
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
                             <td>
