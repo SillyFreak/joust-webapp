@@ -31,6 +31,7 @@ class SeedingResults(t: Tournament) {
   def result(team: Team, round: Int, score: Int) = {
     val sr = t.seedingRoundsMap(team, round)
     _ranking.clear()
+    t.overallResults.clear()
     _results(sr) = SeedingRoundResult(sr.id, score)
   }
   def result(team: Team, round: Int) = {

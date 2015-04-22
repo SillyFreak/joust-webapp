@@ -21,6 +21,7 @@ class BracketResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
   def result(bm: BracketMatch, winnerSideA: Option[Boolean]) = {
     _ranking.clear()
+    t.overallResults.clear()
     winnerSideA match {
       case Some(winnerSideA) => _results(bm) = BracketMatchResult(bm.id, winnerSideA)
       case None              => _results.remove(bm)

@@ -35,6 +35,7 @@ class DocumentationResults(t: Tournament) {
     private[this] val _results = collection.mutable.Map[Team, PeriodDocResult]()
     def result(team: Team, p1: Int, p2: Int, p3: Int) = {
       _ranking.clear()
+      t.overallResults.clear()
       _results(team) = PeriodDocResult(team, p1, p2, p3)
     }
     def result(team: Team) = _results.get(team)
@@ -54,6 +55,7 @@ class DocumentationResults(t: Tournament) {
     private[this] val _results = collection.mutable.Map[Team, OnsiteDocResult]()
     def result(team: Team, score: Int) = {
       _ranking.clear()
+      t.overallResults.clear()
       _results(team) = OnsiteDocResult(team, score)
     }
     def result(team: Team) = _results.get(team)
