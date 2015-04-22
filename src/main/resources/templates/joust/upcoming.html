@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{upcoming.name}">Upcoming games</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th th:text="#{upcoming.id}">Game ID</th>
+                    <th th:text="#{upcoming.aTeam}">Pink Side</th>
+                    <th th:text="#{upcoming.bTeam}">Green Side</th>
+                </tr>
+<!--/*/ <th:block th:remove="all"> /*/-->
+                <tr th:remove="tag" th:fragment="team(team)" th:switch="${team}">
+                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
+                </tr>
+<!--/*/ </th:block> /*/-->
+                <tr th:each="game : ${upcoming}">
+                    <td th:text="${game.id}">S1</td>
+                    <td th:replace="this::team(${game.aTeam})">unknown</td>
+                    <td th:replace="this::team(${game.bTeam})">unknown</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</body>
+</html>
