@@ -1,9 +1,6 @@
 package at.pria.joust.webapp.web.joust;
 
-import at.pria.joust.BracketMatch;
-import at.pria.joust.BracketMatchResult;
-import at.pria.joust.ByeTeam$;
-import at.pria.joust.Tournament;
+import at.pria.joust.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +18,14 @@ public class BracketController {
     public String adminBracket(Model model) {
         model.addAttribute("bracket", new Bracket(tournament));
         model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
+        model.addAttribute(new BracketInput());
         return "joust/bracket_admin";
+    }
+
+    @RequestMapping(value = "/admin/bracket/", method = RequestMethod.POST)
+    public String adminBracketPost(Model model, BracketInput bracketInput) {
+        bracketInput.apply(tournament);
+        return adminBracket(model);
     }
 
     @RequestMapping(value = "/bracket/", method = RequestMethod.GET)
@@ -103,6 +107,31 @@ public class BracketController {
 
         public List<Map<String, Object>> getGames() {
             return games;
+        }
+    }
+
+    private static class BracketInput {
+        private int id;
+        private boolean winnerSideA;
+
+        public void apply(Tournament t) {
+            t.getBracketResults().setResult(t.getBracketMatches().get(id), winnerSideA);
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public boolean isWinnerSideA() {
+            return winnerSideA;
+        }
+
+        public void setWinnerSideA(boolean winnerSideA) {
+            this.winnerSideA = winnerSideA;
         }
     }
 }
