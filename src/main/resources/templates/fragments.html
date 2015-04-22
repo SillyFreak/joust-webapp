@@ -28,20 +28,17 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-<!--/*/ <th:block sec:authorize="!hasRole('ROLE_ADMIN')"> /*/-->
+<!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
                     <li><a th:href="@{/teams/}" th:text="#{teams.name}">Seeding</a></li>
                     <li><a th:href="@{/bracket/}" th:text="#{bracket.name}">DE</a></li>
 <!--/*/ </th:block> /*/-->
-<!--/*/ <th:block sec:authorize="hasRole('ROLE_ADMIN')"> /*/-->
+<!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
                     <li><a th:href="@{/admin/teams/}" th:text="#{teams.name}">Seeding</a></li>
                     <li><a th:href="@{/admin/bracket/}" th:text="#{bracket.name}">DE</a></li>
 <!--/*/ </th:block> /*/-->
                     <li><a th:href="@{/bracket/main/}" th:text="#{bracket.name.main}">Main Bracket</a></li>
                     <li><a th:href="@{/bracket/consolation/}" th:text="#{bracket.name.consolation}">Consolation Bracket</a></li>
                     <li><a th:href="@{/bracket/final/}" th:text="#{bracket.name.final}">Final Bracket</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a th:href="@{/login/}" th:text="#{accounts.login}">Login</a></li>
                 </ul>
             </div>
         </div>
