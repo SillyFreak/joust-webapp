@@ -19,14 +19,18 @@ case class BracketScore(
 
 class BracketResults(t: Tournament) {
   private[this] val _results = collection.mutable.Map[BracketMatch, BracketMatchResult]()
-  def result(bm: BracketMatch, winnerSideA: Boolean) = {
+  def result(bm: BracketMatch, winnerSideA: Option[Boolean]) = {
     _ranking.clear()
-    _results(bm) = BracketMatchResult(bm.id, winnerSideA)
+    winnerSideA match {
+      case Some(winnerSideA) => _results(bm) = BracketMatchResult(bm.id, winnerSideA)
+      case None              => _results.remove(bm)
+    }
   }
   def result(bm: BracketMatch) = _results.get(bm)
 
   //Java interop
-  def setResult(bm: BracketMatch, winnerSideA: Boolean) = result(bm, winnerSideA)
+  def setResult(bm: BracketMatch, winnerSideA: Boolean) = result(bm, Some(winnerSideA))
+  def removeResult(bm: BracketMatch) = result(bm, None)
   def getResult(bm: BracketMatch) = result(bm).getOrElse(null)
 
   def clear() = {

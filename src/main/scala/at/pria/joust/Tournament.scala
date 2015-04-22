@@ -213,8 +213,8 @@ class Tournament(val teams: List[Team]) {
   //autofill bye games
   for (game <- bracketMatches)
     (game.aTeamSource.team, game.bTeamSource.team) match {
-      case (Some(ByeTeam), _) => bracketResults.result(game, false)
-      case (_, Some(ByeTeam)) => bracketResults.result(game, true)
+      case (Some(ByeTeam), _) => bracketResults.result(game, Some(false))
+      case (_, Some(ByeTeam)) => bracketResults.result(game, Some(true))
       case _                  => // do nothing
     }
 }

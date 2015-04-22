@@ -63,7 +63,7 @@ object Joust {
             case (_, ByeTeam)             => true
             case (Team(a, _), Team(b, _)) => Integer.parseInt(a, 0x10) < Integer.parseInt(b, 0x10)
           }
-      t.bracketResults.result(m, winnerSideA)
+      t.bracketResults.result(m, Some(winnerSideA))
     }
 
     for (team <- t.teams) {
