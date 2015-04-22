@@ -25,7 +25,7 @@
         <table class="bracket">
             <tbody>
             <tr>
-                <td th:each="round : ${bracket.mainRounds}" th:object="${round}">
+                <td th:if="${mode == 'main'}" th:each="round : ${bracket.mainRounds}" th:object="${round}">
                     <table class="round round-main">
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
@@ -36,7 +36,7 @@
                         </tbody>
                     </table>
                 </td>
-                <td th:each="round : ${bracket.consolationRounds}" th:object="${round}">
+                <td th:if="${mode == 'consolation'}" th:each="round : ${bracket.consolationRounds}" th:object="${round}">
                     <table class="round round-consolation">
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">

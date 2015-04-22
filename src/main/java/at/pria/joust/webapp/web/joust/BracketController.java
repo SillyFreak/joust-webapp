@@ -31,9 +31,18 @@ public class BracketController {
         return "joust/bracket";
     }
 
-    @RequestMapping(value = "/bracket2/", method = RequestMethod.GET)
-    public String bracket2(Model model) {
+    @RequestMapping(value = "/bracket/main/", method = RequestMethod.GET)
+    public String mainBracket(Model model) {
         model.addAttribute("bracket", new Bracket(tournament));
+        model.addAttribute("mode", "main");
+        model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
+        return "joust/bracket2";
+    }
+
+    @RequestMapping(value = "/bracket/consolation/", method = RequestMethod.GET)
+    public String consolationBracket(Model model) {
+        model.addAttribute("bracket", new Bracket(tournament));
+        model.addAttribute("mode", "consolation");
         model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
         return "joust/bracket2";
     }
