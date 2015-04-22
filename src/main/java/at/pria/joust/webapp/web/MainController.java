@@ -14,8 +14,7 @@ public class MainController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
-        model.addAttribute("greetings", greetings.findAll());
-        return "index";
+        return "redirect:/teams/";
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)
