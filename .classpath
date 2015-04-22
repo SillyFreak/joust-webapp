@@ -2,11 +2,11 @@
 <classpath>
 	<classpathentry kind="output" path="build/classes/main"/>
 
-	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/scala"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="src" path="src/main/webapp"/>
 
-	<classpathentry kind="src" path="src/test/java" output="build/classes/test"/>
+	<classpathentry kind="src" path="src/test/scala" output="build/classes/test"/>
 	<classpathentry kind="src" path="src/test/resources" output="build/classes/test"/>
 
 	<classpathentry kind="src" path="build/generated-sources/main">
