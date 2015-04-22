@@ -48,10 +48,19 @@ case class FinalMatchLoser(val finalMatch: Int, val consolation: Int)(implicit t
       yield if (finalLoser == consolationWinner) ByeTeam else finalLoser
 }
 
-case class BracketWinner(val final1: Int, val final2: Int)(implicit t: Tournament) extends TeamSource {
-  def team =
-    for (final1Winner <- t.bracketResults.winner(final1); final2Winner <- t.bracketResults.winner(final2))
-      yield if (final2Winner == ByeTeam) final1Winner else final2Winner
+case class BracketWinner(val final1: Int, val final2: Int, val main: Int)(implicit t: Tournament) extends TeamSource {
+  def team = {
+    val m = t.bracketResults.winner(main)
+    val f1 = t.bracketResults.winner(final1)
+    val f2 = t.bracketResults.winner(final2)
+
+    (m, f1, f2) match {
+      //main bracket winner won the first match
+      case (Some(x), Some(y), _) if x == y => f1
+      //in any other case, take the winner of f2, which may not be known
+      case _                               => f2
+    }
+  }
 }
 
 case object ByeTeamSource extends TeamSource {
