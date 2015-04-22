@@ -25,6 +25,14 @@ public class UpcomingController {
             if (tournament.getBracketResults().getResult(bm) == null)
                 games.add(new Game(bm));
 
+        {
+            int i = 0;
+            for (Game game : games) {
+                game.setCalled(true);
+                if (++i == 3) break;
+            }
+        }
+
         model.addAttribute("upcoming", games);
         model.addAttribute("ByeTeam", ByeTeam$.MODULE$);
         return "joust/upcoming";
@@ -34,6 +42,8 @@ public class UpcomingController {
         private final String id;
         private final TeamLike aTeam;
         private final TeamLike bTeam;
+
+        private boolean called;
 
         public Game(SeedingRound game) {
             id = "S " + (game.getId() + 1);
@@ -57,6 +67,14 @@ public class UpcomingController {
 
         public TeamLike getBTeam() {
             return bTeam;
+        }
+
+        public boolean isCalled() {
+            return called;
+        }
+
+        public void setCalled(boolean called) {
+            this.called = called;
         }
     }
 }

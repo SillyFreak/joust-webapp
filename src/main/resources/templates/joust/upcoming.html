@@ -22,7 +22,7 @@
                     <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
                 </tr>
 <!--/*/ </th:block> /*/-->
-                <tr th:each="game : ${upcoming}">
+                <tr th:each="game : ${upcoming}" th:class="${game.called ? 'alert alert-danger' : ''}">
                     <td th:text="${game.id}">S1</td>
                     <td th:replace="this::team(${game.aTeam})">unknown</td>
                     <td th:replace="this::team(${game.bTeam})">unknown</td>
