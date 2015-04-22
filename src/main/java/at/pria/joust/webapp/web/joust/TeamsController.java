@@ -33,26 +33,32 @@ public class TeamsController {
     }
 
     private static class SeedingInput {
-        private String id;
+        private String team;
+        private int round;
         private int score;
 
         public void apply(Tournament t) {
-            String[] parts = id.split("/");
-            String id = parts[0];
-            int round = Integer.parseInt(parts[1]) - 1;
             for (Team team : t.getTeams())
-                if (team.getId().equals(id)) {
+                if (team.getId().equals(this.team)) {
                     t.getSeedingResults().setResult(team, round, score);
                     break;
                 }
         }
 
-        public String getId() {
-            return id;
+        public String getTeam() {
+            return team;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setTeam(String team) {
+            this.team = team;
+        }
+
+        public int getRound() {
+            return round;
+        }
+
+        public void setRound(int round) {
+            this.round = round;
         }
 
         public int getScore() {
