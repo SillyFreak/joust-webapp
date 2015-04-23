@@ -21,7 +21,7 @@ class BracketController {
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
   def adminBracket(model: Model) = {
     model.addAttribute("bracket", new Bracket())
-    model.addAttribute("ByeTeam", ByeTeam$.MODULE$)
+    model.addAttribute("ByeTeam", ByeTeam)
     model.addAttribute(new BracketControllerInput())
     "joust/bracket_admin"
   }
@@ -35,7 +35,7 @@ class BracketController {
   @RequestMapping(value = Array("/bracket/"), method = Array(RequestMethod.GET))
   def bracket(model: Model) = {
     model.addAttribute("bracket", new Bracket())
-    model.addAttribute("ByeTeam", ByeTeam$.MODULE$)
+    model.addAttribute("ByeTeam", ByeTeam)
     "joust/bracket"
   }
 
@@ -43,7 +43,7 @@ class BracketController {
   def mainBracket(model: Model) = {
     model.addAttribute("bracket", new Bracket())
     model.addAttribute("mode", "main")
-    model.addAttribute("ByeTeam", ByeTeam$.MODULE$)
+    model.addAttribute("ByeTeam", ByeTeam)
     "joust/bracket2"
   }
 
@@ -51,7 +51,7 @@ class BracketController {
   def consolationBracket(model: Model) = {
     model.addAttribute("bracket", new Bracket())
     model.addAttribute("mode", "consolation")
-    model.addAttribute("ByeTeam", ByeTeam$.MODULE$)
+    model.addAttribute("ByeTeam", ByeTeam)
     "joust/bracket2"
   }
 
@@ -59,7 +59,7 @@ class BracketController {
   def finalBracket(model: Model) = {
     model.addAttribute("bracket", new Bracket())
     model.addAttribute("mode", "final")
-    model.addAttribute("ByeTeam", ByeTeam$.MODULE$)
+    model.addAttribute("ByeTeam", ByeTeam)
     "joust/bracket2"
   }
 
