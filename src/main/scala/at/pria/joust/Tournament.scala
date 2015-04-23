@@ -184,10 +184,10 @@ class Tournament(val teams: List[Team]) {
               BracketMatch(first, ord,
                 BracketMatchWinner(mPrev.first),
                 BracketMatchWinner(cPrev.first)),
-              BracketMatch(first + 1, ord,
+              BracketMatch(first + 1, ord + 1,
                 FinalMatchWinner(first, mPrev.first),
                 FinalMatchLoser(first, cPrev.first)),
-              BracketMatch(first + 2, ord + 1,
+              BracketMatch(first + 2, ord + 2,
                 BracketWinner(first, first + 1, mPrev.first),
                 ByeTeamSource))
 
