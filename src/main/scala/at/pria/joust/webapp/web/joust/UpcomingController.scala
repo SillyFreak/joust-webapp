@@ -1,4 +1,4 @@
-package at.pria.joust.webapp.web.joust;
+package at.pria.joust.webapp.web.joust
 
 import scala.beans.BeanProperty
 

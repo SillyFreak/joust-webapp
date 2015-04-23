@@ -1,13 +1,14 @@
 package at.pria.joust.webapp.web.joust
 
-import at.pria.joust.Team
-import at.pria.joust.Tournament
+import scala.beans.BeanProperty
+
+import at.pria.joust._
+
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import scala.beans.BeanProperty
 
 @Controller
 class TeamsController {

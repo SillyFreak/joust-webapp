@@ -1,17 +1,17 @@
 package at.pria.joust.webapp.web.joust
 
 import scala.beans.BeanProperty
-import scala.collection.JavaConversions._
 
 import at.pria.joust._
-
-import java.util.{ List => juList }
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+
+import scala.collection.JavaConversions._
+import java.util.{ List => juList }
 
 @Controller
 class BracketController {
