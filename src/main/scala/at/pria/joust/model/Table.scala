@@ -34,4 +34,6 @@ class Table {
   @BeanProperty var description: String = null
 }
 
-trait TableRepository extends CrudRepository[Table, java.lang.Long]
+trait TableRepository extends CrudRepository[Table, java.lang.Long] {
+  def findByDescription(description: String): Table
+}

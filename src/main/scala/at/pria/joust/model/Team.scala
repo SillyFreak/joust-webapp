@@ -42,4 +42,7 @@ class Team {
   @BeanProperty var onsite: Int = 0
 }
 
-trait TeamRepository extends CrudRepository[Team, java.lang.Long]
+trait TeamRepository extends CrudRepository[Team, java.lang.Long] {
+  def findByTeamId(teamId: String): Tournament
+  def findByName(name: String): Tournament
+}

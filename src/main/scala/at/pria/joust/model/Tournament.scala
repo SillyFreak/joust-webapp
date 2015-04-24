@@ -41,4 +41,6 @@ class Tournament {
   @BeanProperty var games: java.util.List[Game] = new java.util.ArrayList[Game]
 }
 
-trait TournamentRepository extends CrudRepository[Tournament, java.lang.Long]
+trait TournamentRepository extends CrudRepository[Tournament, java.lang.Long] {
+  def findByName(name: String): Tournament
+}
