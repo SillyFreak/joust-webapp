@@ -19,6 +19,8 @@ import javax.persistence.GenerationType
 import javax.persistence.ManyToOne
 import javax.persistence.Transient
 
+import java.lang.{ Long => jLong }
+
 /**
  * <p>
  * {@code Game}
@@ -37,7 +39,7 @@ abstract class Game {
   @BeanProperty var tournament: Tournament = null
 }
 
-trait GameRepository extends CrudRepository[Game, java.lang.Long]
+trait GameRepository extends CrudRepository[Game, jLong]
 
 @Entity
 class SeedingGame extends Game {

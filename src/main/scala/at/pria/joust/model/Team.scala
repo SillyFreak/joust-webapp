@@ -17,6 +17,9 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.OneToMany
 
+import java.lang.{ Long => jLong }
+import java.util.{ List => juList, ArrayList => juArrayList }
+
 /**
  * <p>
  * {@code Team}
@@ -43,10 +46,10 @@ class Team {
   @BeanProperty var onsite: Int = 0
 
   @OneToMany(mappedBy = "team")
-  @BeanProperty var seedingGames: java.util.List[SeedingGame] = new java.util.ArrayList[SeedingGame]
+  @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]
 }
 
-trait TeamRepository extends CrudRepository[Team, java.lang.Long] {
+trait TeamRepository extends CrudRepository[Team, jLong] {
   def findByTeamId(teamId: String): Tournament
   def findByName(name: String): Tournament
 }
