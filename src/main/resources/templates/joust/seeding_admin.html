@@ -36,21 +36,21 @@
 <!--/*/ </th:block> /*/-->
 <!--/*/ <th:block th:object="${tournament.seedingResults.ranking[#object]}"> /*/-->
                     <td>
-                        <form th:action="@{/admin/teams/}" method="post">
+                        <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="0" />
                             <input type="number" min="0" id="score" name="score" th:value="*{s1 != -1 ? s1 : ''}" />
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/teams/}" method="post">
+                        <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="1" />
                             <input type="number" min="0" id="score" name="score" th:value="*{s2 != -1 ? s2 : ''}" />
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/teams/}" method="post">
+                        <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="team" name="team" th:value="*{team.id}" />
                             <input type="hidden" id="round" name="round" th:value="2" />
                             <input type="number" min="0" id="score" name="score" th:value="*{s3 != -1 ? s3 : ''}" />
