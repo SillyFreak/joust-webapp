@@ -1,4 +1,4 @@
-package at.pria.joust.webapp.web
+package at.pria.joust.web
 
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

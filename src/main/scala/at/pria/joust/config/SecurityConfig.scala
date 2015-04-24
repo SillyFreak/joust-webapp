@@ -1,4 +1,4 @@
-package at.pria.joust.webapp.config
+package at.pria.joust.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity

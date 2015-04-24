@@ -4,7 +4,7 @@
  * Created on 22.04.2015
  */
 
-package at.pria.joust.webapp.model
+package at.pria.joust.model
 
 import scala.beans.BeanProperty
 import scala.collection.JavaConversions._

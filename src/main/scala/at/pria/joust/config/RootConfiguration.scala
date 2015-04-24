@@ -1,4 +1,4 @@
-package at.pria.joust.webapp.config
+package at.pria.joust.config
 
 import at.pria.joust._
 

@@ -1,9 +1,8 @@
-package at.pria.joust.webapp.web.joust
+package at.pria.joust.web.joust
 
 import scala.beans.BeanProperty
 
 import at.pria.joust._
-import at.pria.joust.webapp.model
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
