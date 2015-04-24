@@ -3,6 +3,7 @@ package at.pria.joust.webapp.web.joust
 import scala.beans.BeanProperty
 
 import at.pria.joust._
+import at.pria.joust.webapp.model
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -18,8 +19,22 @@ class UpcomingController {
   @Autowired
   private[this] var tournament: Tournament = _
 
+  @Autowired
+  private[this] var teamRepo: model.TeamRepository = _
+
+  private[this] def teamTest() = {
+    val team = new model.Team
+    team.teamId = "15-0000"
+    team.name = "TGM"
+    teamRepo.save(team)
+
+    println(teamRepo.count())
+  }
+
   @RequestMapping(value = Array("/"), method = Array(RequestMethod.GET))
   def upcoming(model: Model) = {
+    teamTest()
+
     val seeding = tournament.seedingRoundsList
       .filter { sr => tournament.seedingResults.result(sr.team, sr.round).isEmpty }
       .map { new Game(_) }
