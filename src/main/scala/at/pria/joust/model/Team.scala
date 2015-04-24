@@ -35,6 +35,11 @@ class Team {
 
   @NotEmpty
   @BeanProperty var name: String = null
+
+  @BeanProperty var p1doc: Int = 0
+  @BeanProperty var p2doc: Int = 0
+  @BeanProperty var p3doc: Int = 0
+  @BeanProperty var onsite: Int = 0
 }
 
 trait TeamRepository extends CrudRepository[Team, java.lang.Long]
