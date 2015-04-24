@@ -50,6 +50,8 @@ class Team {
   @OneToMany(mappedBy = "team")
   @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]
 
+  //inferred
+
   private[this] def seedingStats = {
     val allScores =
       for (game <- List(seedingGames: _*))
