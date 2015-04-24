@@ -25,40 +25,21 @@
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
-                    <td th:text="${team.id}">15-0000</td>
+                    <td th:text="${team.teamId}">15-0000</td>
                     <td th:text="${team.name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
-<!--/*/ <th:block th:object="${tournament.documentationResults.ranking[#object]}"> /*/-->
-                    <td th:text="*{p1Score}">300</td>
-                    <td th:text="*{p2Score}">300</td>
-                    <td th:text="*{p3Score}">200</td>
-                    <td th:text="*{onsiteScore}">100</td>
-<!--/*/ </th:block> /*/-->
-<!--/*/ <th:block th:object="${tournament.seedingResults.ranking[#object]}"> /*/-->
-                    <td>
+                    <td th:text="*{p1doc}">300</td>
+                    <td th:text="*{p2doc}">300</td>
+                    <td th:text="*{p3doc}">200</td>
+                    <td th:text="*{onsite}">100</td>
+                    <td th:each="game : *{seedingGames}" th:object="${game}">
                         <form th:action="@{/admin/seeding/}" method="post">
-                            <input type="hidden" id="team" name="team" th:value="*{team.id}" />
-                            <input type="hidden" id="round" name="round" th:value="0" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s1 != -1 ? s1 : ''}" />
+                            <input type="hidden" id="id" name="id" th:value="*{id}" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />
                         </form>
                     </td>
-                    <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
-                            <input type="hidden" id="team" name="team" th:value="*{team.id}" />
-                            <input type="hidden" id="round" name="round" th:value="1" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s2 != -1 ? s2 : ''}" />
-                        </form>
-                    </td>
-                    <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
-                            <input type="hidden" id="team" name="team" th:value="*{team.id}" />
-                            <input type="hidden" id="round" name="round" th:value="2" />
-                            <input type="number" min="0" id="score" name="score" th:value="*{s3 != -1 ? s3 : ''}" />
-                        </form>
-                    </td>
-                    <td th:text="*{avg}">---</td>
-                    <td th:text="*{rank + 1}">---</td>
-<!--/*/ </th:block> /*/-->
+                    <td th:text="'*{avg}'">---</td>
+                    <td th:text="'*{rank + 1}'">---</td>
                 </tr>
             </tbody>
         </table>

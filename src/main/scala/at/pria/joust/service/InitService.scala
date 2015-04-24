@@ -27,6 +27,8 @@ class InitService {
   private[this] var tournamentRepo: TournamentRepository = _
   @Autowired
   private[this] var teamRepo: TeamRepository = _
+  @Autowired
+  private[this] var gameRepo: GameRepository = _
 
   private[this] def mkTeam(teamId: String, name: String) = {
     val t = new Team
@@ -42,9 +44,21 @@ class InitService {
     tournamentRepo.save(tournament)
   }
 
+  private[this] def mkSeeding(tournament: Tournament) = {
+    for (round <- 0 until 3; team <- tournament.teams) {
+      val game = new SeedingGame
+      game.tournament = tournament
+      game.team = team
+      game.round = round
+      gameRepo.save(game)
+    }
+  }
+
   def apply(): Unit =
     if (tournamentRepo.count() == 0) {
-      mkTournament("Botball",
-        (for (i <- List(0 to 16: _*)) yield mkTeam("15-%04d".format(i), "TGM")): _*)
+      val botball =
+        mkTournament("Botball",
+          (for (i <- List(0 to 16: _*)) yield mkTeam("15-%04d".format(i), "TGM")): _*)
+      mkSeeding(botball)
     }
 }
