@@ -11,31 +11,31 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
 @Controller
-class TeamsController {
+class SeedingController {
   @Autowired
   private[this] var tournament: Tournament = _
 
-  @RequestMapping(value = Array("/admin/teams/"), method = Array(RequestMethod.GET))
-  def adminTeams(model: Model) = {
+  @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
+  def seedingAdmin(model: Model) = {
     model.addAttribute("tournament", tournament)
-    model.addAttribute(new TeamsControllerInput())
-    "joust/teams_admin"
+    model.addAttribute(new SeedingControllerInput())
+    "joust/seeding_admin"
   }
 
-  @RequestMapping(value = Array("/admin/teams/"), method = Array(RequestMethod.POST))
-  def adminTeamsPost(model: Model, teamsControllerInput: TeamsControllerInput) = {
+  @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.POST))
+  def seedingAdminPost(model: Model, teamsControllerInput: SeedingControllerInput) = {
     teamsControllerInput.apply(tournament)
-    adminTeams(model)
+    seedingAdmin(model)
   }
 
-  @RequestMapping(value = Array("/teams/"), method = Array(RequestMethod.GET))
-  def teams(model: Model) = {
+  @RequestMapping(value = Array("/seeding/"), method = Array(RequestMethod.GET))
+  def seeding(model: Model) = {
     model.addAttribute("tournament", tournament)
-    "joust/teams"
+    "joust/seeding"
   }
 }
 
-class TeamsControllerInput {
+class SeedingControllerInput {
   @BeanProperty var team: String = _
   @BeanProperty var round: Int = _
   @BeanProperty var score: Int = _

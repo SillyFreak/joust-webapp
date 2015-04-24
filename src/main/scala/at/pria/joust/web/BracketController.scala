@@ -19,7 +19,7 @@ class BracketController {
   private[this] var tournament: Tournament = _
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
-  def adminBracket(model: Model) = {
+  def bracketAdmin(model: Model) = {
     model.addAttribute("bracket", new Bracket())
     model.addAttribute("ByeTeam", ByeTeam)
     model.addAttribute(new BracketControllerInput())
@@ -27,9 +27,9 @@ class BracketController {
   }
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.POST))
-  def adminBracketPost(model: Model, bracketControllerInput: BracketControllerInput) = {
+  def bracketAdminPost(model: Model, bracketControllerInput: BracketControllerInput) = {
     bracketControllerInput.apply(tournament)
-    adminBracket(model)
+    bracketAdmin(model)
   }
 
   @RequestMapping(value = Array("/bracket/"), method = Array(RequestMethod.GET))

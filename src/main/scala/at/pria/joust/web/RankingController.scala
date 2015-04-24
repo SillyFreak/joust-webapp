@@ -19,7 +19,7 @@ class RankingController {
   private[this] var tournament: Tournament = _
 
   @RequestMapping(value = Array("/ranking/"), method = Array(RequestMethod.GET))
-  def adminBracket(model: Model) = {
+  def ranking(model: Model) = {
     val ov = tournament.overallResults.ranking
     val doc = tournament.documentationResults.ranking
     val seed = tournament.seedingResults.ranking
