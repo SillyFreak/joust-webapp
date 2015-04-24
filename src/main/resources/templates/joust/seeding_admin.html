@@ -38,8 +38,8 @@
                             <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />
                         </form>
                     </td>
-                    <td th:text="'*{avg}'">---</td>
-                    <td th:text="'*{rank + 1}'">---</td>
+                    <td th:text="*{seedingAvg}">---</td>
+<!--                    <td th:text="">---</td> -->
                 </tr>
             </tbody>
         </table>
