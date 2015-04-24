@@ -22,7 +22,7 @@
                     <td th:text="${team.teamId}">15-0000</td>
                     <td th:text="${team.name}">TGM</td>
                     <td th:each="game : *{seedingGames}" th:object="${game}" th:text="*{finished ? score : '---'}">---</td>
-<!--                    <td th:text="">---</td> -->
+<!--                    <td th:text="">-</td> -->
                 </tr>
             </tbody>
         </table>
