@@ -32,10 +32,10 @@ import java.util.{ List => juList, ArrayList => juArrayList }
 class Tournament {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty var id: Long = 0l
+  @BeanProperty var id: Long = _
 
   @NotEmpty
-  @BeanProperty var name: String = null
+  @BeanProperty var name: String = _
 
   @OneToMany
   @BeanProperty var teams: juList[Team] = new juArrayList[Team]

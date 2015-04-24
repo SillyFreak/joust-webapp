@@ -34,10 +34,10 @@ import java.util.{ List => juList, ArrayList => juArrayList }
 abstract class TableSlot {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty var id: Long = 0l
+  @BeanProperty var id: Long = _
 
   @ManyToOne
-  @BeanProperty var table: Table = null
+  @BeanProperty var table: Table = _
 
   def participants: List[Team]
   @Transient
@@ -49,7 +49,7 @@ trait TableSlotRepository extends CrudRepository[TableSlot, jLong]
 @Entity
 class PracticeSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var team: Team = null
+  @BeanProperty var team: Team = _
 
   def participants: List[Team] = List(team)
 }
@@ -57,7 +57,7 @@ class PracticeSlot extends TableSlot {
 @Entity
 class SeedingSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: SeedingGame = null
+  @BeanProperty var game: SeedingGame = _
 
   def participants: List[Team] = List(game.team)
 }
@@ -65,7 +65,7 @@ class SeedingSlot extends TableSlot {
 @Entity
 class BracketSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: BracketGame = null
+  @BeanProperty var game: BracketGame = _
 
   def participants: List[Team] = List(???, ???)
 }
@@ -73,7 +73,7 @@ class BracketSlot extends TableSlot {
 @Entity
 class AllianceSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: AllianceGame = null
+  @BeanProperty var game: AllianceGame = _
 
   def participants: List[Team] = List(game.aTeam, game.bTeam)
 }

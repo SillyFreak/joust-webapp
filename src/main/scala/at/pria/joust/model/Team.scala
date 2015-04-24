@@ -34,18 +34,18 @@ import java.util.{ List => juList, ArrayList => juArrayList }
 class Team {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty var id: Long = 0l
+  @BeanProperty var id: Long = _
 
   @NotEmpty
-  @BeanProperty var teamId: String = null
+  @BeanProperty var teamId: String = _
 
   @NotEmpty
-  @BeanProperty var name: String = null
+  @BeanProperty var name: String = _
 
-  @BeanProperty var p1doc: Int = 0
-  @BeanProperty var p2doc: Int = 0
-  @BeanProperty var p3doc: Int = 0
-  @BeanProperty var onsite: Int = 0
+  @BeanProperty var p1doc: Int = _
+  @BeanProperty var p2doc: Int = _
+  @BeanProperty var p3doc: Int = _
+  @BeanProperty var onsite: Int = _
 
   @OneToMany(mappedBy = "team")
   @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]

@@ -30,10 +30,10 @@ import java.lang.{ Long => jLong }
 class Table {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty var id: Long = 0l
+  @BeanProperty var id: Long = _
 
   @NotEmpty
-  @BeanProperty var description: String = null
+  @BeanProperty var description: String = _
 }
 
 trait TableRepository extends CrudRepository[Table, jLong] {

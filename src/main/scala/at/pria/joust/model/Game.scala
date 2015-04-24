@@ -33,10 +33,10 @@ import java.lang.{ Long => jLong }
 abstract class Game {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @BeanProperty var id: Long = 0l
+  @BeanProperty var id: Long = _
 
   @ManyToOne
-  @BeanProperty var tournament: Tournament = null
+  @BeanProperty var tournament: Tournament = _
 }
 
 trait GameRepository extends CrudRepository[Game, jLong]
@@ -44,32 +44,32 @@ trait GameRepository extends CrudRepository[Game, jLong]
 @Entity
 class SeedingGame extends Game {
   @ManyToOne
-  @BeanProperty var team: Team = null
-  @BeanProperty var round: Int = -1
+  @BeanProperty var team: Team = _
+  @BeanProperty var round: Int = _
 
   //result
-  @BeanProperty var finished: Boolean = false
-  @BeanProperty var score: Int = -1
+  @BeanProperty var finished: Boolean = _
+  @BeanProperty var score: Int = _
 }
 
 @Entity
 class BracketGame extends Game {
-  @BeanProperty var gameId: Int = -1
+  @BeanProperty var gameId: Int = _
 
   //result
   @BeanProperty var finished: Boolean = false
-  @BeanProperty var winnerSideA: Boolean = false
+  @BeanProperty var winnerSideA: Boolean = _
 }
 
 @Entity
 class AllianceGame extends Game {
   @ManyToOne
-  @BeanProperty var aTeam: Team = null
+  @BeanProperty var aTeam: Team = _
 
   @ManyToOne
-  @BeanProperty var bTeam: Team = null
+  @BeanProperty var bTeam: Team = _
 
   //result
   @BeanProperty var finished: Boolean = false
-  @BeanProperty var score: Int = -1
+  @BeanProperty var score: Int = _
 }
