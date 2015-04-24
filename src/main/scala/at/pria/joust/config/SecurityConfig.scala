@@ -11,6 +11,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
   @throws[Exception]
   protected override def configure(http: HttpSecurity): Unit = {
     http
+      .headers().frameOptions().disable()
       .authorizeRequests()
       .antMatchers("/admin/**").hasIpAddress("localhost")
       .anyRequest().permitAll()
