@@ -25,8 +25,8 @@ class RootConfiguration extends WebMvcConfigurerAdapter {
   @Bean def messageSource() = {
     val ms = new org.springframework.context.support.ReloadableResourceBundleMessageSource()
     ms.setBasenames(
+      "classpath:i18n/admin",
       "classpath:i18n/error",
-      "classpath:i18n/tournament",
       "classpath:i18n/joust")
     ms
   }

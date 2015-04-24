@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+<title th:text="#{admin.name}">Admin</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <h1 th:text="#{admin.tournaments}">Tournaments</h1>
+        <form action="#" th:action="@{/admin/}" th:object="${newTournament}" method="post">
+            <table>
+                <tbody>
+                    <tr th:if="${newTournamentSuccess}">
+                        <td colspan="2" th:text="#{admin.tournament.added}">Tournament added!</td>
+                    </tr>
+                    <tr>
+                        <td><label for="name" th:text="#{admin.tournament.name}">Name:</label></td>
+                        <td><input type="text" th:field="*{name}" /></td>
+                    </tr>
+                    <tr th:if="${#fields.hasErrors('name')}">
+                        <td colspan="2">
+                            <div class="alert alert-danger" th:errors="*{content}">Message Error</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="reset" class="btn btn-danger">Reset</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <p></p>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th th:text="#{tournament.name}">Tournament</th>
+                </tr>
+                <tr th:each="tournament : ${tournaments}" th:object="${tournament}">
+                    <td th:text="*{name}">Botball</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</body>
+</html>
