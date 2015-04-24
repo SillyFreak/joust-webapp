@@ -15,6 +15,7 @@ import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
+import javax.persistence.OneToMany
 
 /**
  * <p>
@@ -40,6 +41,9 @@ class Team {
   @BeanProperty var p2doc: Int = 0
   @BeanProperty var p3doc: Int = 0
   @BeanProperty var onsite: Int = 0
+
+  @OneToMany(mappedBy = "team")
+  @BeanProperty var seedingGames: java.util.List[SeedingGame] = new java.util.ArrayList[SeedingGame]
 }
 
 trait TeamRepository extends CrudRepository[Team, java.lang.Long] {
