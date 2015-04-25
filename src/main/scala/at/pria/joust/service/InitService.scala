@@ -30,18 +30,21 @@ class InitService {
   @Autowired
   private[this] var gameRepo: GameRepository = _
 
-  private[this] def mkTeam(teamId: String, name: String) = {
-    val t = new Team
-    t.teamId = teamId
-    t.name = name
-    teamRepo.save(t)
-  }
-
-  private[this] def mkTournament(name: String, teams: Team*) = {
+  private[this] def mkTournament(name: String) = {
     val tournament = new Tournament
     tournament.name = name
-    tournament.teams.addAll(teams)
     tournamentRepo.save(tournament)
+  }
+
+  private[this] def mkTeam(tournament: Tournament, teamId: String, name: String) = {
+    val team = new Team
+    team.tournament = tournament
+    team.teamId = teamId
+    team.name = name
+    val result = teamRepo.save(team)
+    //TODO can I avoid this by "refreshing" the tournament?
+    tournament.teams.add(result)
+    result
   }
 
   private[this] def mkSeeding(tournament: Tournament) = {
@@ -73,9 +76,9 @@ class InitService {
 
   def apply(): Unit =
     if (tournamentRepo.count() == 0) {
-      val botball =
-        mkTournament("Botball",
-          (for (i <- List(0 to 16: _*)) yield mkTeam("15-%04d".format(i), "TGM")): _*)
+      val botball = mkTournament("Botball")
+      for (i <- List(0 to 16: _*))
+        mkTeam(botball, "15-%04d".format(i), "TGM")
       mkSeeding(botball)
       mkBracket(botball)
     }

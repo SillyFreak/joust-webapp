@@ -16,6 +16,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Transient
 
@@ -35,6 +36,9 @@ class Team {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _
+
+  @ManyToOne
+  @BeanProperty var tournament: Tournament = _
 
   @NotEmpty
   @BeanProperty var teamId: String = _

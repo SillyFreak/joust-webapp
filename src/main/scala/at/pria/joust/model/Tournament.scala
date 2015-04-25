@@ -37,7 +37,7 @@ class Tournament {
   @NotEmpty
   @BeanProperty var name: String = _
 
-  @OneToMany
+  @OneToMany(mappedBy = "tournament")
   @BeanProperty var teams: juList[Team] = new juArrayList[Team]
 
   @OneToMany(mappedBy = "tournament")
