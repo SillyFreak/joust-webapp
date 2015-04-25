@@ -20,6 +20,8 @@ class BracketController {
   private[this] var tournamentRepo: TournamentRepository = _
   @Autowired
   private[this] var gameRepo: GameRepository = _
+  @Autowired
+  private[this] var slotRepo: TableSlotRepository = _
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
   def bracketAdmin(model: Model) = {
@@ -28,19 +30,34 @@ class BracketController {
     val games = bracket.games.map { BracketGameView(_) }
 
     model.addAttribute("bracket", games: juList[BracketGameView])
-    model.addAttribute(new BracketControllerInput())
+    model.addAttribute(new BracketInput())
     "joust/bracket_admin"
   }
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.POST))
-  def bracketAdminPost(model: Model, in: BracketControllerInput) = {
+  def bracketAdminPost(model: Model, in: BracketInput) = {
     val tournament = tournamentRepo.findByName("Botball")
     val bracket = new BracketStructure(tournament)
 
-    val game = bracket.games(in.id).game
-    game.finished = in.resolved
-    game.winnerSideA = in.winnerSideA
-    gameRepo.save(game)
+    val game = bracket.games(in.gameId).game
+    in.item match {
+      case "winnerA" =>
+        game.finished = true
+        game.winnerSideA = true
+        gameRepo.save(game)
+      case "winnerB" =>
+        game.finished = true
+        game.winnerSideA = false
+        gameRepo.save(game)
+      case "unresolve" =>
+        game.finished = false
+        gameRepo.save(game)
+      case "call" =>
+        val slot = new BracketSlot
+        //TODO table
+        slot.game = game
+        slotRepo.save(slot)
+    }
 
     bracketAdmin(model)
   }
@@ -133,8 +150,7 @@ class BracketController {
   }
 }
 
-class BracketControllerInput {
-  @BeanProperty var id: Int = _
-  @BeanProperty var winnerSideA: Boolean = _
-  @BeanProperty var resolved: Boolean = _
+class BracketInput {
+  @BeanProperty var gameId: Int = _
+  @BeanProperty var item: String = _
 }
