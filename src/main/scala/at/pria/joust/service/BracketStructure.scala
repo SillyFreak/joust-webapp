@@ -79,6 +79,10 @@ class BracketStructure(val tournament: Tournament) {
     rounds.result()
   }
 
+  val mainRounds = rounds.filter { r => r.isInstanceOf[FirstRound] || r.isInstanceOf[MainRound] }
+  val consolationRounds = rounds.filter { r => r.isInstanceOf[ConsolationRound1] || r.isInstanceOf[ConsolationRound2] }
+  val finalRound = rounds.last
+
   private[this] lazy val teams =
     List(tournament.teams: _*).sortBy { _.seedingRank }
 
