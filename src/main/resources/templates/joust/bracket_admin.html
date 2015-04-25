@@ -20,18 +20,17 @@
                     <th></th>
                 </tr>
 <!--/*/ <th:block th:remove="all"> /*/-->
-                <tr th:remove="tag" th:fragment="team(team)" th:switch="${team}">
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
+                <tr th:remove="tag" th:fragment="team(team)" th:object="${team}">
+                    <td th:if="*{!defined}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
+                    <td th:if="*{defined and get() == null}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
+                    <td th:if="*{defined and get() != null}" th:object="*{get()}" th:text="#{bracket.team(*{teamId}, *{name})}">15-0000 TGM</td>
                 </tr>
 <!--/*/ </th:block> /*/-->
-                <tr th:each="game : ${bracket.games}" th:object="${game}">
+                <tr th:each="game : ${bracket}" th:object="${game}">
                     <td th:text="*{id + 1}">1</td>
                     <td th:replace="this::team(*{aTeam})">unknown</td>
                     <td>
-                        <form th:action="@{/admin/bracket/}" method="post"
-                              th:if="*{aTeam instanceof T(at.pria.joust.Team) and bTeam instanceof T(at.pria.joust.Team)}">
+                        <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable}">
                             <input type="hidden" id="id" name="id" th:value="*{id}" />
                             <input type="hidden" id="winnerSideA" name="winnerSideA" th:value="true" />
                             <input type="hidden" id="resolved" name="resolved" th:value="true" />
@@ -40,8 +39,7 @@
                     </td>
                     <td th:replace="this::team(*{bTeam})">unknown</td>
                     <td>
-                        <form th:action="@{/admin/bracket/}" method="post"
-                              th:if="*{aTeam instanceof T(at.pria.joust.Team) and bTeam instanceof T(at.pria.joust.Team)}">
+                        <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable}">
                             <input type="hidden" id="id" name="id" th:value="*{id}" />
                             <input type="hidden" id="winnerSideA" name="winnerSideA" th:value="false" />
                             <input type="hidden" id="resolved" name="resolved" th:value="true" />
@@ -50,8 +48,7 @@
                     </td>
                     <td th:replace="this::team(*{winner})">unknown</td>
                     <td>
-                        <form th:action="@{/admin/bracket/}" method="post"
-                              th:if="*{aTeam instanceof T(at.pria.joust.Team) and bTeam instanceof T(at.pria.joust.Team) and winner instanceof T(at.pria.joust.Team)}">
+                        <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable and finished}">
                             <input type="hidden" id="id" name="id" th:value="*{id}" />
                             <input type="hidden" id="resolved" name="resolved" th:value="false" />
                             <button type="submit" class="btn btn-danger"></button>
