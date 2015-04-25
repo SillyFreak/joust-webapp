@@ -16,7 +16,7 @@
                     <th th:text="#{upcoming.slot}">Slot Description</th>
                 </tr>
                 <tr th:each="slot : ${upcoming}" th:object="${slot}"
-                    th:class="#{upcoming.status.__*{state}__.class}">
+                    th:class="#{upcoming.status.__*{state}__.class}" th:id="|row*{id}|">
                     <td>
                         <form th:action="@{/admin/}" method="post">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />

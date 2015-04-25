@@ -24,7 +24,7 @@
                     <th th:text="#{teams.seedingAvg}">Seeding Average</th>
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
-                <tr th:each="team : ${tournament.teams}" th:object="${team}">
+                <tr th:each="team : ${tournament.teams}" th:object="${team}" th:id="|row*{id}|">
                     <td class="button-column">
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
