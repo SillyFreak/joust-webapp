@@ -7,6 +7,7 @@
 package at.pria.joust.model
 
 import scala.beans.BeanProperty
+import scala.collection.JavaConversions._
 
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.repository.CrudRepository
@@ -42,6 +43,13 @@ class Tournament {
 
   @OneToMany(mappedBy = "tournament")
   @BeanProperty var games: juList[Game] = new juArrayList[Game]
+
+  //inferred
+
+  def seedingMax = {
+    val scores = games.collect { case g: SeedingGame if g.finished => g.score }
+    if (scores.isEmpty) 0 else scores.max
+  }
 }
 
 trait TournamentRepository extends CrudRepository[Tournament, jLong] {

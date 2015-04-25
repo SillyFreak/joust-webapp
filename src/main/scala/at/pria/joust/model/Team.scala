@@ -81,6 +81,16 @@ class Team {
     tournament.teams.count { _.seedingAvg > seedingAvg }
   }
   @Transient def getSeedingRank() = seedingRank
+
+  def seedingScore = {
+    val count = tournament.teams.size
+    val rank = seedingRank
+    val avg = seedingAvg
+    val seedingMax = tournament.seedingMax
+
+    .75 * (count - rank) / count + .25 * (if (seedingMax == 0) 0 else avg / seedingMax)
+  }
+  @Transient def getSeedingScore() = seedingScore
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {
