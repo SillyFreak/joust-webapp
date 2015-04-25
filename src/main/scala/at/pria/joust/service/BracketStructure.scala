@@ -6,6 +6,9 @@
 
 package at.pria.joust.service
 
+import scala.collection.JavaConversions._
+
+import at.pria.joust.model
 import at.pria.joust.model._
 
 /**
@@ -74,24 +77,74 @@ class BracketStructure(val tournament: Tournament) {
     rounds.result()
   }
 
-  sealed trait TeamSource
+  sealed trait TeamSource {
+    def apply(): Option[Team]
+  }
   //no opponent
-  case object ByeTeamSource extends TeamSource
-  case class SeedingRankSource(rank: Int) extends TeamSource
-  case class BracketWinnerSource(game: Int) extends TeamSource
-  case class BracketLoserSource(game: Int) extends TeamSource
+  case object ByeTeamSource extends TeamSource {
+    override def apply() = Some(null)
+  }
+  case class SeedingRankSource(rank: Int) extends TeamSource {
+    override def apply() = Some(null) //TODO
+  }
+  case class BracketWinnerSource(game: Int) extends TeamSource {
+    override def apply() = games(game).winner()
+  }
+  case class BracketLoserSource(game: Int) extends TeamSource {
+    override def apply() = games(game).loser()
+  }
   //for the second final match:
   //if the main bracket winner won the first final, a bye, otherwise like a bracket source
-  case class FinalWinnerSource(game: Int, main: Int) extends TeamSource
-  case class FinalLoserSource(game: Int, consolation: Int) extends TeamSource
+  case class FinalWinnerSource(game: Int, main: Int) extends TeamSource {
+    override def apply() =
+      for (gw <- games(game).winner(); mw <- games(main).winner())
+        yield if (gw == mw) null else gw
+  }
+  case class FinalLoserSource(game: Int, consolation: Int) extends TeamSource {
+    override def apply() =
+      for (gl <- games(game).loser(); cw <- games(consolation).winner())
+        yield if (gl == cw) null else gl
+  }
   //pseudo source that displays the bracket winner
-  case class BracketWinner(val final1: Int, val final2: Int, val main: Int) extends TeamSource
+  case class BracketWinner(val final1: Int, val final2: Int, val main: Int) extends TeamSource {
+    override def apply() = {
+      val mw = games(main).winner()
+      val f1w = games(final1).winner()
+      val f2w = games(final2).winner()
+
+      (mw, f1w, f2w) match {
+        //main bracket winner won the first match
+        case (Some(x), Some(y), _) if x == y => f1w
+        //in any other case, take the winner of f2, which may not be known
+        case _                               => f2w
+      }
+    }
+  }
+
+  private[this] lazy val tGames =
+    List(tournament.games: _*)
+      .collect { case g: model.BracketGame => g }
+      .sortBy { _.gameId }
 
   case class BracketGame(
-    id: Int,
-    round: Int,
-    aTeam: TeamSource,
-    bTeam: TeamSource)
+      id: Int,
+      round: Int,
+      aTeam: TeamSource,
+      bTeam: TeamSource) {
+    lazy val game = tGames(id)
+    def finished = game.finished
+    def winnerSideA = game.winnerSideA
+
+    def winner() =
+      if (!finished) None
+      else if (winnerSideA) aTeam()
+      else bTeam()
+
+    def loser() =
+      if (!finished) None
+      else if (winnerSideA) bTeam()
+      else aTeam()
+  }
 
   val games = {
     for {
