@@ -16,6 +16,8 @@ class SeedingController {
   private[this] var tournamentRepo: TournamentRepository = _
   @Autowired
   private[this] var gameRepo: GameRepository = _
+  @Autowired
+  private[this] var teamRepo: TeamRepository = _
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
@@ -27,11 +29,22 @@ class SeedingController {
   }
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.POST))
-  def seedingAdminPost(model: Model, teamsControllerInput: SeedingControllerInput) = {
-    val game = gameRepo.findOne(teamsControllerInput.id).asInstanceOf[SeedingGame]
-    game.finished = true
-    game.score = teamsControllerInput.score
-    gameRepo.save(game)
+  def seedingAdminPost(model: Model, in: SeedingControllerInput) = {
+    if (in.gameId != 0) {
+      val game = gameRepo.findOne(in.gameId).asInstanceOf[SeedingGame]
+      game.finished = true
+      game.score = in.score
+      gameRepo.save(game)
+    } else {
+      val team = teamRepo.findOne(in.teamId)
+      in.phase match {
+        case "p1doc"  => team.p1doc = in.score
+        case "p2doc"  => team.p2doc = in.score
+        case "p3doc"  => team.p3doc = in.score
+        case "onsite" => team.onsite = in.score
+      }
+      teamRepo.save(team)
+    }
 
     seedingAdmin(model)
   }
@@ -46,6 +59,8 @@ class SeedingController {
 }
 
 class SeedingControllerInput {
-  @BeanProperty var id: Long = _
+  @BeanProperty var teamId: Long = _
+  @BeanProperty var phase: String = _
+  @BeanProperty var gameId: Long = _
   @BeanProperty var score: Int = _
 }

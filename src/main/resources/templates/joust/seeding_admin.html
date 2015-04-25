@@ -28,13 +28,37 @@
                     <td th:text="*{teamId}">15-0000</td>
                     <td th:text="*{name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
-                    <td th:text="*{p1doc}">300</td>
-                    <td th:text="*{p2doc}">300</td>
-                    <td th:text="*{p3doc}">200</td>
-                    <td th:text="*{onsite}">100</td>
+                    <td>
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <input type="hidden" id="phase" name="phase" th:value="p1doc" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{p1doc}" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <input type="hidden" id="phase" name="phase" th:value="p2doc" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{p2doc}" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <input type="hidden" id="phase" name="phase" th:value="p3doc" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{p3doc}" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <input type="hidden" id="phase" name="phase" th:value="onsite" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{onsite}" />
+                        </form>
+                    </td>
                     <td th:each="game : *{seedingGames}" th:object="${game}">
                         <form th:action="@{/admin/seeding/}" method="post">
-                            <input type="hidden" id="id" name="id" th:value="*{id}" />
+                            <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />
                         </form>
                     </td>
