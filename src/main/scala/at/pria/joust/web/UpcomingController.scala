@@ -20,6 +20,8 @@ import java.util.{ List => juList }
 class UpcomingController {
   @Autowired
   private[this] var slotRepo: TableSlotRepository = _
+  @Autowired
+  private[this] var tableRepo: TableRepository = _
 
   @Autowired
   private[this] var init: InitService = _
@@ -35,6 +37,7 @@ class UpcomingController {
         .sortBy(-_.state)
 
     model.addAttribute("upcoming", slots: juList[TableSlot])
+    model.addAttribute("tables", tableRepo.findAll())
     "joust/upcoming_admin"
   }
 
@@ -47,6 +50,9 @@ class UpcomingController {
         slotRepo.save(slot)
       case "cancel" =>
         slotRepo.delete(slot)
+      case "table" =>
+        slot.table = tableRepo.findOne(in.table)
+        slotRepo.save(slot)
     }
 
     upcomingAdmin(model)
@@ -70,4 +76,5 @@ class UpcomingController {
 class UpcomingInput {
   @BeanProperty var slotId: Long = _
   @BeanProperty var item: String = _
+  @BeanProperty var table: Long = _
 }

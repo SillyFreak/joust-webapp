@@ -19,7 +19,19 @@
                 </tr>
                 <tr th:each="slot : ${upcoming}" th:object="${slot}"
                     th:class="#{upcoming.status.__*{state}__.class}">
-                    <td th:text="*{table == null? '' : table.description}">Table 1</td>
+                    <td>
+                        <form th:action="@{/admin/}" method="post">
+                            <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />
+                            <input type="hidden" id="item" name="item" th:value="table" />
+                            <select id="table" name="table">
+                                <option value="0" th:text="---">---</option>
+                                <option th:each="table : ${tables}"
+                                    th:selected="${slot.table != null and slot.table.id == table.id}"
+                                    th:value="${table.id}" th:text="${table.description}">Table 1</option>
+                            </select>
+                            <button type="submit" class="btn btn-info"></button>
+                        </form>
+                    </td>
                     <td class="button-column">
                         <form th:action="@{/admin/}" method="post">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />
