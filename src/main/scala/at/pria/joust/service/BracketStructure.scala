@@ -20,6 +20,8 @@ import at.pria.joust.model._
  * @author SillyFreak
  */
 class BracketStructure(val tournament: Tournament) {
+  if (tournament.teams.size == 0) throw new IllegalArgumentException("no teams in tournament")
+
   // the bracket size n is the lowest power of two that fits all teams, i.e.
   // 2^(ceil(log2(n)))
   val bracketSize = Integer.highestOneBit(tournament.teams.size - 1) * 2
