@@ -23,7 +23,7 @@
                 <tr th:remove="tag" th:fragment="team(team)" th:object="${team}">
                     <td th:if="*{!defined}" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
                     <td th:if="*{defined and get() == null}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:if="*{defined and get() != null}" th:object="*{get()}" th:text="#{bracket.team(*{teamId}, *{name})}">15-0000 TGM</td>
+                    <td th:if="*{defined and get() != null}" th:object="${team.get()}" th:text="#{bracket.team(*{teamId}, *{name})}">15-0000 TGM</td>
                 </tr>
 <!--/*/ </th:block> /*/-->
                 <tr th:each="game : ${bracket}" th:object="${game}">
