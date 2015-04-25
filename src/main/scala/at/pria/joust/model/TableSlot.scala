@@ -39,6 +39,9 @@ abstract class TableSlot {
   @ManyToOne
   @BeanProperty var table: Table = _
 
+  @BeanProperty var calling: Boolean = false
+  @BeanProperty var finished: Boolean = false
+
   def participants: List[Team]
   @Transient
   def getParticipants() = participants: juList[Team]
