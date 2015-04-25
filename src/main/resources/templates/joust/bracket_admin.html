@@ -28,7 +28,13 @@
                 </tr>
 <!--/*/ </th:block> /*/-->
                 <tr th:each="game : ${bracket}" th:object="${game}">
-                    <td class="button-column"></td>
+                    <td class="button-column">
+                        <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable and !finished}">
+                            <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
+                            <!-- TODO -->
+                            <button type="submit" class="btn btn-info"></button>
+                        </form>
+                    </td>
                     <td th:text="*{id + 1}">1</td>
                     <td class="button-column">
                         <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable}">

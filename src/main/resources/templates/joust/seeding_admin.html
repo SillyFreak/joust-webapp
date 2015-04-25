@@ -29,7 +29,13 @@
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
-                    <td class="button-column"></td>
+                    <td class="button-column">
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <!-- TODO -->
+                            <button type="submit" class="btn btn-info"></button>
+                        </form>
+                    </td>
                     <td th:text="*{teamId}">15-0000</td>
                     <td th:text="*{name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
@@ -61,12 +67,21 @@
                             <input type="number" min="0" id="score" name="score" th:value="*{onsite}" />
                         </form>
                     </td>
-                    <td th:each="game : *{seedingGames}" th:object="${game}">
+<!--/*/ <th:block th:each="game : *{seedingGames}" th:object="${game}"> /*/-->
+                    <td class="button-column">
+                        <form th:action="@{/admin/seeding/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
+                            <!-- TODO -->
+                            <button type="submit" class="btn btn-info"></button>
+                        </form>
+                    </td>
+                    <td>
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />
                         </form>
                     </td>
+<!--/*/ </th:block> /*/-->
                     <td th:text="*{seedingAvg}">---</td>
                     <td th:text="*{seedingRank}">---</td> 
                 </tr>
