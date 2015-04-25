@@ -131,41 +131,6 @@ class BracketController {
     def getWinner() = game.winner()
     def getLoser() = game.loser()
   }
-
-  //private class Bracket {
-  //  private[this] val m = tournament.bracketMatches.map(new BracketMatchView(_))
-  //
-  //  private[this] val brackets = {
-  //    val _rounds = m.groupBy(_.ord)
-  //    val size = _rounds.size
-  //    val rounds =
-  //      _rounds.groupBy {
-  //        case (ord, a) => ord match {
-  //          case 0                  => "main"
-  //          case x if x >= size - 3 => "final"
-  //          case x if x % 3 == 1    => "main"
-  //          case _                  => "consolation"
-  //        }
-  //      }
-  //
-  //    rounds.map {
-  //      case (k, round) =>
-  //        val bracket =
-  //          round.toList
-  //            .sortBy { case (k, _) => k }
-  //            .map {
-  //              case (_, v) => v: juList[BracketMatchView]
-  //            }
-  //        (k, (if (k == "consolation") bracket.reverse else bracket): juList[juList[BracketMatchView]])
-  //    }
-  //  }
-  //
-  //  @BeanProperty val games = m: juList[BracketMatchView]
-  //
-  //  @BeanProperty val mainRounds = brackets("main")
-  //  @BeanProperty val consolationRounds = brackets("consolation")
-  //  @BeanProperty val finalRounds = brackets("final")
-  //}
 }
 
 class BracketControllerInput {
