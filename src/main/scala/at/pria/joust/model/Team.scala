@@ -91,6 +91,21 @@ class Team {
     .75 * (count - rank) / count + .25 * (if (seedingMax == 0) 0 else avg / seedingMax)
   }
   @Transient def getSeedingScore() = seedingScore
+
+  def docScore =
+    List(
+      (0.30, 300, p1doc),
+      (0.30, 300, p2doc),
+      (0.10, 200, p3doc),
+      (0.30, 100, onsite))
+      .foldLeft(0d) { case (sum, (weight, max, score)) => sum + weight * score / max }
+  @Transient def getDocScore() = docScore
+
+  def docRank = {
+    val docScore = this.docScore
+    tournament.teams.count { _.docScore > docScore }
+  }
+  @Transient def getDocRank() = docRank
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {
