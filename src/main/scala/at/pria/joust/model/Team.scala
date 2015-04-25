@@ -75,6 +75,12 @@ class Team {
 
   def seedingAvg = seedingStats._2
   @Transient def getSeedingAvg() = seedingAvg
+
+  def seedingRank = {
+    val seedingAvg = this.seedingAvg
+    tournament.teams.count { _.seedingAvg > seedingAvg }
+  }
+  @Transient def getSeedingRank() = seedingRank
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {

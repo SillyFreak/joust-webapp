@@ -19,10 +19,10 @@
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
-                    <td th:text="${team.teamId}">15-0000</td>
-                    <td th:text="${team.name}">TGM</td>
+                    <td th:text="*{teamId}">15-0000</td>
+                    <td th:text="*{name}">TGM</td>
                     <td th:each="game : *{seedingGames}" th:object="${game}" th:text="*{finished ? score : '---'}">---</td>
-<!--                    <td th:text="">-</td> -->
+                    <td th:text="*{seedingRank}">---</td> 
                 </tr>
             </tbody>
         </table>
