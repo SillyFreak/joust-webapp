@@ -16,9 +16,9 @@
                     <th th:text="#{upcoming.slot}">Slot Description</th>
                 </tr>
                 <tr th:each="slot : ${upcoming}" th:object="${slot}"
-                    th:class="#{upcoming.status.__*{stateName}__.class}">
+                    th:class="#{upcoming.status.__*{state}__.class}">
                     <td th:text="*{table == null? '' : table.description}">Table 1</td>
-                    <td th:text="#{upcoming.status.__*{stateName}__}">Table 1</td>
+                    <td th:text="#{upcoming.status.__*{state}__}">Table 1</td>
                     <td th:text="*{description}">Open practice for team 15-0000 TGM</td>
                 </tr>
             </tbody>

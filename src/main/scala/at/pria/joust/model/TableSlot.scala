@@ -42,14 +42,6 @@ abstract class TableSlot {
   @BeanProperty var table: Table = _
 
   @BeanProperty var state: Int = UPCOMING
-  def stateName: String = state match {
-    case UPCOMING => "upcoming"
-    case CALLED   => "called"
-    case CURRENT  => "current"
-    case FINISHED => "finished"
-  }
-  @Transient
-  def getStateName() = stateName
 
   def participants: List[Team]
   @Transient
