@@ -21,7 +21,7 @@
                     th:class="#{upcoming.status.__*{state}__.class}">
                     <td th:text="*{table == null? '' : table.description}">Table 1</td>
                     <td class="button-column">
-                        <form th:action="@{/admin/}" method="post" th:if="*{state lt 2}">
+                        <form th:action="@{/admin/}" method="post">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="next" />
                             <button type="submit" class="btn btn-info" th:title="#{upcoming.btn.next(#{upcoming.status.__*{state + 1}__})}"></button>
