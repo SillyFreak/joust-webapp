@@ -36,6 +36,10 @@ td.score-button {
 	width: 3em;
 }
 
+tr.called {
+	font-weight: bold;
+}
+
 .bracket {
 }
 
