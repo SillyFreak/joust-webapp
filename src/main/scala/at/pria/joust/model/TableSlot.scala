@@ -32,6 +32,8 @@ import java.util.{ List => juList, ArrayList => juArrayList }
  */
 @Entity
 abstract class TableSlot {
+  import TableSlot._
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _
@@ -39,12 +41,18 @@ abstract class TableSlot {
   @ManyToOne
   @BeanProperty var table: Table = _
 
-  @BeanProperty var calling: Boolean = false
-  @BeanProperty var finished: Boolean = false
+  @BeanProperty var state: Int = UPCOMING
 
   def participants: List[Team]
   @Transient
   def getParticipants() = participants: juList[Team]
+}
+
+object TableSlot {
+  final val UPCOMING = 0
+  final val CALLED = 1
+  final val CURRENT = 2
+  final val FINISHED = 3
 }
 
 trait TableSlotRepository extends CrudRepository[TableSlot, jLong]
