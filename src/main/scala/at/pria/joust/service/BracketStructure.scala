@@ -79,6 +79,9 @@ class BracketStructure(val tournament: Tournament) {
     rounds.result()
   }
 
+  private[this] lazy val teams =
+    List(tournament.teams: _*).sortBy { _.seedingRank }
+
   sealed trait TeamSource {
     def apply(): Option[Team]
   }
@@ -87,7 +90,7 @@ class BracketStructure(val tournament: Tournament) {
     override def apply() = Some(null)
   }
   case class SeedingRankSource(rank: Int) extends TeamSource {
-    override def apply() = Some(null) //TODO
+    override def apply() = Some(teams(rank))
   }
   case class BracketWinnerSource(game: Int) extends TeamSource {
     override def apply() = games(game).winner()
@@ -123,7 +126,7 @@ class BracketStructure(val tournament: Tournament) {
     }
   }
 
-  private[this] lazy val tGames =
+  private[this] lazy val _games =
     List(tournament.games: _*)
       .collect { case g: model.BracketGame => g }
       .sortBy { _.gameId }
@@ -133,7 +136,7 @@ class BracketStructure(val tournament: Tournament) {
       round: Int,
       aTeam: TeamSource,
       bTeam: TeamSource) {
-    lazy val game = tGames(id)
+    lazy val game = _games(id)
     def finished = game.finished
     def winnerSideA = game.winnerSideA
 
