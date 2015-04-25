@@ -12,9 +12,7 @@
             <tbody>
                 <tr>
                     <th th:text="#{upcoming.table}">Table</th>
-                    <th class="button-column"></th>
-                    <th class="button-column"></th>
-                    <th th:text="#{upcoming.status}">Status</th>
+                    <th colspan="3" th:text="#{upcoming.status}">Status</th>
                     <th th:text="#{upcoming.slot}">Slot Description</th>
                 </tr>
                 <tr th:each="slot : ${upcoming}" th:object="${slot}"
