@@ -31,6 +31,10 @@ input[type="number"] {
     width: 5em;
 }
 
+th.score-button,
+td.score-button {
+	width: 3em;
+}
 
 .bracket {
 }
