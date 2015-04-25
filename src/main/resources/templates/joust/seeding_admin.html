@@ -11,6 +11,7 @@
         <table class="table">
             <tbody>
                 <tr>
+                    <th class="button-column"></th>
                     <th th:text="#{teams.code}">Team Code</th>
                     <th th:text="#{teams.organization}">Organization/Name</th>
 <!--                    <th th:text="#{teams.email}">Contact Email</th> -->
@@ -18,13 +19,17 @@
                     <th th:text="#{teams.doc_p(2)}">P2 Doc</th>
                     <th th:text="#{teams.doc_p(3)}">P3 Doc</th>
                     <th th:text="#{teams.doc_onsite}">Onsite Doc</th>
+                    <th class="button-column"></th>
                     <th th:text="#{teams.seeding(1)}">S1</th>
+                    <th class="button-column"></th>
                     <th th:text="#{teams.seeding(2)}">S2</th>
+                    <th class="button-column"></th>
                     <th th:text="#{teams.seeding(3)}">S3</th>
                     <th th:text="#{teams.seedingAvg}">Seeding Average</th>
                     <th th:text="#{teams.seedingRank}">Seeding Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
+                    <td class="button-column"></td>
                     <td th:text="*{teamId}">15-0000</td>
                     <td th:text="*{name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
