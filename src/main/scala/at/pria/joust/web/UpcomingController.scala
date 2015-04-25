@@ -24,6 +24,25 @@ class UpcomingController {
   @Autowired
   private[this] var init: InitService = _
 
+  @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.GET))
+  def upcomingAdmin(model: Model) = {
+    init()
+
+    val slots =
+      slotRepo.findAll().toList
+        .filter(_.state != FINISHED)
+        //most urgent slots first
+        .sortBy(-_.state)
+
+    model.addAttribute("upcoming", slots: juList[TableSlot])
+    "joust/upcoming_admin"
+  }
+
+  @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
+  def upcomingAdminPost(model: Model) = {
+    upcomingAdmin(model)
+  }
+
   @RequestMapping(value = Array("/"), method = Array(RequestMethod.GET))
   def upcoming(model: Model) = {
     init()

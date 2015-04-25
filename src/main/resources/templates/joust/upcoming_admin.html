@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{upcoming.name}">Upcoming games</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th th:text="#{upcoming.table}">Table</th>
+                    <th th:text="#{upcoming.status}">Status</th>
+                    <th th:text="#{upcoming.slot}">Slot Description</th>
+                </tr>
+                <tr th:each="slot : ${upcoming}" th:object="${slot}"
+                    th:class="#{upcoming.status.__*{stateName}__.class}">
+                    <td th:text="*{table.description}">Table 1</td>
+                    <td th:text="#{upcoming.status.__*{stateName}__}">Table 1</td>
+                    <td th:text="*{description}">Open practice for team 15-0000 TGM</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</body>
+</html>
