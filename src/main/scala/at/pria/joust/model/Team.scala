@@ -129,6 +129,16 @@ class Team {
     tournament.teams.count { _.docScore > docScore }
   }
   @Transient def getDocRank() = docRank
+
+  def overallScore(bracket: BracketStructure) =
+    seedingScore + bracketScore(bracket) + docScore
+  @Transient def getOverallScore(bracket: BracketStructure) = overallScore(bracket)
+
+  def overallRank(bracket: BracketStructure) = {
+    val overallScore = this.overallScore(bracket)
+    tournament.teams.count { _.overallScore(bracket) > overallScore }
+  }
+  @Transient def getOverallRank(bracket: BracketStructure) = overallRank(bracket)
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {
