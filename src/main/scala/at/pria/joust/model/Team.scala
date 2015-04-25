@@ -9,6 +9,8 @@ package at.pria.joust.model
 import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
+import at.pria.joust.service.BracketStructure
+
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.repository.CrudRepository
 
@@ -91,6 +93,27 @@ class Team {
     .75 * (count - rank) / count + .25 * (if (seedingMax == 0) 0 else avg / seedingMax)
   }
   @Transient def getSeedingScore() = seedingScore
+
+  private def rawBracketScore(bracket: BracketStructure) = {
+    var score = -1
+    for (game <- bracket.games)
+      for (a <- game.aTeam(); b <- game.bTeam())
+        if (a == this || b == this) score = game.round
+    score
+  }
+
+  def bracketRank(bracket: BracketStructure) = {
+    val bracket = new BracketStructure(tournament)
+    val bracketScore = this.rawBracketScore(bracket)
+    tournament.teams.count { _.rawBracketScore(bracket) > bracketScore }
+  }
+  @Transient def getbracketRank(bracket: BracketStructure) = bracketRank(bracket)
+
+  def bracketScore(bracket: BracketStructure) = {
+    val count = tournament.teams.size
+    (count - bracketRank(bracket)).toDouble / count
+  }
+  @Transient def getBracketScore(bracket: BracketStructure) = bracketScore(bracket)
 
   def docScore =
     List(
