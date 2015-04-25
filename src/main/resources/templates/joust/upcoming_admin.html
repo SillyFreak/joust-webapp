@@ -19,7 +19,7 @@
                 </tr>
                 <tr th:each="slot : ${upcoming}" th:object="${slot}"
                     th:class="#{upcoming.status.__*{stateName}__.class}">
-                    <td th:text="*{table.description}">Table 1</td>
+                    <td th:text="*{table == null? '' : table.description}">Table 1</td>
                     <td class="button-column">
                         <form th:action="@{/admin/}" method="post" th:if="*{state lt 2}">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />

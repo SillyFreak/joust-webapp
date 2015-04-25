@@ -32,7 +32,7 @@
                     <td class="button-column">
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
-                            <!-- TODO -->
+                            <input type="hidden" id="item" name="item" th:value="practiceCall" />
                             <button type="submit" class="btn btn-info"></button>
                         </form>
                     </td>
@@ -42,28 +42,28 @@
                     <td>
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
-                            <input type="hidden" id="phase" name="phase" th:value="p1doc" />
+                            <input type="hidden" id="item" name="item" th:value="p1doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p1doc}" />
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
-                            <input type="hidden" id="phase" name="phase" th:value="p2doc" />
+                            <input type="hidden" id="item" name="item" th:value="p2doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p2doc}" />
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
-                            <input type="hidden" id="phase" name="phase" th:value="p3doc" />
+                            <input type="hidden" id="item" name="item" th:value="p3doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p3doc}" />
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
-                            <input type="hidden" id="phase" name="phase" th:value="onsite" />
+                            <input type="hidden" id="item" name="item" th:value="onsite" />
                             <input type="number" min="0" id="score" name="score" th:value="*{onsite}" />
                         </form>
                     </td>
@@ -71,13 +71,14 @@
                     <td class="button-column">
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
-                            <!-- TODO -->
+                            <input type="hidden" id="item" name="item" th:value="|s*{round}Call|" />
                             <button type="submit" class="btn btn-info"></button>
                         </form>
                     </td>
                     <td>
                         <form th:action="@{/admin/seeding/}" method="post">
-                            <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
+                            <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
+                            <input type="hidden" id="item" name="item" th:value="|s*{round}|" />
                             <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />
                         </form>
                     </td>
