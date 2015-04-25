@@ -39,7 +39,16 @@ class UpcomingController {
   }
 
   @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
-  def upcomingAdminPost(model: Model) = {
+  def upcomingAdminPost(model: Model, in: UpcomingInput) = {
+    val slot = slotRepo.findOne(in.slotId)
+    in.item match {
+      case "next" =>
+        slot.state += 1
+        slotRepo.save(slot)
+      case "cancel" =>
+        slotRepo.delete(slot)
+    }
+
     upcomingAdmin(model)
   }
 
@@ -56,4 +65,9 @@ class UpcomingController {
     model.addAttribute("upcoming", slots: juList[TableSlot])
     "joust/upcoming"
   }
+}
+
+class UpcomingInput {
+  @BeanProperty var slotId: Long = _
+  @BeanProperty var item: String = _
 }
