@@ -92,19 +92,9 @@ class InitService {
       mkSeeding(botball)
       mkBracket(botball)
 
-      val table1 = mkTable("Botball 1")
-      val slot1 = {
-        val slot = new PracticeSlot
-        slot.table = table1
-        slot.team = botball.teams(0)
-        tableSlotRepo.save(slot)
-      }
-      val slot2 = {
-        val slot = new PracticeSlot
-        slot.table = table1
-        slot.team = botball.teams(1)
-        slot.state = TableSlot.CALLED
-        tableSlotRepo.save(slot)
-      }
+      val botball1 = mkTable("Botball Left")
+      val botball2 = mkTable("Botball Right")
+      val botballPractice = mkTable("Botball Free-for-all")
+      val aerial = mkTable("PRIA Aerial")
     }
 }
