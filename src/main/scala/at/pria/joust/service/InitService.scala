@@ -29,6 +29,10 @@ class InitService {
   private[this] var teamRepo: TeamRepository = _
   @Autowired
   private[this] var gameRepo: GameRepository = _
+  @Autowired
+  private[this] var tableRepo: TableRepository = _
+  @Autowired
+  private[this] var tableSlotRepo: TableSlotRepository = _
 
   private[this] def mkTournament(name: String) = {
     val tournament = new Tournament
@@ -74,6 +78,12 @@ class InitService {
     }
   }
 
+  private[this] def mkTable(description: String) = {
+    val table = new Table
+    table.description = description
+    tableRepo.save(table)
+  }
+
   def apply(): Unit =
     if (tournamentRepo.count() == 0) {
       val botball = mkTournament("Botball")
@@ -81,5 +91,20 @@ class InitService {
         mkTeam(botball, "15-%04d".format(i), "TGM")
       mkSeeding(botball)
       mkBracket(botball)
+
+      val table1 = mkTable("Botball 1")
+      val slot1 = {
+        val slot = new PracticeSlot
+        slot.table = table1
+        slot.team = botball.teams(0)
+        tableSlotRepo.save(slot)
+      }
+      val slot2 = {
+        val slot = new PracticeSlot
+        slot.table = table1
+        slot.team = botball.teams(1)
+        slot.state = TableSlot.CALLED
+        tableSlotRepo.save(slot)
+      }
     }
 }

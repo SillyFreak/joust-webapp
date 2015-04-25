@@ -46,6 +46,10 @@ abstract class TableSlot {
   def participants: List[Team]
   @Transient
   def getParticipants() = participants: juList[Team]
+
+  def description: String
+  @Transient
+  def getDescription() = description
 }
 
 object TableSlot {
@@ -63,6 +67,7 @@ class PracticeSlot extends TableSlot {
   @BeanProperty var team: Team = _
 
   def participants: List[Team] = List(team)
+  def description = s"Open practice for team ${team.teamId} ${team.name}"
 }
 
 @Entity
@@ -70,6 +75,7 @@ class SeedingSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var game: SeedingGame = _
 
+  def description = s"Seeding round ${game.round} for team ${game.team.teamId} ${game.team.name}"
   def participants: List[Team] = List(game.team)
 }
 
@@ -78,6 +84,7 @@ class BracketSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var game: BracketGame = _
 
+  def description = s"Double elimination match #${game.gameId}"
   def participants: List[Team] = List(???, ???)
 }
 
@@ -86,5 +93,6 @@ class AllianceSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var game: AllianceGame = _
 
+  def description = s"Alliance game ${game.aTeam.teamId} ${game.aTeam.name} & ${game.bTeam.teamId} ${game.bTeam.name}"
   def participants: List[Team] = List(game.aTeam, game.bTeam)
 }

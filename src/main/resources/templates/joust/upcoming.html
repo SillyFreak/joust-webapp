@@ -11,21 +11,12 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <th th:text="#{upcoming.id}">Game ID</th>
-                    <th th:text="#{upcoming.aTeam}">Pink Side</th>
-                    <th th:text="#{upcoming.bTeam}">Green Side</th>
+                    <th th:text="#{upcoming.table}">Table</th>
+                    <th th:text="#{upcoming.slot}">Slot Description</th>
                 </tr>
-<!--/*/ <th:block th:remove="all"> /*/-->
-                <tr th:remove="tag" th:fragment="team(team)" th:switch="${team}">
-                    <td th:case="null" class="team-unknown" th:text="#{bracket.team.unknown}">unknown</td>
-                    <td th:case="${ByeTeam}" class="team-bye" th:text="#{bracket.team.bye}">bye</td>
-                    <td th:case="*" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</td>
-                </tr>
-<!--/*/ </th:block> /*/-->
-                <tr th:each="game : ${upcoming}" th:class="${game.called ? 'alert alert-danger' : ''}">
-                    <td th:text="${game.id}">S1</td>
-                    <td th:replace="this::team(${game.aTeam})">unknown</td>
-                    <td th:replace="this::team(${game.bTeam})">unknown</td>
+                <tr th:each="slot : ${upcoming}" th:object="${slot}">
+                    <td th:text="*{table.description}">Table 1</td>
+                    <td th:text="*{description}">Open practice for team 15-0000 TGM</td>
                 </tr>
             </tbody>
         </table>
