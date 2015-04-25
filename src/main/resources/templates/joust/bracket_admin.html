@@ -32,7 +32,7 @@
                         <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable and !finished}">
                             <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="call" />
-                            <button type="submit" class="btn btn-info"></button>
+                            <button type="submit" class="btn btn-info" th:title="#{bracket.btn.call}"></button>
                         </form>
                     </td>
                     <td th:text="*{id + 1}">1</td>
@@ -40,7 +40,7 @@
                         <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable}">
                             <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="winnerA" />
-                            <button type="submit" class="btn btn-success"></button>
+                            <button type="submit" class="btn btn-success" th:title="#{bracket.btn.winnerA}"></button>
                         </form>
                     </td>
                     <td th:replace="this::team(*{aTeam})">unknown</td>
@@ -48,7 +48,7 @@
                         <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable}">
                             <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="winnerB" />
-                            <button type="submit" class="btn btn-success"></button>
+                            <button type="submit" class="btn btn-success" th:title="#{bracket.btn.winnerB}"></button>
                         </form>
                     </td>
                     <td th:replace="this::team(*{bTeam})">unknown</td>
@@ -56,7 +56,7 @@
                         <form th:action="@{/admin/bracket/}" method="post" th:if="*{scorable and finished}">
                             <input type="hidden" id="gameId" name="gameId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="unresolve" />
-                            <button type="submit" class="btn btn-danger"></button>
+                            <button type="submit" class="btn btn-danger" th:title="#{bracket.btn.clear}"></button>
                         </form>
                     </td>
                     <td th:replace="this::team(*{winner})">unknown</td>

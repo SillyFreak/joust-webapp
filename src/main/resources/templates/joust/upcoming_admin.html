@@ -24,14 +24,14 @@
                         <form th:action="@{/admin/}" method="post" th:if="*{state lt 2}">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="next" />
-                            <button type="submit" class="btn btn-info"></button>
+                            <button type="submit" class="btn btn-info" th:title="#{upcoming.btn.next(#{upcoming.status.__*{stateName + 1}__})}"></button>
                         </form>
                     </td>
                     <td class="button-column">
                         <form th:action="@{/admin/}" method="post">
                             <input type="hidden" id="slotId" name="slotId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="cancel" />
-                            <button type="submit" class="btn btn-danger"></button>
+                            <button type="submit" class="btn btn-danger" th:title="#{upcoming.btn.cancel}"></button>
                         </form>
                     </td>
                     <td th:text="#{upcoming.status.__*{stateName}__}">Table 1</td>

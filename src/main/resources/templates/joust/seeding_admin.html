@@ -33,7 +33,7 @@
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="practiceCall" />
-                            <button type="submit" class="btn btn-info"></button>
+                            <button type="submit" class="btn btn-info" th:title="#{teams.btn.practiceCall}"></button>
                         </form>
                     </td>
                     <td th:text="*{teamId}">15-0000</td>
@@ -72,7 +72,7 @@
                         <form th:action="@{/admin/seeding/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
                             <input type="hidden" id="item" name="item" th:value="|s*{round}Call|" />
-                            <button type="submit" class="btn btn-info"></button>
+                            <button type="submit" class="btn btn-info" th:title="#{teams.btn.seedingCall(*{round + 1})}"></button>
                         </form>
                     </td>
                     <td>
