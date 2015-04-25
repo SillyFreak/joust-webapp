@@ -9,10 +9,10 @@
 <body>
     <article layout:fragment="content">
 <!--/*/ <th:block th:remove="all"> /*/-->
-                                <div th:remove="tag" th:fragment="team(team)" th:switch="${team}">
-                                    <div th:case="null" class="team-name team-unknown" th:text="#{bracket.team.unknown}">unknown</div>
-                                    <div th:case="${ByeTeam}" class="team-name team-bye" th:text="#{bracket.team.bye}">bye</div>
-                                    <div th:case="*" class="team-name" th:text="#{bracket.team(${team.id}, ${team.name})}">15-0000 TGM</div>
+                                <div th:remove="tag" th:fragment="team(team)" th:object="${team}">
+                                    <div th:if="*{!defined}" class="team-name team-unknown" th:text="#{bracket.team.unknown}">unknown</div>
+                                    <div th:if="*{defined and get() == null}" class="team-name team-bye" th:text="#{bracket.team.bye}">bye</div>
+                                    <div th:if="*{defined and get() != null}" th:object="${team.get()}" class="team-name" th:text="#{bracket.team(*{teamId}, *{name})}">15-0000 TGM</div>
                                 </div>
                                 <div th:fragment="match(game, orientation)" th:object="${game}" class="game"
                                      th:classappend="${orientation}">
@@ -26,7 +26,7 @@
         <table class="bracket">
             <tbody>
             <tr>
-                <td th:if="${mode == 'main'}" th:each="round : ${bracket.mainRounds}" th:object="${round}">
+                <td th:if="${mode == 'main'}" th:each="round : ${rounds}" th:object="${round}">
                     <table class="round round-main">
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
@@ -37,7 +37,7 @@
                         </tbody>
                     </table>
                 </td>
-                <td th:if="${mode == 'consolation'}" th:each="round : ${bracket.consolationRounds}" th:object="${round}">
+                <td th:if="${mode == 'consolation'}" th:each="round : ${rounds}" th:object="${round}">
                     <table class="round round-consolation">
                         <tbody>
                         <tr th:each="game : ${round}" th:object="${game}">
@@ -48,12 +48,12 @@
                         </tbody>
                     </table>
                 </td>
-                <td th:if="${mode == 'final'}" th:each="round : ${bracket.finalRounds}" th:object="${round}">
+                <td th:if="${mode == 'final'}" th:each="game : ${round}" th:object="${game}">
                     <table class="round round-final">
                         <tbody>
-                        <tr th:each="game : ${round}" th:object="${game}">
+                        <tr>
                             <td>
-                                <div th:replace="this::match(${#object}, ${(roundStat.index != 2) ? 'game-top' : 'game-bottom'})"></div>
+                                <div th:replace="this::match(${#object}, ${(gameStat.index != 2) ? 'game-top' : 'game-bottom'})"></div>
                             </td>
                         </tr>
                         </tbody>

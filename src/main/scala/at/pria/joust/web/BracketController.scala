@@ -59,7 +59,16 @@ class BracketController {
   def mainBracket(model: Model) = {
     val tournament = tournamentRepo.findByName("Botball")
     val bracket = new BracketStructure(tournament)
+    val rounds = bracket.mainRounds.map { round =>
+      val first = round.first
+      val last = first + round.count
+      val result =
+        for (id <- List(first until last: _*))
+          yield BracketGameView(bracket.games(id))
+      result: juList[BracketGameView]
+    }
 
+    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
     model.addAttribute("mode", "main")
     "joust/bracket2"
   }
@@ -68,7 +77,16 @@ class BracketController {
   def consolationBracket(model: Model) = {
     val tournament = tournamentRepo.findByName("Botball")
     val bracket = new BracketStructure(tournament)
+    val rounds = bracket.consolationRounds.reverse.map { round =>
+      val first = round.first
+      val last = first + round.count
+      val result =
+        for (id <- List(first until last: _*))
+          yield BracketGameView(bracket.games(id))
+      result: juList[BracketGameView]
+    }
 
+    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
     model.addAttribute("mode", "consolation")
     "joust/bracket2"
   }
@@ -77,7 +95,17 @@ class BracketController {
   def finalBracket(model: Model) = {
     val tournament = tournamentRepo.findByName("Botball")
     val bracket = new BracketStructure(tournament)
+    val round = {
+      val round = bracket.finalRound
+      val first = round.first
+      val last = first + round.count
+      val result =
+        for (id <- List(first until last: _*))
+          yield BracketGameView(bracket.games(id))
+      result: juList[BracketGameView]
+    }
 
+    model.addAttribute("round", round)
     model.addAttribute("mode", "final")
     "joust/bracket2"
   }
