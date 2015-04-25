@@ -83,7 +83,7 @@ class SeedingSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var game: SeedingGame = _
 
-  def description = s"Seeding round ${game.round} for team ${game.team.teamId} ${game.team.name}"
+  def description = s"Seeding round ${game.round + 1} for team ${game.team.teamId} ${game.team.name}"
   def participants: List[Team] = List(game.team)
 }
 
@@ -92,7 +92,7 @@ class BracketSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var game: BracketGame = _
 
-  def description = s"Double elimination match #${game.gameId}"
+  def description = s"Double elimination match #${game.gameId + 1}"
   def participants: List[Team] = List(???, ???)
 }
 
