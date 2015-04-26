@@ -9,6 +9,8 @@
 <body onload="connect(receiveNotify);">
     <article layout:fragment="content">
         <p th:utext="#{notification.description}"></p>
+        <input th:each="team : ${teams}" th:object="${team}"
+            type="checkbox" th:id="|team-*{id}|" th:text="#{bracket.team(*{teamId}, *{name})}" />
         <div id="sound"></div>
         <script type="text/javascript">
 "use strict";
@@ -17,7 +19,7 @@
 function receiveNotify(teamIds) {
 	var notify = false;
 	for(var i = 0; i < teamIds.length; i++)
-		notify |= teamIds[i] == 2;
+		notify |= document.getElementById('team-' + teamIds[i]).checked
 	if(notify) playSound('sound', '/bing');
 }
 //-->

@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod
 class NotificationController {
   @Autowired
   private[this] var init: InitService = _
+  @Autowired
+  private[this] var teamRepo: TeamRepository = _
 
   @RequestMapping(value = Array("/notification/"), method = Array(RequestMethod.GET))
   def notificationAdmin(model: Model) = {
     init()
+    model.addAttribute("teams", teamRepo.findAll())
     "joust/notification"
   }
 }
