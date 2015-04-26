@@ -37,7 +37,7 @@ function connect() {
         setConnected(true);
         stompClient.subscribe('/topic/slots', function(slot) {
         	slot = JSON.parse(slot.body);
-            console.log('Slot: ' + slot.teamId);
+            console.log('Teams: ' + slot.teamIds);
         	playSound('bing');
         });
     });
