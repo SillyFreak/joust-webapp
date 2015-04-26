@@ -4,6 +4,7 @@ import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
 import at.pria.joust.model._
+import at.pria.joust.service._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -21,9 +22,7 @@ class SeedingController {
   @Autowired
   private[this] var teamRepo: TeamRepository = _
   @Autowired
-  private[this] var slotRepo: TableSlotRepository = _
-  @Autowired
-  private[this] var tpl: SimpMessagingTemplate = _
+  private[this] var slotService: SlotService = _
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
@@ -39,23 +38,13 @@ class SeedingController {
     val team = teamRepo.findOne(in.teamId)
     in.item match {
       case "practiceCall" =>
-        val slot = new PracticeSlot
-        slot.team = team
-        slotRepo.save(slot)
-        tpl.convertAndSend("/topic/slots", SlotUpdate(team.id))
+        slotService.addPracticeSlot(team)
       case "s0Call" =>
-        val slot = new SeedingSlot
-        //TODO table
-        slot.game = team.seedingGames(0)
-        slotRepo.save(slot)
+        slotService.addSeedingSlot(team.seedingGames(0))
       case "s1Call" =>
-        val slot = new SeedingSlot
-        slot.game = team.seedingGames(1)
-        slotRepo.save(slot)
+        slotService.addSeedingSlot(team.seedingGames(1))
       case "s2Call" =>
-        val slot = new SeedingSlot
-        slot.game = team.seedingGames(2)
-        slotRepo.save(slot)
+        slotService.addSeedingSlot(team.seedingGames(2))
       case "p1doc" =>
         team.p1doc = in.score
         teamRepo.save(team)
@@ -102,6 +91,3 @@ class SeedingInput {
   @BeanProperty var item: String = _
   @BeanProperty var score: Int = _
 }
-
-case class SlotUpdate(
-  @BeanProperty teamId: Long)

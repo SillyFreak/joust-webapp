@@ -4,7 +4,7 @@ import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
 import at.pria.joust.model._
-import at.pria.joust.service.BracketStructure
+import at.pria.joust.service._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -21,7 +21,7 @@ class BracketController {
   @Autowired
   private[this] var gameRepo: GameRepository = _
   @Autowired
-  private[this] var slotRepo: TableSlotRepository = _
+  private[this] var slotService: SlotService = _
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
   def bracketAdmin(model: Model) = {
@@ -53,9 +53,7 @@ class BracketController {
         game.finished = false
         gameRepo.save(game)
       case "call" =>
-        val slot = new BracketSlot
-        slot.game = game
-        slotRepo.save(slot)
+        slotService.addBracketSlot(game)
     }
 
     bracketAdmin(model)
