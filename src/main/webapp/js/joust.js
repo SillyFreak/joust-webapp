@@ -1,3 +1,5 @@
+"use strict";
+
 var stompClient = null;
 
 function setConnected(connected) {
