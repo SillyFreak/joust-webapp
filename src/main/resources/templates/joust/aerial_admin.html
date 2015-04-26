@@ -36,7 +36,7 @@
                             <button type="submit" class="btn btn-info" th:title="#{teams.btn.aerialCall(${day + 1})}"></button>
                         </form>
                     </td>
-                    <td th:text="*{getAerialAvg(__${day}__)}">---</td>
+                    <td th:text="*{aerialAvg[__${day}__]}">---</td>
 <!--/*/ </th:block> /*/-->
                     <td th:text="*{aerialRank + 1}">---</td> 
                 </tr>

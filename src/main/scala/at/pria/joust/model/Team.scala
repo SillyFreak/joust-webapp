@@ -62,10 +62,10 @@ class Team {
   //inferred
 
   private[this] def seedingStats = {
-    val allScores =
-      for (game <- List(seedingGames: _*))
-        yield if (game.finished) Some(game.score) else None
-    val scores = allScores.collect { case Some(x) => x }.sorted
+    val _scores =
+      for (game <- List(seedingGames: _*) if game.finished)
+        yield game.score
+    val scores = _scores.sorted
 
     if (scores.isEmpty) {
       (0, 0d)
@@ -142,32 +142,30 @@ class Team {
   }
   @Transient def getOverallRank(implicit tInfo: TInfo) = overallRank
 
-  private[this] def aerialStats(day: Int) = {
-    val allScores =
-      for (game <- List(aerialGames: _*) if game.day == day)
-        yield if (game.finished) Some(game.score) else None
-    val scores = allScores.collect { case Some(x) => x }.sorted
+  private[this] def aerialStats =
+    (for (games <- List(aerialGames: _*).groupBy(_.day).toList.sortBy(_._1).map(_._2)) yield {
+      val _scores =
+        for (game <- games if game.finished)
+          yield game.score
+      val scores = _scores.sorted
 
-    if (scores.isEmpty) {
-      (0, 0d)
-    } else {
-      val dropped = scores.takeRight(2)
-      (dropped.last, dropped.sum.toDouble / dropped.size)
-    }
-  }
+      if (scores.isEmpty) {
+        (0, 0d)
+      } else {
+        val dropped = scores.takeRight(2)
+        (dropped.last, dropped.sum.toDouble / dropped.size)
+      }
+    }).padTo(2, (0, 0d))
 
-  def aerialMax(day: Int) = aerialStats(day)._1
-  @Transient def getAerialMax(day: Int) = aerialMax(day)
+  def aerialMax = aerialStats.map(_._1)
+  @Transient def getAerialMax() = aerialMax: juList[Int]
 
-  def aerialAvg(day: Int) = aerialStats(day)._2
-  @Transient def getAerialAvg(day: Int) = aerialAvg(day)
+  def aerialAvg = aerialStats.map(_._2)
+  @Transient def getAerialAvg() = aerialAvg: juList[Double]
 
   private def rawAerialScore = {
-    var score = 0d
-    val days = 2
-    for (day <- 0 until days)
-      score += aerialAvg(day)
-    score / days
+    val avgs = aerialAvg
+    avgs.sum / avgs.size
   }
 
   def aerialRank = {
