@@ -6,6 +6,7 @@ import scala.collection.JavaConversions._
 import at.pria.joust.model._
 import at.pria.joust.model.Tournament._
 import at.pria.joust.service._
+import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -22,7 +23,7 @@ class SeedingController {
   @Autowired
   private[this] var slotService: SlotService = _
 
-  private[this] def view(model: Model, tInfo: TournamentService#TournamentInfo, admin: Boolean) = {
+  private[this] def view(model: Model, tInfo: TInfo, admin: Boolean) = {
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("tournament", tInfo.tournament)
     if (admin) {
