@@ -54,5 +54,18 @@ class TournamentService {
       game.finished = false
       gameRepo.save(game)
     }
+
+    def scoreBracketGame(gameId: Int, winnerSideA: Boolean) = {
+      val game = bracket.games(gameId).game
+      game.finished = true
+      game.winnerSideA = winnerSideA
+      gameRepo.save(game)
+    }
+
+    def unscoreBracketGame(gameId: Int) = {
+      val game = bracket.games(gameId).game
+      game.finished = false
+      gameRepo.save(game)
+    }
   }
 }

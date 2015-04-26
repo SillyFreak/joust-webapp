@@ -19,8 +19,6 @@ class BracketController {
   @Autowired
   private[this] var tournamentService: TournamentService = _
   @Autowired
-  private[this] var gameRepo: GameRepository = _
-  @Autowired
   private[this] var slotService: SlotService = _
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
@@ -37,23 +35,12 @@ class BracketController {
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.POST))
   def bracketAdminPost(model: Model, in: BracketInput) = {
     val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
-    val bracket = tInfo.bracket
 
-    val game = bracket.games(in.gameId).game
     in.item match {
-      case "winnerA" =>
-        game.finished = true
-        game.winnerSideA = true
-        gameRepo.save(game)
-      case "winnerB" =>
-        game.finished = true
-        game.winnerSideA = false
-        gameRepo.save(game)
-      case "unresolve" =>
-        game.finished = false
-        gameRepo.save(game)
-      case "call" =>
-        slotService.addBracketSlot(game)
+      case "winnerA"   => tInfo.scoreBracketGame(in.gameId, true)
+      case "winnerB"   => tInfo.scoreBracketGame(in.gameId, false)
+      case "unresolve" => tInfo.unscoreBracketGame(in.gameId)
+      case "call"      => slotService.addBracketSlot(tInfo.bracket.games(in.gameId).game)
     }
 
     bracketAdmin(model)
