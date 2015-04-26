@@ -70,14 +70,18 @@ class InitService {
       val game = new BracketGame
       game.tournament = tournament
       game.gameId = g.id
-      if (g.aTeam == bracket.ByeTeamSource) {
+      gameRepo.save(game)
+    }
+    em.refresh(tournament)
+    for (g <- bracket.games) {
+      val game = g.game
+      if (g.aTeam() == Some(null)) {
         game.finished = true
         game.winnerSideA = false
-      } else if (g.bTeam == bracket.ByeTeamSource) {
+      } else if (g.bTeam() == Some(null)) {
         game.finished = true
         game.winnerSideA = true
       }
-      gameRepo.save(game)
     }
   }
 
