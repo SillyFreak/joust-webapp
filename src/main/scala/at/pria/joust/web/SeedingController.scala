@@ -37,7 +37,6 @@ class SeedingController {
     in.item match {
       case "practiceCall" =>
         val slot = new PracticeSlot
-        //TODO table
         slot.team = team
         slotRepo.save(slot)
       case "s0Call" =>
@@ -47,12 +46,10 @@ class SeedingController {
         slotRepo.save(slot)
       case "s1Call" =>
         val slot = new SeedingSlot
-        //TODO table
         slot.game = team.seedingGames(1)
         slotRepo.save(slot)
       case "s2Call" =>
         val slot = new SeedingSlot
-        //TODO table
         slot.game = team.seedingGames(2)
         slotRepo.save(slot)
       case "p1doc" =>

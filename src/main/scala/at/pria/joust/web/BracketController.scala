@@ -54,7 +54,6 @@ class BracketController {
         gameRepo.save(game)
       case "call" =>
         val slot = new BracketSlot
-        //TODO table
         slot.game = game
         slotRepo.save(slot)
     }
