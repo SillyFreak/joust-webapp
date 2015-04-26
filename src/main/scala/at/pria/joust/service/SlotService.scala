@@ -10,6 +10,7 @@ import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
 import at.pria.joust.model._
+import at.pria.joust.model.TableSlot._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -29,11 +30,15 @@ class SlotService {
   @Autowired
   private[this] var slotRepo: TableSlotRepository = _
   @Autowired
+  private[this] var tableRepo: TableRepository = _
+  @Autowired
   private[this] var tpl: SimpMessagingTemplate = _
 
-  def addTableSlot(slot: TableSlot) = {
+  def allSlots = slotRepo.findAll().toList
+  def slot(id: Long) = slotRepo.findOne(id)
+
+  private[this] def addTableSlot(slot: TableSlot) = {
     slotRepo.save(slot)
-    tpl.convertAndSend("/topic/slots", SlotUpdate(0)) //TODO re-add team IDs
   }
 
   def addPracticeSlot(team: Team) = {
@@ -58,6 +63,25 @@ class SlotService {
     val slot = new AllianceSlot
     slot.game = game
     addTableSlot(slot)
+  }
+
+  def advance(id: Long) = {
+    val slot = this.slot(id)
+    slot.state += 1
+    slotRepo.save(slot)
+
+    if (slot.state == CALLED)
+      tpl.convertAndSend("/topic/slots", SlotUpdate(0)) //TODO re-add team IDs
+  }
+
+  def cancel(id: Long) = {
+    slotRepo.delete(id)
+  }
+
+  def assignTable(id: Long, table: Table) = {
+    val slot = this.slot(id)
+    slot.table = table
+    slotRepo.save(slot)
   }
 }
 

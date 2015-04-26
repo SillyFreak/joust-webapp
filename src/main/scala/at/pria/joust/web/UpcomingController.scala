@@ -5,7 +5,7 @@ import scala.collection.JavaConversions._
 
 import at.pria.joust.model._
 import at.pria.joust.model.TableSlot._
-import at.pria.joust.service.InitService
+import at.pria.joust.service._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -19,10 +19,10 @@ import java.util.{ List => juList }
 @Controller
 class UpcomingController {
   @Autowired
-  private[this] var slotRepo: TableSlotRepository = _
-  @Autowired
   private[this] var tableRepo: TableRepository = _
 
+  @Autowired
+  private[this] var slotService: SlotService = _
   @Autowired
   private[this] var init: InitService = _
 
@@ -31,7 +31,7 @@ class UpcomingController {
     init()
 
     val slots =
-      slotRepo.findAll().toList
+      slotService.allSlots
         .filter(_.state != FINISHED)
         //most urgent slots first
         .sortBy(-_.state)
@@ -43,16 +43,13 @@ class UpcomingController {
 
   @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
   def upcomingAdminPost(model: Model, in: UpcomingInput) = {
-    val slot = slotRepo.findOne(in.slotId)
     in.item match {
       case "next" =>
-        slot.state += 1
-        slotRepo.save(slot)
+        slotService.advance(in.slotId)
       case "cancel" =>
-        slotRepo.delete(slot)
+        slotService.cancel(in.slotId)
       case "table" =>
-        slot.table = tableRepo.findOne(in.table)
-        slotRepo.save(slot)
+        slotService.assignTable(in.slotId, tableRepo.findOne(in.table))
     }
 
     upcomingAdmin(model)
@@ -63,7 +60,7 @@ class UpcomingController {
     init()
 
     val slots =
-      slotRepo.findAll().toList
+      slotService.allSlots
         .filter(_.state != FINISHED)
         //most urgent slots first
         .sortBy(-_.state)
