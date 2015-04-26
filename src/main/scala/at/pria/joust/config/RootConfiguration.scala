@@ -30,11 +30,4 @@ class RootConfiguration extends WebMvcConfigurerAdapter {
       "classpath:i18n/joust")
     ms
   }
-
-  @Bean def tournament() = {
-    val teams =
-      for (i <- List(0 to 16: _*))
-        yield Team("15-%04d".format(i), "TGM")
-    new Tournament(teams)
-  }
 }
