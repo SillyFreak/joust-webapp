@@ -26,6 +26,10 @@ import org.springframework.stereotype.Service
 class TournamentService {
   @Autowired
   private[this] var tournamentRepo: TournamentRepository = _
+  @Autowired
+  private[this] var gameRepo: GameRepository = _
+  @Autowired
+  private[this] var teamRepo: TeamRepository = _
 
   def apply(name: String) =
     tournamentRepo.findByName(name) match {
@@ -35,5 +39,20 @@ class TournamentService {
 
   class TournamentInfo(val tournament: Tournament) {
     lazy val bracket = new BracketStructure(tournament)
+
+    def team(id: Long) = teamRepo.findOne(id)
+
+    def scoreSeedingGame(teamId: Long, round: Int, score: Int) = {
+      val game = team(teamId).seedingGames(round)
+      game.finished = true
+      game.score = score
+      gameRepo.save(game)
+    }
+
+    def unscoreSeedingGame(teamId: Long, round: Int) = {
+      val game = team(teamId).seedingGames(round)
+      game.finished = false
+      gameRepo.save(game)
+    }
   }
 }

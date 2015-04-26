@@ -18,8 +18,6 @@ class SeedingController {
   @Autowired
   private[this] var tournamentService: TournamentService = _
   @Autowired
-  private[this] var gameRepo: GameRepository = _
-  @Autowired
   private[this] var teamRepo: TeamRepository = _
   @Autowired
   private[this] var slotService: SlotService = _
@@ -35,7 +33,9 @@ class SeedingController {
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.POST))
   def seedingAdminPost(model: Model, in: SeedingInput) = {
-    val team = teamRepo.findOne(in.teamId)
+    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+    val team = tInfo.team(in.teamId)
+
     in.item match {
       case "practiceCall" =>
         slotService.addPracticeSlot(team)
@@ -58,20 +58,11 @@ class SeedingController {
         team.onsite = in.score
         teamRepo.save(team)
       case "s0" =>
-        val game = team.seedingGames(0)
-        game.finished = true
-        game.score = in.score
-        gameRepo.save(game)
+        tInfo.scoreSeedingGame(in.teamId, 0, in.score)
       case "s1" =>
-        val game = team.seedingGames(1)
-        game.finished = true
-        game.score = in.score
-        gameRepo.save(game)
+        tInfo.scoreSeedingGame(in.teamId, 1, in.score)
       case "s2" =>
-        val game = team.seedingGames(2)
-        game.finished = true
-        game.score = in.score
-        gameRepo.save(game)
+        tInfo.scoreSeedingGame(in.teamId, 2, in.score)
     }
 
     seedingAdmin(model)
