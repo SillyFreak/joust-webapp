@@ -13,15 +13,13 @@
                 <tr>
                     <th th:text="#{teams.code}">Team Code</th>
                     <th th:text="#{teams.organization}">Organization/Name</th>
-                    <th th:text="#{teams.aerial(1)}">Day 1 Average</th>
-                    <th th:text="#{teams.aerial(2)}">Day 2 Average</th>
+                    <th th:each="day: ${days}" th:text="#{teams.aerial(${day + 1})}">Day n Average</th>
                     <th th:text="#{teams.aerialRank}">Aerial Rank</th>
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
                     <td th:text="*{teamId}">AERIAL-0000</td>
                     <td th:text="*{name}">TGM</td>
-                    <td th:text="*{getAerialAvg(0)}">---</td>
-                    <td th:text="*{getAerialAvg(1)}">---</td>
+                    <td th:each="day: ${days}" th:text="*{getAerialAvg(__${day}__)}">---</td>
                     <td th:text="*{aerialRank + 1}">---</td> 
                 </tr>
             </tbody>

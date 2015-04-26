@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
+import java.util.{ List => juList, ArrayList => juArrayList }
+
 @Controller
 class AerialController {
   @Autowired
@@ -25,6 +27,7 @@ class AerialController {
 
   private[this] def view(model: Model, tInfo: TInfo, admin: Boolean) = {
     model.addAttribute("tName", tInfo.tournament.name)
+    model.addAttribute("days", (0 until 2): juList[Int])
     model.addAttribute("tournament", tInfo.tournament)
     if (admin) {
       //for form processing
