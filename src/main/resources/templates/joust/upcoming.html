@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{upcoming.name}">Upcoming games</title>
 </head>
-<body onload="connect();">
+<body onload="connect(receiveNotify);">
     <article layout:fragment="content">
         <table class="table">
             <tbody>
@@ -24,6 +24,11 @@
             </tbody>
         </table>
         <div id="sound"></div>
+        <script type="text/javascript">
+function receiveNotify(teamIds) {
+	playSound('sound', 'bing');
+}
+        </script>
     </article>
 </body>
 </html>

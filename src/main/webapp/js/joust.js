@@ -3,7 +3,7 @@ var stompClient = null;
 function setConnected(connected) {
 }
 
-function connect() {
+function connect(callback) {
     var socket = new SockJS('/test');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function(frame) {
@@ -11,7 +11,7 @@ function connect() {
         stompClient.subscribe('/topic/slots', function(slot) {
         	slot = JSON.parse(slot.body);
             console.log('Teams: ' + slot.teamIds);
-        	playSound('bing');
+            callback(slot.teamIds);
         });
     });
 }
@@ -25,8 +25,8 @@ function disconnect() {
 }
 
 // @param filename The name of the file WITHOUT ending
-function playSound(filename) {
-    document.getElementById("sound").innerHTML =
+function playSound(element, filename) {
+    document.getElementById(element).innerHTML =
         '<audio autoplay="autoplay">'
       + '    <source src="' + filename + '.mp3" type="audio/mpeg" />'
       + '    <source src="' + filename + '.ogg" type="audio/ogg" />'
