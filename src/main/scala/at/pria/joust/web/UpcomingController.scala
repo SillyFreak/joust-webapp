@@ -23,10 +23,7 @@ class UpcomingController {
   @Autowired
   private[this] var init: InitService = _
 
-  @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.GET))
-  def upcomingAdmin(model: Model) = {
-    init()
-
+  private[this] def view(model: Model, admin: Boolean) = {
     val slots =
       slotService.allSlots
         .filter(_.state != FINISHED)
@@ -34,8 +31,18 @@ class UpcomingController {
         .sortBy(-_.state)
 
     model.addAttribute("upcoming", slots: juList[TableSlot])
-    model.addAttribute("tables", slotService.allTables: juList[Table])
-    "joust/upcoming_admin"
+    if (admin) {
+      //for options
+      model.addAttribute("tables", slotService.allTables: juList[Table])
+    }
+
+    if (admin) "joust/upcoming_admin" else "joust/upcoming"
+  }
+
+  @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.GET))
+  def upcomingAdmin(model: Model) = {
+    init()
+    view(model, true)
   }
 
   @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
@@ -45,22 +52,13 @@ class UpcomingController {
       case "cancel" => slotService.cancel(in.slotId)
       case "table"  => slotService.assignTable(in.slotId, slotService.table(in.table))
     }
-
-    upcomingAdmin(model)
+    view(model, true)
   }
 
   @RequestMapping(value = Array("/"), method = Array(RequestMethod.GET))
   def upcoming(model: Model) = {
     init()
-
-    val slots =
-      slotService.allSlots
-        .filter(_.state != FINISHED)
-        //most urgent slots first
-        .sortBy(-_.state)
-
-    model.addAttribute("upcoming", slots: juList[TableSlot])
-    "joust/upcoming"
+    view(model, false)
   }
 }
 

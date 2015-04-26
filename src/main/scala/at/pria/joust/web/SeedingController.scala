@@ -20,24 +20,30 @@ class SeedingController {
   @Autowired
   private[this] var slotService: SlotService = _
 
+  private[this] def view(model: Model, tInfo: TournamentService#TournamentInfo, admin: Boolean) = {
+    model.addAttribute("tournament", tInfo.tournament)
+    if (admin) {
+      //for form processing
+      model.addAttribute(new SeedingInput())
+    }
+
+    if (admin) "joust/seeding_admin" else "joust/seeding"
+  }
+
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
     val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
-
-    model.addAttribute("tournament", tInfo.tournament)
-    model.addAttribute(new SeedingInput())
-    "joust/seeding_admin"
+    view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.POST))
   def seedingAdminPost(model: Model, in: SeedingInput) = {
     val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
-    val team = tInfo.team(in.teamId)
 
+    val team = tInfo.team(in.teamId)
     in.item match {
       case period @ ("p1doc" | "p2doc" | "p3doc" | "onsite") =>
         tInfo.scoreDocumentation(in.teamId, period, in.score)
-
       case "practiceCall" => slotService.addPracticeSlot(team)
       case "s0Call"       => slotService.addSeedingSlot(team.seedingGames(0))
       case "s1Call"       => slotService.addSeedingSlot(team.seedingGames(1))
@@ -47,15 +53,13 @@ class SeedingController {
       case "s2"           => tInfo.scoreSeedingGame(in.teamId, 2, in.score)
     }
 
-    seedingAdmin(model)
+    view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/seeding/"), method = Array(RequestMethod.GET))
   def seeding(model: Model) = {
     val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
-
-    model.addAttribute("tournament", tInfo.tournament)
-    "joust/seeding"
+    view(model, tInfo, false)
   }
 }
 

@@ -21,15 +21,23 @@ class BracketController {
   @Autowired
   private[this] var slotService: SlotService = _
 
-  @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
-  def bracketAdmin(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  private[this] def view(model: Model, tInfo: TournamentService#TournamentInfo, admin: Boolean) = {
     val bracket = tInfo.bracket
     val games = bracket.games.map { BracketGameView(_) }
 
     model.addAttribute("bracket", games: juList[BracketGameView])
-    model.addAttribute(new BracketInput())
-    "joust/bracket_admin"
+    if (admin) {
+      //for form processing
+      model.addAttribute(new BracketInput())
+    }
+
+    if (admin) "joust/bracket_admin" else "joust/bracket"
+  }
+
+  @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
+  def bracketAdmin(model: Model) = {
+    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+    view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.POST))
@@ -43,17 +51,13 @@ class BracketController {
       case "call"      => slotService.addBracketSlot(tInfo.bracket.games(in.gameId).game)
     }
 
-    bracketAdmin(model)
+    view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/bracket/"), method = Array(RequestMethod.GET))
   def bracket(model: Model) = {
     val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
-    val bracket = tInfo.bracket
-    val games = bracket.games.map { BracketGameView(_) }
-
-    model.addAttribute("bracket", games: juList[BracketGameView])
-    "joust/bracket"
+    view(model, tInfo, false)
   }
 
   @RequestMapping(value = Array("/bracket/main/"), method = Array(RequestMethod.GET))
