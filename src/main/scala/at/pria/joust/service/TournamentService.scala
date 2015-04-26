@@ -33,5 +33,7 @@ class TournamentService {
       case t    => Some(new TournamentInfo(t))
     }
 
-  class TournamentInfo(val tournament: Tournament)
+  class TournamentInfo(val tournament: Tournament) {
+    lazy val bracket = new BracketStructure(tournament)
+  }
 }

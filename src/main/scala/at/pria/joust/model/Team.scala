@@ -103,11 +103,10 @@ class Team {
   }
 
   def bracketRank(bracket: BracketStructure) = {
-    val bracket = new BracketStructure(tournament)
     val bracketScore = this.rawBracketScore(bracket)
     tournament.teams.count { _.rawBracketScore(bracket) > bracketScore }
   }
-  @Transient def getbracketRank(bracket: BracketStructure) = bracketRank(bracket)
+  @Transient def getBracketRank(bracket: BracketStructure) = bracketRank(bracket)
 
   def bracketScore(bracket: BracketStructure) = {
     val count = tournament.teams.size
