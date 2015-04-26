@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{upcoming.name}">Upcoming games</title>
 </head>
-<body>
+<body onload="disconnect(); connect();">
     <article layout:fragment="content">
         <table class="table">
             <tbody>
@@ -23,18 +23,49 @@
                 </tr>
             </tbody>
         </table>
-        <button onclick="playSound('bing');">Play</button>  
+        <button id="soundButton" onclick="sendTest();">Play</button>  
         <div id="sound"></div>
         <script type="text/javascript">
-            // @param filename The name of the file WITHOUT ending
-            function playSound(filename) {
-                document.getElementById("sound").innerHTML =
-                    '<audio autoplay="autoplay">'
-                  + '    <source src="' + filename + '.mp3" type="audio/mpeg" />'
-                  + '    <source src="' + filename + '.ogg" type="audio/ogg" />'
-                  + '    <embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" />'
-                  + '</audio>';
-            }
+var stompClient = null;
+
+function setConnected(connected) {
+    document.getElementById('soundButton').disabled = !connected;
+}
+
+function connect() {
+    var socket = new SockJS('/test');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+        setConnected(true);
+        stompClient.subscribe('/topic/slots', function(slot) {
+        	slot = JSON.parse(slot.body);
+            console.log('Slot: ' + slot.teamId);
+        	playSound('bing');
+        });
+    });
+}
+
+function disconnect() {
+    if (stompClient != null) {
+        stompClient.disconnect();
+        stompClient = null;
+    }
+    setConnected(false);
+}
+
+function sendTest() {
+    stompClient.send("/app/test", {}, JSON.stringify({}));
+}
+
+// @param filename The name of the file WITHOUT ending
+function playSound(filename) {
+    document.getElementById("sound").innerHTML =
+        '<audio autoplay="autoplay">'
+      + '    <source src="' + filename + '.mp3" type="audio/mpeg" />'
+      + '    <source src="' + filename + '.ogg" type="audio/ogg" />'
+      + '    <embed hidden="true" autostart="true" loop="false" src="' + filename +'.mp3" />'
+      + '</audio>';
+}
         </script>
     </article>
 </body>
