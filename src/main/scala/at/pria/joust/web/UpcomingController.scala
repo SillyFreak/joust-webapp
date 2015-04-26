@@ -19,9 +19,6 @@ import java.util.{ List => juList }
 @Controller
 class UpcomingController {
   @Autowired
-  private[this] var tableRepo: TableRepository = _
-
-  @Autowired
   private[this] var slotService: SlotService = _
   @Autowired
   private[this] var init: InitService = _
@@ -37,19 +34,16 @@ class UpcomingController {
         .sortBy(-_.state)
 
     model.addAttribute("upcoming", slots: juList[TableSlot])
-    model.addAttribute("tables", tableRepo.findAll())
+    model.addAttribute("tables", slotService.allTables: juList[Table])
     "joust/upcoming_admin"
   }
 
   @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
   def upcomingAdminPost(model: Model, in: UpcomingInput) = {
     in.item match {
-      case "next" =>
-        slotService.advance(in.slotId)
-      case "cancel" =>
-        slotService.cancel(in.slotId)
-      case "table" =>
-        slotService.assignTable(in.slotId, tableRepo.findOne(in.table))
+      case "next"   => slotService.advance(in.slotId)
+      case "cancel" => slotService.cancel(in.slotId)
+      case "table"  => slotService.assignTable(in.slotId, slotService.table(in.table))
     }
 
     upcomingAdmin(model)

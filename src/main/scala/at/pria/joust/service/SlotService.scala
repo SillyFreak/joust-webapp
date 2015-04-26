@@ -36,6 +36,9 @@ class SlotService {
   def allSlots = slotRepo.findAll().toList
   def slot(id: Long) = slotRepo.findOne(id)
 
+  def allTables = tableRepo.findAll().toList
+  def table(id: Long) = tableRepo.findOne(id)
+
   private[this] def addTableSlot(slot: TableSlot) = {
     slotRepo.save(slot)
   }
