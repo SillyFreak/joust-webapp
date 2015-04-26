@@ -38,6 +38,8 @@ class Tournament {
   @NotEmpty
   @BeanProperty var name: String = _
 
+  @BeanProperty var mode: Int = _
+
   @OneToMany(mappedBy = "tournament")
   @BeanProperty var teams: juList[Team] = new juArrayList[Team]
 
@@ -50,6 +52,11 @@ class Tournament {
     val scores = games.collect { case g: SeedingGame if g.finished => g.score }
     if (scores.isEmpty) 0 else scores.max
   }
+}
+
+object Tournament {
+  final val BOTBALL = 0
+  final val AERIAL = 1
 }
 
 trait TournamentRepository extends CrudRepository[Tournament, jLong] {

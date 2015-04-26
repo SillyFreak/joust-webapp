@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
 
 import at.pria.joust.model._
+import at.pria.joust.model.Tournament._
 
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
@@ -40,9 +41,10 @@ class InitService {
   @Autowired
   private[this] var tableSlotRepo: TableSlotRepository = _
 
-  private[this] def mkTournament(name: String) = {
+  private[this] def mkTournament(name: String, mode: Int = BOTBALL) = {
     val tournament = new Tournament
     tournament.name = name
+    tournament.mode = mode
     tournamentRepo.save(tournament)
   }
 
@@ -121,7 +123,7 @@ class InitService {
       }
 
       { //PRIA Aerial
-        val aerial = mkTournament("PRIA Aerial")
+        val aerial = mkTournament("PRIA Aerial", AERIAL)
         for (i <- List(0 to 4: _*))
           mkTeam(aerial, "AERIAL-%04d".format(i), "TGM")
 
