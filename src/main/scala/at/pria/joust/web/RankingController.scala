@@ -17,15 +17,17 @@ import java.util.{ List => juList }
 
 @Controller
 class RankingController {
+  type TInfo = TournamentService#TournamentInfo
+
   @Autowired
   private[this] var tournamentService: TournamentService = _
 
   @RequestMapping(value = Array("/ranking/{tournament}/"), method = Array(RequestMethod.GET))
   def ranking(model: Model, @PathVariable("tournament") t: String) = {
-    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
+    implicit val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     val bracket = tInfo.bracket
 
-    val teams = tInfo.tournament.teams.toList.map { TeamRanks(bracket, _) }
+    val teams = tInfo.tournament.teams.toList.map { TeamRanks(_) }
 
     val byOverall = teams.sortBy(_.overallRank)
     val byDoc = teams.sortBy(_.docRank)
@@ -48,10 +50,9 @@ class RankingController {
     @BeanProperty bracket: TeamRanks)
 
   case class TeamRanks(
-      bracket: BracketStructure,
-      @BeanProperty team: Team) {
-    @BeanProperty val overallScore = team.overallScore(bracket)
-    @BeanProperty val overallRank = team.overallRank(bracket)
+      @BeanProperty team: Team)(implicit tInfo: TInfo) {
+    @BeanProperty val overallScore = team.overallScore
+    @BeanProperty val overallRank = team.overallRank
 
     @BeanProperty val docScore = team.docScore
     @BeanProperty val docRank = team.docRank
@@ -59,7 +60,7 @@ class RankingController {
     @BeanProperty val seedingScore = team.seedingScore
     @BeanProperty val seedingRank = team.seedingRank
 
-    @BeanProperty val bracketScore = team.bracketScore(bracket)
-    @BeanProperty val bracketRank = team.bracketRank(bracket)
+    @BeanProperty val bracketScore = team.bracketScore
+    @BeanProperty val bracketRank = team.bracketRank
   }
 }

@@ -9,7 +9,7 @@ package at.pria.joust.model
 import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
-import at.pria.joust.service.BracketStructure
+import at.pria.joust.service.TournamentService
 
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.repository.CrudRepository
@@ -35,6 +35,8 @@ import java.util.{ List => juList, ArrayList => juArrayList }
  */
 @Entity
 class Team {
+  type TInfo = TournamentService#TournamentInfo
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _
@@ -94,25 +96,25 @@ class Team {
   }
   @Transient def getSeedingScore() = seedingScore
 
-  private def rawBracketScore(bracket: BracketStructure) = {
+  private def rawBracketScore(implicit tInfo: TInfo) = {
     var score = -1
-    for (game <- bracket.games)
+    for (game <- tInfo.bracket.games)
       for (a <- game.aTeam(); b <- game.bTeam())
         if (a == this || b == this) score = game.round
     score
   }
 
-  def bracketRank(bracket: BracketStructure) = {
-    val bracketScore = this.rawBracketScore(bracket)
-    tournament.teams.count { _.rawBracketScore(bracket) > bracketScore }
+  def bracketRank(implicit tInfo: TInfo) = {
+    val bracketScore = this.rawBracketScore
+    tournament.teams.count { _.rawBracketScore > bracketScore }
   }
-  @Transient def getBracketRank(bracket: BracketStructure) = bracketRank(bracket)
+  @Transient def getBracketRank(implicit tInfo: TInfo) = bracketRank
 
-  def bracketScore(bracket: BracketStructure) = {
+  def bracketScore(implicit tInfo: TInfo) = {
     val count = tournament.teams.size
-    (count - bracketRank(bracket)).toDouble / count
+    (count - bracketRank).toDouble / count
   }
-  @Transient def getBracketScore(bracket: BracketStructure) = bracketScore(bracket)
+  @Transient def getBracketScore(implicit tInfo: TInfo) = bracketScore
 
   def docScore =
     List(
@@ -129,15 +131,15 @@ class Team {
   }
   @Transient def getDocRank() = docRank
 
-  def overallScore(bracket: BracketStructure) =
-    seedingScore + bracketScore(bracket) + docScore
-  @Transient def getOverallScore(bracket: BracketStructure) = overallScore(bracket)
+  def overallScore(implicit tInfo: TInfo) =
+    seedingScore + bracketScore + docScore
+  @Transient def getOverallScore(implicit tInfo: TInfo) = overallScore
 
-  def overallRank(bracket: BracketStructure) = {
-    val overallScore = this.overallScore(bracket)
-    tournament.teams.count { _.overallScore(bracket) > overallScore }
+  def overallRank(implicit tInfo: TInfo) = {
+    val overallScore = this.overallScore
+    tournament.teams.count { _.overallScore > overallScore }
   }
-  @Transient def getOverallRank(bracket: BracketStructure) = overallRank(bracket)
+  @Transient def getOverallRank(implicit tInfo: TInfo) = overallRank
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {
