@@ -73,26 +73,26 @@ class PracticeSlot extends TableSlot {
 @Entity
 class SeedingSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: SeedingGame = _
+  @BeanProperty var sGame: SeedingGame = _
 
-  def description = s"Seeding round ${game.round + 1} for team ${game.team.teamId} ${game.team.name}"
-  def participants: List[Team] = List(game.team)
+  def description = s"Seeding round ${sGame.round + 1} for team ${sGame.team.teamId} ${sGame.team.name}"
+  def participants: List[Team] = List(sGame.team)
 }
 
 @Entity
 class BracketSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: BracketGame = _
+  @BeanProperty var bGame: BracketGame = _
 
-  def description = s"Double elimination match #${game.gameId + 1}"
+  def description = s"Double elimination match #${bGame.gameId + 1}"
   def participants: List[Team] = List(???, ???)
 }
 
 @Entity
 class AllianceSlot extends TableSlot {
   @ManyToOne
-  @BeanProperty var game: AllianceGame = _
+  @BeanProperty var aGame: AllianceGame = _
 
-  def description = s"Alliance game ${game.aTeam.teamId} ${game.aTeam.name} & ${game.bTeam.teamId} ${game.bTeam.name}"
-  def participants: List[Team] = List(game.aTeam, game.bTeam)
+  def description = s"Alliance game ${aGame.aTeam.teamId} ${aGame.aTeam.name} & ${aGame.bTeam.teamId} ${aGame.bTeam.name}"
+  def participants: List[Team] = List(aGame.aTeam, aGame.bTeam)
 }

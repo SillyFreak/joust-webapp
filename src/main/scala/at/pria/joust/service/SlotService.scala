@@ -48,19 +48,19 @@ class SlotService {
 
   def addSeedingSlot(game: SeedingGame) = {
     val slot = new SeedingSlot
-    slot.game = game
+    slot.sGame = game
     addTableSlot(slot)
   }
 
   def addBracketSlot(game: BracketGame) = {
     val slot = new BracketSlot
-    slot.game = game
+    slot.bGame = game
     addTableSlot(slot)
   }
 
   def addAllianceSlot(game: AllianceGame) = {
     val slot = new AllianceSlot
-    slot.game = game
+    slot.aGame = game
     addTableSlot(slot)
   }
 
