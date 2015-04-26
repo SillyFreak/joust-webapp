@@ -56,7 +56,7 @@ class Team {
   @OneToMany(mappedBy = "team")
   @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]
 
-  @OneToMany(mappedBy = "team")
+  @OneToMany(mappedBy = "aerialTeam")
   @BeanProperty var aerialGames: juList[AerialGame] = new juArrayList[AerialGame]
 
   //inferred

@@ -77,7 +77,7 @@ class AllianceGame extends Game {
 @Entity
 class AerialGame extends Game {
   @ManyToOne
-  @BeanProperty var team: Team = _
+  @BeanProperty var aerialTeam: Team = _
   @BeanProperty var day: Int = _
   @BeanProperty var round: Int = _
 
