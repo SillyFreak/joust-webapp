@@ -93,17 +93,41 @@ class InitService {
 
   def apply(): Unit =
     if (tournamentRepo.count() == 0) {
-      val botball = mkTournament("Botball")
-      for (i <- List(0 to 16: _*))
-        mkTeam(botball, "15-%04d".format(i), "TGM")
+      { //tables
+        val botball1 = mkTable("Botball Left")
+        val botball2 = mkTable("Botball Right")
+        val aerial = mkTable("PRIA Aerial")
+        val botballPractice = mkTable("Botball Free-for-all")
+      }
 
-      em.refresh(botball)
-      mkSeeding(botball)
-      mkBracket(botball)
+      { //botball
+        val botball = mkTournament("Botball")
+        for (i <- List(0 to 16: _*))
+          mkTeam(botball, "15-%04d".format(i), "TGM")
 
-      val botball1 = mkTable("Botball Left")
-      val botball2 = mkTable("Botball Right")
-      val botballPractice = mkTable("Botball Free-for-all")
-      val aerial = mkTable("PRIA Aerial")
+        em.refresh(botball)
+        mkSeeding(botball)
+        mkBracket(botball)
+      }
+
+      { //PRIA Open
+        val open = mkTournament("PRIA Open")
+        for (i <- List(0 to 3: _*))
+          mkTeam(open, "OPEN-%04d".format(i), "TGM")
+
+        em.refresh(open)
+        mkSeeding(open)
+        mkBracket(open)
+      }
+
+      { //PRIA Aerial
+        val aerial = mkTournament("PRIA Aerial")
+        for (i <- List(0 to 4: _*))
+          mkTeam(aerial, "AERIAL-%04d".format(i), "TGM")
+
+        em.refresh(aerial)
+        //TODO this is only superficially a seeding
+        mkSeeding(aerial)
+      }
     }
 }
