@@ -31,11 +31,16 @@ class TournamentService {
   @Autowired
   private[this] var teamRepo: TeamRepository = _
 
-  def apply(name: String) =
+  @Autowired
+  private[this] var init: InitService = _
+
+  def apply(name: String) = {
+    init()
     tournamentRepo.findByName(name) match {
       case null => None
       case t    => Some(new TournamentInfo(t))
     }
+  }
 
   class TournamentInfo(val tournament: Tournament) {
     lazy val bracket = new BracketStructure(tournament)
