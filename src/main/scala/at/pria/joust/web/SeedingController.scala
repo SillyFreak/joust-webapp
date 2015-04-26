@@ -6,6 +6,7 @@ import scala.collection.JavaConversions._
 import at.pria.joust.model._
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,6 +22,8 @@ class SeedingController {
   private[this] var teamRepo: TeamRepository = _
   @Autowired
   private[this] var slotRepo: TableSlotRepository = _
+  @Autowired
+  private[this] var tpl: SimpMessagingTemplate = _
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
@@ -39,6 +42,7 @@ class SeedingController {
         val slot = new PracticeSlot
         slot.team = team
         slotRepo.save(slot)
+        tpl.convertAndSend("/topic/slots", SlotUpdate(team.id))
       case "s0Call" =>
         val slot = new SeedingSlot
         //TODO table
@@ -98,3 +102,6 @@ class SeedingInput {
   @BeanProperty var item: String = _
   @BeanProperty var score: Int = _
 }
+
+case class SlotUpdate(
+  @BeanProperty teamId: Long)
