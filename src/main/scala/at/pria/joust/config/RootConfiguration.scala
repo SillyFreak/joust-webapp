@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan
 class RootConfiguration extends WebMvcConfigurerAdapter {
   override def addViewControllers(registry: ViewControllerRegistry) = {
-    registry.addViewController("/notification/").setViewName("joust/notification")
     registry.setOrder(Ordered.HIGHEST_PRECEDENCE)
   }
 
