@@ -18,6 +18,4 @@ import org.springframework.http.HttpStatus
  * @author SillyFreak
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-class NotFoundException extends RuntimeException {
-
-}
+class NotFoundException extends RuntimeException
