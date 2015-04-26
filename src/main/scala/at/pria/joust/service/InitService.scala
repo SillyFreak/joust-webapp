@@ -6,12 +6,15 @@
 
 package at.pria.joust.service
 
+import scala.collection.JavaConversions._
+
 import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
 
 import at.pria.joust.model._
 
-import scala.collection.JavaConversions._
+import javax.persistence.EntityManager
+import javax.persistence.PersistenceContext
 
 /**
  * <p>
@@ -23,6 +26,9 @@ import scala.collection.JavaConversions._
  */
 @Service
 class InitService {
+  @PersistenceContext
+  private[this] var em: EntityManager = _
+
   @Autowired
   private[this] var tournamentRepo: TournamentRepository = _
   @Autowired
@@ -45,10 +51,7 @@ class InitService {
     team.tournament = tournament
     team.teamId = teamId
     team.name = name
-    val result = teamRepo.save(team)
-    //TODO can I avoid this by "refreshing" the tournament?
-    tournament.teams.add(result)
-    result
+    teamRepo.save(team)
   }
 
   private[this] def mkSeeding(tournament: Tournament) = {
@@ -89,6 +92,8 @@ class InitService {
       val botball = mkTournament("Botball")
       for (i <- List(0 to 16: _*))
         mkTeam(botball, "15-%04d".format(i), "TGM")
+
+      em.refresh(botball)
       mkSeeding(botball)
       mkBracket(botball)
 
