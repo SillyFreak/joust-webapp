@@ -4,6 +4,7 @@ import scala.beans.BeanProperty
 
 import at.pria.joust.model._
 import at.pria.joust.service._
+import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -17,8 +18,6 @@ import java.util.{ List => juList }
 
 @Controller
 class RankingController {
-  type TInfo = TournamentService#TournamentInfo
-
   @Autowired
   private[this] var tournamentService: TournamentService = _
 

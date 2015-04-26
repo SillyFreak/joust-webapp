@@ -9,7 +9,7 @@ package at.pria.joust.model
 import scala.beans.BeanProperty
 import scala.collection.JavaConversions._
 
-import at.pria.joust.service.TournamentService
+import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.repository.CrudRepository
@@ -35,8 +35,6 @@ import java.util.{ List => juList, ArrayList => juArrayList }
  */
 @Entity
 class Team {
-  type TInfo = TournamentService#TournamentInfo
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _

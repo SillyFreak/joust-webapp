@@ -85,3 +85,7 @@ class TournamentService {
     }
   }
 }
+
+object TournamentService {
+  type TournamentInfo = TournamentService#TournamentInfo
+}
