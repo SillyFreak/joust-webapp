@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{upcoming.name}">Upcoming games</title>
 </head>
-<body onload="disconnect(); connect();">
+<body onload="connect();">
     <article layout:fragment="content">
         <table class="table">
             <tbody>
@@ -23,13 +23,11 @@
                 </tr>
             </tbody>
         </table>
-        <button id="soundButton" onclick="sendTest();">Play</button>  
         <div id="sound"></div>
         <script type="text/javascript">
 var stompClient = null;
 
 function setConnected(connected) {
-    document.getElementById('soundButton').disabled = !connected;
 }
 
 function connect() {
@@ -51,10 +49,6 @@ function disconnect() {
         stompClient = null;
     }
     setConnected(false);
-}
-
-function sendTest() {
-    stompClient.send("/app/test", {}, JSON.stringify({}));
 }
 
 // @param filename The name of the file WITHOUT ending
