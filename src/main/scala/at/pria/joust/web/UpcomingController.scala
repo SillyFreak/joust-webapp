@@ -57,6 +57,7 @@ class UpcomingController {
 
   @RequestMapping(value = Array("/admin/"), method = Array(RequestMethod.POST))
   def upcomingAdminPost(model: Model, in: UpcomingInput) = {
+    init()
     in.item match {
       case "next"   => slotService.advance(in.slotId)
       case "cancel" => slotService.cancel(in.slotId)
