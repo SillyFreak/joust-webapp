@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -21,6 +22,7 @@ class SeedingController {
   private[this] var slotService: SlotService = _
 
   private[this] def view(model: Model, tInfo: TournamentService#TournamentInfo, admin: Boolean) = {
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("tournament", tInfo.tournament)
     if (admin) {
       //for form processing
@@ -30,15 +32,15 @@ class SeedingController {
     if (admin) "joust/seeding_admin" else "joust/seeding"
   }
 
-  @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
-  def seedingAdmin(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/admin/seeding/{tournament}/"), method = Array(RequestMethod.GET))
+  def seedingAdmin(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     view(model, tInfo, true)
   }
 
-  @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.POST))
-  def seedingAdminPost(model: Model, in: SeedingInput) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/admin/seeding/{tournament}/"), method = Array(RequestMethod.POST))
+  def seedingAdminPost(model: Model, in: SeedingInput, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
 
     val team = tInfo.team(in.teamId)
     in.item match {
@@ -56,9 +58,9 @@ class SeedingController {
     view(model, tInfo, true)
   }
 
-  @RequestMapping(value = Array("/seeding/"), method = Array(RequestMethod.GET))
-  def seeding(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/seeding/{tournament}/"), method = Array(RequestMethod.GET))
+  def seeding(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     view(model, tInfo, false)
   }
 }

@@ -26,7 +26,7 @@
                 </tr>
                 <tr th:each="team : ${tournament.teams}" th:object="${team}" th:id="|row*{id}|">
                     <td class="button-column">
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="practiceCall" />
                             <button type="submit" class="btn btn-info" th:title="#{teams.btn.practiceCall}"></button>
@@ -36,28 +36,28 @@
                     <td th:text="*{name}">TGM</td>
 <!--                    <td>schueler@student.tgm.ac.at</td> -->
                     <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="p1doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p1doc}" />
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="p2doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p2doc}" />
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="p3doc" />
                             <input type="number" min="0" id="score" name="score" th:value="*{p3doc}" />
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="onsite" />
                             <input type="number" min="0" id="score" name="score" th:value="*{onsite}" />
@@ -65,14 +65,14 @@
                     </td>
 <!--/*/ <th:block th:each="game : *{seedingGames}" th:object="${game}"> /*/-->
                     <td class="button-column">
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
                             <input type="hidden" id="item" name="item" th:value="|s*{round}Call|" />
                             <button type="submit" class="btn btn-info" th:title="#{teams.btn.seedingCall(*{round + 1})}"></button>
                         </form>
                     </td>
                     <td>
-                        <form th:action="@{/admin/seeding/}" method="post">
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
                             <input type="hidden" id="item" name="item" th:value="|s*{round}|" />
                             <input type="number" min="0" id="score" name="score" th:value="*{finished ? score : ''}" />

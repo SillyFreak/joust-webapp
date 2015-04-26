@@ -8,6 +8,7 @@ import at.pria.joust.service._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -19,9 +20,9 @@ class RankingController {
   @Autowired
   private[this] var tournamentService: TournamentService = _
 
-  @RequestMapping(value = Array("/ranking/"), method = Array(RequestMethod.GET))
-  def ranking(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/ranking/{tournament}/"), method = Array(RequestMethod.GET))
+  def ranking(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     val bracket = tInfo.bracket
 
     val teams = tInfo.tournament.teams.toList.map { TeamRanks(bracket, _) }
@@ -35,6 +36,7 @@ class RankingController {
       for ((((o, d), s), b) <- (byOverall zip byDoc zip bySeeding zip byBracket))
         yield RankItem(o, d, s, b)
 
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("ranking", ranking: juList[RankItem])
     "joust/ranking"
   }

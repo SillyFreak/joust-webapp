@@ -9,6 +9,7 @@ import at.pria.joust.service._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
@@ -25,6 +26,7 @@ class BracketController {
     val bracket = tInfo.bracket
     val games = bracket.games.map { BracketGameView(_) }
 
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("bracket", games: juList[BracketGameView])
     if (admin) {
       //for form processing
@@ -34,15 +36,15 @@ class BracketController {
     if (admin) "joust/bracket_admin" else "joust/bracket"
   }
 
-  @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.GET))
-  def bracketAdmin(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/admin/bracket/{tournament}/"), method = Array(RequestMethod.GET))
+  def bracketAdmin(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     view(model, tInfo, true)
   }
 
-  @RequestMapping(value = Array("/admin/bracket/"), method = Array(RequestMethod.POST))
-  def bracketAdminPost(model: Model, in: BracketInput) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/admin/bracket/{tournament}/"), method = Array(RequestMethod.POST))
+  def bracketAdminPost(model: Model, in: BracketInput, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
 
     in.item match {
       case "winnerA"   => tInfo.scoreBracketGame(in.gameId, true)
@@ -54,15 +56,15 @@ class BracketController {
     view(model, tInfo, true)
   }
 
-  @RequestMapping(value = Array("/bracket/"), method = Array(RequestMethod.GET))
-  def bracket(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/bracket/{tournament}/"), method = Array(RequestMethod.GET))
+  def bracket(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     view(model, tInfo, false)
   }
 
-  @RequestMapping(value = Array("/bracket/main/"), method = Array(RequestMethod.GET))
-  def mainBracket(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/bracket/main/{tournament}/"), method = Array(RequestMethod.GET))
+  def mainBracket(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     val bracket = tInfo.bracket
     val rounds = bracket.mainRounds.map { round =>
       val first = round.first
@@ -73,14 +75,15 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
-    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "main")
+    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
     "joust/bracket2"
   }
 
-  @RequestMapping(value = Array("/bracket/consolation/"), method = Array(RequestMethod.GET))
-  def consolationBracket(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/bracket/consolation/{tournament}/"), method = Array(RequestMethod.GET))
+  def consolationBracket(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     val bracket = tInfo.bracket
     val rounds = bracket.consolationRounds.reverse.map { round =>
       val first = round.first
@@ -91,14 +94,15 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
-    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "consolation")
+    model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
     "joust/bracket2"
   }
 
-  @RequestMapping(value = Array("/bracket/final/"), method = Array(RequestMethod.GET))
-  def finalBracket(model: Model) = {
-    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+  @RequestMapping(value = Array("/bracket/final/{tournament}/"), method = Array(RequestMethod.GET))
+  def finalBracket(model: Model, @PathVariable("tournament") t: String) = {
+    val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
     val bracket = tInfo.bracket
     val round = {
       val round = bracket.finalRound
@@ -110,8 +114,9 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
-    model.addAttribute("round", round)
+    model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "final")
+    model.addAttribute("round", round)
     "joust/bracket2"
   }
 
