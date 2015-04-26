@@ -8,9 +8,10 @@
 </head>
 <body onload="connect(receiveNotify);">
     <article layout:fragment="content">
-        <p th:utext="#{notification.description}"></p>
-        <input th:each="team : ${teams}" th:object="${team}"
-            type="checkbox" th:id="|team-*{id}|" th:text="#{bracket.team(*{teamId}, *{name})}" />
+        <p class="h4" th:utext="#{notification.description}"></p>
+        <p th:each="team : ${teams}" th:object="${team}">
+            <input type="checkbox" th:id="|team-*{id}|" th:text="#{bracket.team(*{teamId}, *{name})}" />
+        </p>
         <div id="sound"></div>
         <script type="text/javascript">
 "use strict";
