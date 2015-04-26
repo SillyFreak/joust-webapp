@@ -42,6 +42,17 @@ class TournamentService {
 
     def team(id: Long) = teamRepo.findOne(id)
 
+    def scoreDocumentation(teamId: Long, period: String, score: Int) = {
+      val team = this.team(teamId)
+      period match {
+        case "p1doc"  => team.p1doc = score
+        case "p2doc"  => team.p2doc = score
+        case "p3doc"  => team.p3doc = score
+        case "onsite" => team.onsite = score
+      }
+      teamRepo.save(team)
+    }
+
     def scoreSeedingGame(teamId: Long, round: Int, score: Int) = {
       val game = team(teamId).seedingGames(round)
       game.finished = true

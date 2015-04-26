@@ -18,8 +18,6 @@ class SeedingController {
   @Autowired
   private[this] var tournamentService: TournamentService = _
   @Autowired
-  private[this] var teamRepo: TeamRepository = _
-  @Autowired
   private[this] var slotService: SlotService = _
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
@@ -37,32 +35,16 @@ class SeedingController {
     val team = tInfo.team(in.teamId)
 
     in.item match {
-      case "practiceCall" =>
-        slotService.addPracticeSlot(team)
-      case "s0Call" =>
-        slotService.addSeedingSlot(team.seedingGames(0))
-      case "s1Call" =>
-        slotService.addSeedingSlot(team.seedingGames(1))
-      case "s2Call" =>
-        slotService.addSeedingSlot(team.seedingGames(2))
-      case "p1doc" =>
-        team.p1doc = in.score
-        teamRepo.save(team)
-      case "p2doc" =>
-        team.p2doc = in.score
-        teamRepo.save(team)
-      case "p3doc" =>
-        team.p3doc = in.score
-        teamRepo.save(team)
-      case "onsite" =>
-        team.onsite = in.score
-        teamRepo.save(team)
-      case "s0" =>
-        tInfo.scoreSeedingGame(in.teamId, 0, in.score)
-      case "s1" =>
-        tInfo.scoreSeedingGame(in.teamId, 1, in.score)
-      case "s2" =>
-        tInfo.scoreSeedingGame(in.teamId, 2, in.score)
+      case period @ ("p1doc" | "p2doc" | "p3doc" | "onsite") =>
+        tInfo.scoreDocumentation(in.teamId, period, in.score)
+
+      case "practiceCall" => slotService.addPracticeSlot(team)
+      case "s0Call"       => slotService.addSeedingSlot(team.seedingGames(0))
+      case "s1Call"       => slotService.addSeedingSlot(team.seedingGames(1))
+      case "s2Call"       => slotService.addSeedingSlot(team.seedingGames(2))
+      case "s0"           => tInfo.scoreSeedingGame(in.teamId, 0, in.score)
+      case "s1"           => tInfo.scoreSeedingGame(in.teamId, 1, in.score)
+      case "s2"           => tInfo.scoreSeedingGame(in.teamId, 2, in.score)
     }
 
     seedingAdmin(model)
