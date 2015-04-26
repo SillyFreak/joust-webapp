@@ -3,7 +3,7 @@ package at.pria.joust.web
 import scala.beans.BeanProperty
 
 import at.pria.joust.model._
-import at.pria.joust.service.BracketStructure
+import at.pria.joust.service._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -17,11 +17,11 @@ import java.util.{ List => juList }
 @Controller
 class RankingController {
   @Autowired
-  private[this] var tournamentRepo: TournamentRepository = _
+  private[this] var tournamentService: TournamentService = _
 
   @RequestMapping(value = Array("/ranking/"), method = Array(RequestMethod.GET))
   def ranking(model: Model) = {
-    val tournament = tournamentRepo.findByName("Botball")
+    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
     val bracket = new BracketStructure(tournament)
 
     val teams = tournament.teams.toList.map { TeamRanks(bracket, _) }

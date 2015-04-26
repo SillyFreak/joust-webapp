@@ -14,7 +14,6 @@ import at.pria.joust.model.TableSlot._
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
-import org.springframework.stereotype.Controller
 import org.springframework.stereotype.Service
 
 /**

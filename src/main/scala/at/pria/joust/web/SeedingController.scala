@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 @Controller
 class SeedingController {
   @Autowired
-  private[this] var tournamentRepo: TournamentRepository = _
+  private[this] var tournamentService: TournamentService = _
   @Autowired
   private[this] var gameRepo: GameRepository = _
   @Autowired
@@ -26,7 +26,7 @@ class SeedingController {
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
-    val tournament = tournamentRepo.findByName("Botball")
+    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
 
     model.addAttribute("tournament", tournament)
     model.addAttribute(new SeedingInput())
@@ -79,7 +79,7 @@ class SeedingController {
 
   @RequestMapping(value = Array("/seeding/"), method = Array(RequestMethod.GET))
   def seeding(model: Model) = {
-    val tournament = tournamentRepo.findByName("Botball")
+    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
 
     model.addAttribute("tournament", tournament)
     "joust/seeding"
