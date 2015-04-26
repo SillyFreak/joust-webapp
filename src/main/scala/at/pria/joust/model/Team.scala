@@ -56,6 +56,9 @@ class Team {
   @OneToMany(mappedBy = "team")
   @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]
 
+  @OneToMany(mappedBy = "team")
+  @BeanProperty var aerialGames: juList[AerialGame] = new juArrayList[AerialGame]
+
   //inferred
 
   private[this] def seedingStats = {
@@ -138,6 +141,48 @@ class Team {
     tournament.teams.count { _.overallScore > overallScore }
   }
   @Transient def getOverallRank(implicit tInfo: TInfo) = overallRank
+
+  private[this] def aerialStats(day: Int) = {
+    val allScores =
+      for (game <- List(aerialGames: _*) if game.day == day)
+        yield if (game.finished) Some(game.score) else None
+    val scores = allScores.collect { case Some(x) => x }.sorted
+
+    if (scores.isEmpty) {
+      (0, 0d)
+    } else {
+      val dropped = scores.takeRight(2)
+      (dropped.last, dropped.sum.toDouble / dropped.size)
+    }
+  }
+
+  def aerialMax(day: Int) = aerialStats(day)._1
+  @Transient def getAerialMax(day: Int) = aerialMax(day)
+
+  def aerialAvg(day: Int) = aerialStats(day)._2
+  @Transient def getAerialAvg(day: Int) = aerialAvg(day)
+
+  private def rawAerialScore = {
+    var score = 0d
+    val days = 2
+    for (day <- 0 until days)
+      score += aerialAvg(day)
+    score / days
+  }
+
+  def aerialRank = {
+    val rawAerialScore = this.rawAerialScore
+    tournament.teams.count { _.rawAerialScore > rawAerialScore }
+  }
+  @Transient def getAerialRank() = aerialRank
+
+  def aerialScore = {
+    val count = tournament.teams.size
+    val rank = aerialRank
+
+    (count - rank) / count
+  }
+  @Transient def getAerialScore() = aerialScore
 }
 
 trait TeamRepository extends CrudRepository[Team, jLong] {

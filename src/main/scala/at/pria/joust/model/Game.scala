@@ -73,3 +73,15 @@ class AllianceGame extends Game {
   @BeanProperty var finished: Boolean = false
   @BeanProperty var score: Int = _
 }
+
+@Entity
+class AerialGame extends Game {
+  @ManyToOne
+  @BeanProperty var team: Team = _
+  @BeanProperty var day: Int = _
+  @BeanProperty var round: Int = _
+
+  //result
+  @BeanProperty var finished: Boolean = false
+  @BeanProperty var score: Int = _
+}
