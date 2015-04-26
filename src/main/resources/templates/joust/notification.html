@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{notification.name}">Table Notification</title>
+</head>
+<body onload="connect(receiveNotify);">
+    <article layout:fragment="content">
+        <div id="sound"></div>
+        <script type="text/javascript">
+"use strict";
+//<!--
+
+function receiveNotify(teamIds) {
+	var notify = false;
+	for(var i = 0; i < teamIds.length; i++)
+		notify |= teamIds[i] == 2;
+	if(notify) playSound('sound', '/bing');
+}
+//-->
+        </script>
+    </article>
+</body>
+</html>

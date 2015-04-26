@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{upcoming.name}">Upcoming games</title>
 </head>
-<body onload="connect(receiveNotify);">
+<body>
     <article layout:fragment="content">
         <table class="table">
             <tbody>
@@ -23,19 +23,6 @@
                 </tr>
             </tbody>
         </table>
-        <div id="sound"></div>
-        <script type="text/javascript">
-"use strict";
-//<!--
-
-function receiveNotify(teamIds) {
-	var notify = false;
-	for(var i = 0; i < teamIds.length; i++)
-		notify |= teamIds[i] == 2;
-	if(notify) playSound('sound', 'bing');
-}
-//-->
-        </script>
     </article>
 </body>
 </html>
