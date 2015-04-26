@@ -25,9 +25,15 @@
         </table>
         <div id="sound"></div>
         <script type="text/javascript">
+//<!--
+
 function receiveNotify(teamIds) {
-	playSound('sound', 'bing');
+	var notify = false;
+	for(var i = 0; i < teamIds.length; i++)
+		notify |= teamIds[i] == 2;
+	if(notify) playSound('sound', 'bing');
 }
+//-->
         </script>
     </article>
 </body>
