@@ -11,10 +11,13 @@ import scala.collection.JavaConversions._
 
 import at.pria.joust.model._
 import at.pria.joust.model.TableSlot._
+import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Service
+
+import java.util.{ List => juList }
 
 /**
  * <p>
@@ -32,6 +35,8 @@ class SlotService {
   private[this] var tableRepo: TableRepository = _
   @Autowired
   private[this] var tpl: SimpMessagingTemplate = _
+  @Autowired
+  private[this] var tournamentService: TournamentService = _
 
   def allSlots = slotRepo.findAll().toList
   def slot(id: Long) = slotRepo.findOne(id)
@@ -72,8 +77,11 @@ class SlotService {
     slot.state += 1
     slotRepo.save(slot)
 
-    if (slot.state == CALLED)
-      tpl.convertAndSend("/topic/slots", SlotUpdate(0)) //TODO re-add team IDs
+    if (slot.state == CALLED) {
+      implicit val tInfo = tournamentService(slot.tournament)
+      val teamIds = slot.participants.map(_.id)
+      tpl.convertAndSend("/topic/slots", SlotUpdate(teamIds))
+    }
   }
 
   def cancel(id: Long) = {
@@ -88,4 +96,4 @@ class SlotService {
 }
 
 case class SlotUpdate(
-  @BeanProperty teamId: Long)
+  @BeanProperty teamIds: juList[Long])

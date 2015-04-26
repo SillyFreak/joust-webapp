@@ -42,6 +42,8 @@ class TournamentService {
     }
   }
 
+  def apply(t: Tournament) = new TournamentInfo(t)
+
   class TournamentInfo(val tournament: Tournament) {
     lazy val bracket = new BracketStructure(tournament)
 

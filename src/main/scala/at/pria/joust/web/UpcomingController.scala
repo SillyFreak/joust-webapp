@@ -6,6 +6,7 @@ import scala.collection.JavaConversions._
 import at.pria.joust.model._
 import at.pria.joust.model.TableSlot._
 import at.pria.joust.service._
+import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -19,18 +20,27 @@ import java.util.{ List => juList }
 @Controller
 class UpcomingController {
   @Autowired
+  private[this] var tournamentService: TournamentService = _
+  @Autowired
   private[this] var slotService: SlotService = _
   @Autowired
   private[this] var init: InitService = _
 
   private[this] def view(model: Model, admin: Boolean) = {
+    val tInfos = collection.mutable.Map[Tournament, TInfo]()
+
     val slots =
       slotService.allSlots
         .filter(_.state != FINISHED)
         //most urgent slots first
         .sortBy(-_.state)
+        .map { slot =>
+          val t = slot.tournament
+          implicit val tInfo = tInfos.getOrElseUpdate(t, tournamentService(t))
+          new SlotWrapper(slot)
+        }
 
-    model.addAttribute("upcoming", slots: juList[TableSlot])
+    model.addAttribute("upcoming", slots: juList[SlotWrapper])
     if (admin) {
       //for options
       model.addAttribute("tables", slotService.allTables: juList[Table])
@@ -59,6 +69,15 @@ class UpcomingController {
   def upcoming(model: Model) = {
     init()
     view(model, false)
+  }
+
+  class SlotWrapper(slot: TableSlot)(implicit tInfo: TInfo) {
+    def getId() = slot.id
+    def getTable() = slot.table
+    def getState() = slot.state
+    def getTournament() = slot.tournament
+    def getDescription() = slot.description
+    def getParticipants() = slot.participants: juList[Team]
   }
 }
 

@@ -34,6 +34,8 @@ import java.util.{ List => juList, ArrayList => juArrayList }
 abstract class TableSlot {
   import TableSlot._
 
+  type TInfo = at.pria.joust.service.TournamentService#TournamentInfo
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _
@@ -43,13 +45,17 @@ abstract class TableSlot {
 
   @BeanProperty var state: Int = UPCOMING
 
-  def participants: List[Team]
+  def tournament: Tournament
   @Transient
-  def getParticipants() = participants: juList[Team]
+  def getTournament() = tournament
 
-  def description: String
+  def participants(implicit tInfo: TInfo): List[Team]
   @Transient
-  def getDescription() = description
+  def getParticipants(implicit tInfo: TInfo) = participants: juList[Team]
+
+  def description(implicit tInfo: TInfo): String
+  @Transient
+  def getDescription(implicit tInfo: TInfo) = description
 }
 
 object TableSlot {
@@ -66,8 +72,13 @@ class PracticeSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var team: Team = _
 
-  def participants: List[Team] = List(team)
-  def description = s"Open practice for team ${team.teamId} ${team.name}"
+  override def tournament = team.tournament
+
+  override def description(implicit tInfo: TInfo) = {
+    val List(team) = participants
+    s"Open practice for team ${team.teamId} ${team.name}"
+  }
+  override def participants(implicit tInfo: TInfo): List[Team] = List(team)
 }
 
 @Entity
@@ -75,8 +86,13 @@ class SeedingSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var sGame: SeedingGame = _
 
-  def description = s"Seeding round ${sGame.round + 1} for team ${sGame.team.teamId} ${sGame.team.name}"
-  def participants: List[Team] = List(sGame.team)
+  override def tournament = sGame.tournament
+
+  override def description(implicit tInfo: TInfo) = {
+    val List(team) = participants
+    s"Seeding round ${sGame.round + 1} for team ${team.teamId} ${team.name}"
+  }
+  override def participants(implicit tInfo: TInfo): List[Team] = List(sGame.team)
 }
 
 @Entity
@@ -84,8 +100,17 @@ class BracketSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var bGame: BracketGame = _
 
-  def description = s"Double elimination match #${bGame.gameId + 1}"
-  def participants: List[Team] = List(???, ???)
+  override def tournament = bGame.tournament
+
+  override def description(implicit tInfo: TInfo) = {
+    val List(aTeam, bTeam) = participants
+    s"Double elimination match #${bGame.gameId + 1} between ${aTeam.teamId} ${aTeam.name} & ${bTeam.teamId} ${bTeam.name}"
+  }
+  override def participants(implicit tInfo: TInfo): List[Team] = {
+    val aTeam = tInfo.bracket.games(bGame.gameId).aTeam().get
+    val bTeam = tInfo.bracket.games(bGame.gameId).bTeam().get
+    List(aTeam, bTeam)
+  }
 }
 
 @Entity
@@ -93,6 +118,11 @@ class AllianceSlot extends TableSlot {
   @ManyToOne
   @BeanProperty var aGame: AllianceGame = _
 
-  def description = s"Alliance game ${aGame.aTeam.teamId} ${aGame.aTeam.name} & ${aGame.bTeam.teamId} ${aGame.bTeam.name}"
-  def participants: List[Team] = List(aGame.aTeam, aGame.bTeam)
+  override def tournament = aGame.tournament
+
+  override def description(implicit tInfo: TInfo) = {
+    val List(aTeam, bTeam) = participants
+    s"Alliance game ${aTeam.teamId} ${aTeam.name} & ${bTeam.teamId} ${bTeam.name}"
+  }
+  override def participants(implicit tInfo: TInfo): List[Team] = List(aGame.aTeam, aGame.bTeam)
 }
