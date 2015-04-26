@@ -21,10 +21,10 @@ class RankingController {
 
   @RequestMapping(value = Array("/ranking/"), method = Array(RequestMethod.GET))
   def ranking(model: Model) = {
-    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
-    val bracket = new BracketStructure(tournament)
+    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
+    val bracket = new BracketStructure(tInfo.tournament)
 
-    val teams = tournament.teams.toList.map { TeamRanks(bracket, _) }
+    val teams = tInfo.tournament.teams.toList.map { TeamRanks(bracket, _) }
 
     val byOverall = teams.sortBy(_.overallRank)
     val byDoc = teams.sortBy(_.docRank)

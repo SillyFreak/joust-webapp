@@ -30,6 +30,8 @@ class TournamentService {
   def apply(name: String) =
     tournamentRepo.findByName(name) match {
       case null => None
-      case x    => Some(x)
+      case t    => Some(new TournamentInfo(t))
     }
+
+  class TournamentInfo(val tournament: Tournament)
 }

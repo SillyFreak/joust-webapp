@@ -26,9 +26,9 @@ class SeedingController {
 
   @RequestMapping(value = Array("/admin/seeding/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model) = {
-    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
+    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
 
-    model.addAttribute("tournament", tournament)
+    model.addAttribute("tournament", tInfo.tournament)
     model.addAttribute(new SeedingInput())
     "joust/seeding_admin"
   }
@@ -79,9 +79,9 @@ class SeedingController {
 
   @RequestMapping(value = Array("/seeding/"), method = Array(RequestMethod.GET))
   def seeding(model: Model) = {
-    val tournament = tournamentService("Botball").getOrElse { throw new NotFoundException }
+    val tInfo = tournamentService("Botball").getOrElse { throw new NotFoundException }
 
-    model.addAttribute("tournament", tournament)
+    model.addAttribute("tournament", tInfo.tournament)
     "joust/seeding"
   }
 }
