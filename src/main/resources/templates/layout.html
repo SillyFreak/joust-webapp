@@ -21,7 +21,7 @@
         <div layout:fragment="content" th:classappend="content" />
     </div>
     <footer th:replace="fragments::footer" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script th:src="@{/js/jquery.min.js}" src="../../webapp/js/jquery.min.js"></script>
     <script th:src="@{/js/bootstrap.min.js}" src="../../webapp/js/bootstrap.min.js"></script>
     <script th:src="@{/js/sockjs-0.3.4.js}" src="../../webapp/js/sockjs-0.3.4.js"></script>
     <script th:src="@{/js/stomp.js}" src="../../webapp/js/stomp.js"></script>
