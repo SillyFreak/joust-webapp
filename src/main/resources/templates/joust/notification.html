@@ -6,7 +6,7 @@
 <head>
     <title th:text="#{notification.name}">Table Notification</title>
 </head>
-<body onload="connect(receiveNotify);">
+<body onload="setInterval(function() {disconnect(); connect(receiveNotify);}, 30000);">
     <article layout:fragment="content">
         <p class="h4" th:utext="#{notification.description}"></p>
         <p th:each="team : ${teams}" th:object="${team}">
