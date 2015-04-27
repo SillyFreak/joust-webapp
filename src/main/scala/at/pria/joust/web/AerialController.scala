@@ -41,14 +41,14 @@ class AerialController {
   @RequestMapping(value = Array("/admin/aerial/{tournament}/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != AERIAL) throw new NotFoundException
+    if (!tInfo.tournament.isAerialMode) throw new NotFoundException
     view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/admin/aerial/{tournament}/"), method = Array(RequestMethod.POST))
   def seedingAdminPost(model: Model, in: AerialInput, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != AERIAL) throw new NotFoundException
+    if (!tInfo.tournament.isAerialMode) throw new NotFoundException
 
     //TODO
 
@@ -58,7 +58,7 @@ class AerialController {
   @RequestMapping(value = Array("/aerial/{tournament}/"), method = Array(RequestMethod.GET))
   def seeding(model: Model, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != AERIAL) throw new NotFoundException
+    if (!tInfo.tournament.isAerialMode) throw new NotFoundException
     view(model, tInfo, false)
   }
 }

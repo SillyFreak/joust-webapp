@@ -38,14 +38,14 @@ class SeedingController {
   @RequestMapping(value = Array("/admin/seeding/{tournament}/"), method = Array(RequestMethod.GET))
   def seedingAdmin(model: Model, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != BOTBALL) throw new NotFoundException
+    if (!tInfo.tournament.isBotballMode) throw new NotFoundException
     view(model, tInfo, true)
   }
 
   @RequestMapping(value = Array("/admin/seeding/{tournament}/"), method = Array(RequestMethod.POST))
   def seedingAdminPost(model: Model, in: SeedingInput, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != BOTBALL) throw new NotFoundException
+    if (!tInfo.tournament.isBotballMode) throw new NotFoundException
 
     val team = tInfo.team(in.teamId)
     in.item match {
@@ -66,7 +66,7 @@ class SeedingController {
   @RequestMapping(value = Array("/seeding/{tournament}/"), method = Array(RequestMethod.GET))
   def seeding(model: Model, @PathVariable("tournament") t: String) = {
     val tInfo = tournamentService(t).getOrElse { throw new NotFoundException }
-    if (tInfo.tournament.mode != BOTBALL) throw new NotFoundException
+    if (!tInfo.tournament.isBotballMode) throw new NotFoundException
     view(model, tInfo, false)
   }
 }

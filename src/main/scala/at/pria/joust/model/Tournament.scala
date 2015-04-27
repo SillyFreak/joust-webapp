@@ -17,6 +17,7 @@ import javax.persistence.Id
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.OneToMany
+import javax.persistence.Transient
 
 import java.lang.{ Long => jLong }
 import java.util.{ List => juList, ArrayList => juArrayList }
@@ -31,6 +32,8 @@ import java.util.{ List => juList, ArrayList => juArrayList }
  */
 @Entity
 class Tournament {
+  import Tournament._
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   @BeanProperty var id: Long = _
@@ -47,6 +50,9 @@ class Tournament {
   @BeanProperty var games: juList[Game] = new juArrayList[Game]
 
   //inferred
+
+  @Transient def isAerialMode = mode == AERIAL
+  @Transient def isBotballMode = mode == BOTBALL
 
   def seedingMax = {
     val scores = games.collect { case g: SeedingGame if g.finished => g.score }
