@@ -21,7 +21,12 @@ function receiveNotify(teamIds) {
 	var notify = false;
 	for(var i = 0; i < teamIds.length; i++)
 		notify |= document.getElementById('team-' + teamIds[i]).checked
-	if(notify) playSound('sound', '/res/beep');
+	if(notify) {
+		playSound('sound', '/res/beep');
+		setTimeout(function() {
+			playSound('sound', '/res/beep');
+		}, 5000);
+	}
 }
 //-->
         </script>
