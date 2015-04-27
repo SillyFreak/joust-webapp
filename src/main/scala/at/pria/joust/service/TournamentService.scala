@@ -34,6 +34,8 @@ class TournamentService {
   @Autowired
   private[this] var init: InitService = _
 
+  def getTournaments() = tournamentRepo.findAll()
+
   def apply(name: String) = {
     init()
     tournamentRepo.findByName(name) match {

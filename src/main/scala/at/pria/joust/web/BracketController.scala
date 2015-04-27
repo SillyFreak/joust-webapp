@@ -28,6 +28,7 @@ class BracketController {
     val bracket = tInfo.bracket
     val games = bracket.games.map { BracketGameView(_) }
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("bracket", games: juList[BracketGameView])
     if (admin) {
@@ -81,6 +82,7 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "main")
     model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
@@ -101,6 +103,7 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "consolation")
     model.addAttribute("rounds", rounds: juList[juList[BracketGameView]])
@@ -122,6 +125,7 @@ class BracketController {
       result: juList[BracketGameView]
     }
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("mode", "final")
     model.addAttribute("round", round)

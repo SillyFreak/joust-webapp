@@ -33,18 +33,20 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-<!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
-                    <li><a th:href="@{/seeding/Botball/}" th:text="#{teams.name}">Seeding</a></li>
-                    <li><a th:href="@{/bracket/Botball/}" th:text="#{bracket.name}">DE</a></li>
+<!--/*/ <th:block th:each="t : ${tournaments}"> /*/-->
+    <!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
+                    <li><a th:href="@{/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
+                    <li><a th:href="@{/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
+    <!--/*/ </th:block> /*/-->
+    <!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
+                    <li><a th:href="@{/admin/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
+                    <li><a th:href="@{/admin/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
+    <!--/*/ </th:block> /*/-->
+                    <li><a th:href="@{/bracket/main/__${t.name}__/}" th:text="#{bracket.name.main}">Main Bracket</a></li>
+                    <li><a th:href="@{/bracket/consolation/__${t.name}__/}" th:text="#{bracket.name.consolation}">Consolation Bracket</a></li>
+                    <li><a th:href="@{/bracket/final/__${t.name}__/}" th:text="#{bracket.name.final}">Final Bracket</a></li>
+                    <li><a th:href="@{/ranking/__${t.name}__/}" th:text="#{ranking.name}">Ranking</a></li>
 <!--/*/ </th:block> /*/-->
-<!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
-                    <li><a th:href="@{/admin/seeding/Botball/}" th:text="#{teams.name}">Seeding</a></li>
-                    <li><a th:href="@{/admin/bracket/Botball/}" th:text="#{bracket.name}">DE</a></li>
-<!--/*/ </th:block> /*/-->
-                    <li><a th:href="@{/bracket/main/Botball/}" th:text="#{bracket.name.main}">Main Bracket</a></li>
-                    <li><a th:href="@{/bracket/consolation/Botball/}" th:text="#{bracket.name.consolation}">Consolation Bracket</a></li>
-                    <li><a th:href="@{/bracket/final/Botball/}" th:text="#{bracket.name.final}">Final Bracket</a></li>
-                    <li><a th:href="@{/ranking/Botball/}" th:text="#{ranking.name}">Ranking</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a th:href="@{/notification/}" th:text="#{notification.name}">Table Notification</a></li>

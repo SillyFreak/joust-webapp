@@ -40,6 +40,7 @@ class UpcomingController {
           new SlotWrapper(slot)
         }
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("upcoming", slots: juList[SlotWrapper])
     if (admin) {
       //for options

@@ -24,6 +24,7 @@ class SeedingController {
   private[this] var slotService: SlotService = _
 
   private[this] def view(model: Model, tInfo: TInfo, admin: Boolean) = {
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("tournament", tInfo.tournament)
     if (admin) {

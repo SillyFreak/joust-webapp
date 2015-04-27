@@ -37,6 +37,7 @@ class RankingController {
       for ((((o, d), s), b) <- (byOverall zip byDoc zip bySeeding zip byBracket))
         yield RankItem(o, d, s, b)
 
+    model.addAttribute("tournaments", tournamentService.getTournaments())
     model.addAttribute("tName", tInfo.tournament.name)
     model.addAttribute("ranking", ranking: juList[RankItem])
     "joust/ranking"
