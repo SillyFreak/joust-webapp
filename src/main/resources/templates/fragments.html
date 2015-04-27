@@ -39,7 +39,7 @@
                             <!--/*/ <th:block th:text="${t.name}" /> /*/--> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-<!--/*/ <th:block sec:authorize="hasRole('ROLE_ADMIN')"> /*/-->
+<!--/*/ <th:block sec:authorize="!hasRole('ROLE_ADMIN')"> /*/-->
                             <li th:if="${t.botballMode}"><a th:href="@{/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
                             <li th:if="${t.botballMode}"><a th:href="@{/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
                             <li th:if="${t.aerialMode}"><a th:href="@{/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
