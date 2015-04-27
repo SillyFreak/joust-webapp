@@ -104,8 +104,24 @@ class InitService {
 
       { //botball
         val botball = mkTournament("Botball")
-        for (i <- List(0 to 16: _*))
-          mkTeam(botball, "15-%04d".format(i), "TGM")
+        mkTeam(botball, "15-0233", "iBot αlpha")
+        mkTeam(botball, "15-0270", "Hayah International Academy")
+        mkTeam(botball, "15-0362", "Primotic")
+        mkTeam(botball, "15-0364", "Eat, Sleep, Programm, Repeat")
+        mkTeam(botball, "15-0367", "TGM Battledroids")
+        mkTeam(botball, "15-0369", "3oT")
+        mkTeam(botball, "15-0385", "HTBLVA Spengergasse")
+        mkTeam(botball, "15-0397", "RPA")
+        mkTeam(botball, "15-0400", "Schiffrad")
+        mkTeam(botball, "15-0403", "Queen Elizabeth's Grammar School for Boys")
+        mkTeam(botball, "15-0411", "International School of Islamabad Society")
+        mkTeam(botball, "15-0423", "Eastbrook Comprehensive School, Daggenham")
+        mkTeam(botball, "15-0536", "Al ru'ya Bilingual School of Kuwait")
+        mkTeam(botball, "15-0600", "Scorp Robotics")
+        mkTeam(botball, "15-0602", "items")
+        mkTeam(botball, "15-0603", "SCIPIC")
+        mkTeam(botball, "15-0616", "MiracleRobotics")
+        mkTeam(botball, "15-0647", "The Franciszek Leja State School in Grodzisko Gorne")
 
         em.refresh(botball)
         mkSeeding(botball)
@@ -114,8 +130,11 @@ class InitService {
 
       { //PRIA Open
         val open = mkTournament("PRIA Open")
-        for (i <- List(0 to 3: _*))
-          mkTeam(open, "OPEN-%04d".format(i), "TGM")
+        mkTeam(open, "OP-0001", "HTL Saalfelden/St. Johann")
+        mkTeam(open, "OP-0002", "ACE-Bots")
+        mkTeam(open, "OP-0003", "GG-OPEN")
+        mkTeam(open, "OP-0004", "HTL Saalfelden")
+        mkTeam(open, "OP-0005", "Robot0nFire")
 
         em.refresh(open)
         mkSeeding(open)
@@ -124,8 +143,10 @@ class InitService {
 
       { //PRIA Aerial
         val aerial = mkTournament("PRIA Aerial", AERIAL)
-        for (i <- List(0 to 4: _*))
-          mkTeam(aerial, "AERIAL-%04d".format(i), "TGM")
+        mkTeam(aerial, "AE-0001", "GG-AERIAL")
+        mkTeam(aerial, "AE-0002", "Johannes Wang")
+        mkTeam(aerial, "AE-0003", "LastMinute-Flight")
+        mkTeam(aerial, "AE-0004", "PRIA Allstars")
 
         em.refresh(aerial)
         //TODO this is only superficially a seeding
