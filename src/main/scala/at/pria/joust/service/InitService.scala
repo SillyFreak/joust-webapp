@@ -107,7 +107,7 @@ class InitService {
         mkTeam(botball, "15-0233", "iBot αlpha")
         mkTeam(botball, "15-0270", "Hayah International Academy")
         mkTeam(botball, "15-0362", "Primotic")
-        mkTeam(botball, "15-0364", "Eat, Sleep, Programm, Repeat")
+        mkTeam(botball, "15-0364", "Eat, Sleep, Program, Repeat")
         mkTeam(botball, "15-0367", "TGM Battledroids")
         mkTeam(botball, "15-0369", "3oT")
         mkTeam(botball, "15-0385", "HTBLVA Spengergasse")
@@ -120,7 +120,7 @@ class InitService {
         mkTeam(botball, "15-0600", "Scorp Robotics")
         mkTeam(botball, "15-0602", "items")
         mkTeam(botball, "15-0603", "SCIPIC")
-        mkTeam(botball, "15-0616", "MiracleRobotics")
+//        mkTeam(botball, "15-0616", "MiracleRobotics")
         mkTeam(botball, "15-0647", "The Franciszek Leja State School in Grodzisko Gorne")
 
         em.refresh(botball)
@@ -146,7 +146,6 @@ class InitService {
         mkTeam(aerial, "AE-0001", "GG-AERIAL")
         mkTeam(aerial, "AE-0002", "Johannes Wang")
         mkTeam(aerial, "AE-0003", "LastMinute-Flight")
-        mkTeam(aerial, "AE-0004", "PRIA Allstars")
 
         em.refresh(aerial)
         //TODO this is only superficially a seeding
