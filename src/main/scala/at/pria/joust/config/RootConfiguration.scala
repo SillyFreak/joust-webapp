@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @ComponentScan
 class RootConfiguration extends WebMvcConfigurerAdapter {
   override def addViewControllers(registry: ViewControllerRegistry) = {
+    registry.addViewController("/login/").setViewName("accounts/login")
     registry.setOrder(Ordered.HIGHEST_PRECEDENCE)
   }
 
@@ -25,6 +26,7 @@ class RootConfiguration extends WebMvcConfigurerAdapter {
   @Bean def messageSource() = {
     val ms = new org.springframework.context.support.ReloadableResourceBundleMessageSource()
     ms.setBasenames(
+      "classpath:i18n/accounts",
       "classpath:i18n/admin",
       "classpath:i18n/error",
       "classpath:i18n/joust")

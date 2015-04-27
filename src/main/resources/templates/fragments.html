@@ -25,10 +25,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-<!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
+<!--/*/ <th:block sec:authorize="!hasRole('ROLE_ADMIN')"> /*/-->
                 <a class="navbar-brand" th:href="@{/}" th:text="#{joust.name}">Joust</a>
 <!--/*/ </th:block> /*/-->
-<!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
+<!--/*/ <th:block sec:authorize="hasRole('ROLE_ADMIN')"> /*/-->
                 <a class="navbar-brand" th:href="@{/admin/}" th:text="#{joust.name}">Joust</a>
 <!--/*/ </th:block> /*/-->
             </div>
@@ -39,12 +39,12 @@
                             <!--/*/ <th:block th:text="${t.name}" /> /*/--> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-<!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
+<!--/*/ <th:block sec:authorize="hasRole('ROLE_ADMIN')"> /*/-->
                             <li th:if="${t.botballMode}"><a th:href="@{/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
                             <li th:if="${t.botballMode}"><a th:href="@{/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
                             <li th:if="${t.aerialMode}"><a th:href="@{/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
 <!--/*/ </th:block> /*/-->
-<!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
+<!--/*/ <th:block sec:authorize="hasRole('ROLE_ADMIN')"> /*/-->
                             <li th:if="${t.botballMode}"><a th:href="@{/admin/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
                             <li th:if="${t.botballMode}"><a th:href="@{/admin/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
                             <li th:if="${t.aerialMode}"><a th:href="@{/admin/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>

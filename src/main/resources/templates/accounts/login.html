@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <title th:text="#{accounts.login}">Login</title>
+</head>
+<body>
+    <article layout:fragment="content">
+        <div th:if="${param.logout}" class="alert alert-success" th:text="#{accounts.logoutSuccess}">You have been logged out.</div>
+        <h1 th:text="#{accounts.login}">Login</h1>
+        <form action="#" th:action="@{/login/}" method="post">
+            <table>
+                <tbody>
+                <tr>
+                    <td><label for="username" th:text="|#{accounts.username}:|">Username:</label></td>
+                    <td><input type="text" id="username" name="username" th:placeholder="#{accounts.username}" placeholder="Username" /></td>
+                </tr>
+                <tr>
+                    <td><label for="password" th:text="|#{accounts.password}:|">Password:</label></td>
+                    <td><input type="password" id="password" name="password" th:placeholder="#{accounts.password}" placeholder="Password" /></td>
+                </tr>
+                <tr th:if="${param.error}">
+                    <td colspan="2">
+                        <div class="alert alert-danger" th:text="#{accounts.credentialsError}">Invalid username and password.</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><a th:href="@{/forgotPassword/}" th:text="#{accounts.forgotPassword}">Forgot password</a></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button type="submit" class="btn btn-success" th:text="#{accounts.login.submit}">Login</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </article>
+</body>
+</html>
