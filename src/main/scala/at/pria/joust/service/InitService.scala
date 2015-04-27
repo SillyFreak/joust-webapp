@@ -96,8 +96,8 @@ class InitService {
   def apply(): Unit =
     if (tournamentRepo.count() == 0) {
       { //tables
-        val botball1 = mkTable("Botball Left")
-        val botball2 = mkTable("Botball Right")
+        val botball1 = mkTable("Botball GT 1")
+        val botball2 = mkTable("Botball GT 2")
         val aerial = mkTable("PRIA Aerial")
         val botballPractice = mkTable("Botball Free-for-all")
       }
@@ -120,7 +120,7 @@ class InitService {
         mkTeam(botball, "15-0600", "Scorp Robotics")
         mkTeam(botball, "15-0602", "items")
         mkTeam(botball, "15-0603", "SCIPIC")
-//        mkTeam(botball, "15-0616", "MiracleRobotics")
+        //        mkTeam(botball, "15-0616", "MiracleRobotics")
         mkTeam(botball, "15-0647", "The Franciszek Leja State School in Grodzisko Gorne")
 
         em.refresh(botball)
