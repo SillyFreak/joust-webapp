@@ -33,22 +33,27 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-<!--/*/ <th:block th:each="t : ${tournaments}"> /*/-->
-    <!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
-                    <li th:if="${t.botballMode}"><a th:href="@{/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
-                    <li th:if="${t.botballMode}"><a th:href="@{/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
-                    <li th:if="${t.aerialMode}"><a th:href="@{/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
-    <!--/*/ </th:block> /*/-->
-    <!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
-                    <li th:if="${t.botballMode}"><a th:href="@{/admin/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
-                    <li th:if="${t.botballMode}"><a th:href="@{/admin/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
-                    <li th:if="${t.aerialMode}"><a th:href="@{/admin/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
-    <!--/*/ </th:block> /*/-->
-                    <li th:if="${t.botballMode}"><a th:href="@{/bracket/main/__${t.name}__/}" th:text="#{bracket.name.main}">Main Bracket</a></li>
-                    <li th:if="${t.botballMode}"><a th:href="@{/bracket/consolation/__${t.name}__/}" th:text="#{bracket.name.consolation}">Consolation Bracket</a></li>
-                    <li th:if="${t.botballMode}"><a th:href="@{/bracket/final/__${t.name}__/}" th:text="#{bracket.name.final}">Final Bracket</a></li>
-                    <li><a th:href="@{/ranking/__${t.name}__/}" th:text="#{ranking.name}">Ranking</a></li>
+                    <li th:each="t : ${tournaments}" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <!--/*/ <th:block th:text="${t.name}" /> /*/--> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+<!--/*/ <th:block sec:authorize="!hasIpAddress('localhost')"> /*/-->
+                            <li th:if="${t.botballMode}"><a th:href="@{/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
+                            <li th:if="${t.botballMode}"><a th:href="@{/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
+                            <li th:if="${t.aerialMode}"><a th:href="@{/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
 <!--/*/ </th:block> /*/-->
+<!--/*/ <th:block sec:authorize="hasIpAddress('localhost')"> /*/-->
+                            <li th:if="${t.botballMode}"><a th:href="@{/admin/seeding/__${t.name}__/}" th:text="#{teams.name}">Seeding</a></li>
+                            <li th:if="${t.botballMode}"><a th:href="@{/admin/bracket/__${t.name}__/}" th:text="#{bracket.name}">DE</a></li>
+                            <li th:if="${t.aerialMode}"><a th:href="@{/admin/aerial/__${t.name}__/}" th:text="#{aerial.name}">Aerial</a></li>
+<!--/*/ </th:block> /*/-->
+                            <li th:if="${t.botballMode}"><a th:href="@{/bracket/main/__${t.name}__/}" th:text="#{bracket.name.main}">Main Bracket</a></li>
+                            <li th:if="${t.botballMode}"><a th:href="@{/bracket/consolation/__${t.name}__/}" th:text="#{bracket.name.consolation}">Consolation Bracket</a></li>
+                            <li th:if="${t.botballMode}"><a th:href="@{/bracket/final/__${t.name}__/}" th:text="#{bracket.name.final}">Final Bracket</a></li>
+                            <li><a th:href="@{/ranking/__${t.name}__/}" th:text="#{ranking.name}">Ranking</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a th:href="@{/notification/}" th:text="#{notification.name}">Table Notification</a></li>
