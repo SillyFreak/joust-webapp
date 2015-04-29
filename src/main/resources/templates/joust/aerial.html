@@ -19,7 +19,7 @@
                 <tr th:each="team : ${tournament.teams}" th:object="${team}">
                     <td th:text="*{teamId}">AERIAL-0000</td>
                     <td th:text="*{name}">TGM</td>
-                    <td th:each="day: ${days}" th:text="*{aerialAvg[__${day}__]}">---</td>
+                    <td th:each="day: ${days}" th:text="*{aerialAvg[__${day}__] / 10}">---</td>
                     <td th:text="*{aerialRank + 1}">---</td> 
                 </tr>
             </tbody>
