@@ -119,9 +119,9 @@ class Team {
 
   def docScore =
     List(
-      (0.30, 300, p1doc),
-      (0.30, 300, p2doc),
-      (0.10, 200, p3doc),
+      (0.30, 100, p1doc),
+      (0.30, 100, p2doc),
+      (0.10, 100, p3doc),
       (0.30, 100, onsite))
       .foldLeft(0d) { case (sum, (weight, max, score)) => sum + weight * score / max }
   @Transient def getDocScore() = docScore
