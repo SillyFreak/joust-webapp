@@ -152,5 +152,12 @@ class InitService {
       mkTeam(aerial, "AE-0002", "Johannes Wang")
       mkTeam(aerial, "AE-0003", "LastMinute-Flight")
     }
+
+    tournament("Botball Alliance") { alliance =>
+      mkTeam(alliance, "15-0000 & 15-0000", "")
+      mkTeam(alliance, "15-0000 & 15-0000", "")
+      mkTeam(alliance, "15-0000 & 15-0000", "")
+      mkTeam(alliance, "15-0000 & 15-0000", "")
+    }
   }
 }
