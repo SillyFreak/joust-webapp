@@ -18,7 +18,8 @@
                     <th colspan="2" th:text="#{teams.aerial(2)}">Day 2 Average</th>
                     <th th:text="#{teams.aerialRank}">Aerial Rank</th>
                 </tr>
-                <tr th:each="team : ${tournament.teams}" th:object="${team}" th:id="|row*{id}|">
+<!--/*/ <th:block th:each="team : ${tournament.teams}" th:object="${team}"> /*/-->
+                <tr th:id="|row*{id}|">
                     <td class="button-column">
                         <form th:action="@{/admin/aerial/__${tName}__/}" method="post">
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
@@ -36,10 +37,25 @@
                             <button type="submit" class="btn btn-info" th:title="#{teams.btn.aerialCall(${day + 1})}"></button>
                         </form>
                     </td>
-                    <td th:text="*{aerialAvg[__${day}__]}">---</td>
+                    <td th:text="*{aerialAvg[__${day}__] / 10}">---</td>
 <!--/*/ </th:block> /*/-->
                     <td th:text="*{aerialRank + 1}">---</td> 
                 </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td></td>
+<!--/*/ <th:block th:each="day: ${days}"> /*/-->
+                    <td colspan="2">
+                        <form th:action="@{/admin/aerial/__${tName}__/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="${team.id}" />
+                            <input type="hidden" id="item" name="item" th:value="|aDay${day}Score|" />
+                            <input type="text" id="scores" name="scores" th:value="${d__${day}__t__${team.id}__score} ?: ''" />
+                        </form>
+                    </td>
+<!--/*/ </th:block> /*/-->
+                    <td></td>
+                </tr>
+<!--/*/ </th:block> /*/-->
             </tbody>
         </table>
     </article>
