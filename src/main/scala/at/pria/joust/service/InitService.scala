@@ -93,65 +93,64 @@ class InitService {
     tableRepo.save(table)
   }
 
-  def apply(): Unit =
-    if (tournamentRepo.count() == 0) {
-      { //tables
-        val botball1 = mkTable("Botball GT 1")
-        val botball2 = mkTable("Botball GT 2")
-        val aerial = mkTable("PRIA Aerial")
-        val botballPractice = mkTable("Botball Free-for-all")
-      }
-
-      { //botball
-        val botball = mkTournament("Botball")
-        mkTeam(botball, "15-0233", "iBot αlpha")
-        mkTeam(botball, "15-0270", "Hayah International Academy")
-        mkTeam(botball, "15-0362", "Primotic")
-        mkTeam(botball, "15-0364", "Eat, Sleep, Program, Repeat")
-        mkTeam(botball, "15-0367", "TGM Battledroids")
-        mkTeam(botball, "15-0369", "3oT")
-        mkTeam(botball, "15-0385", "HTBLVA Spengergasse")
-        mkTeam(botball, "15-0397", "RPA")
-        mkTeam(botball, "15-0400", "Schiffrad")
-        //mkTeam(botball, "15-0403", "Queen Elizabeth's Grammar School for Boys")
-        //mkTeam(botball, "15-0411", "International School of Islamabad Society")
-        //mkTeam(botball, "15-0423", "Eastbrook Comprehensive School, Daggenham")
-        mkTeam(botball, "15-0536", "Al ru'ya Bilingual School of Kuwait")
-        mkTeam(botball, "15-0600", "Scorp Robotics")
-        mkTeam(botball, "15-0601", "StormRobotics")
-        mkTeam(botball, "15-0602", "items")
-        mkTeam(botball, "15-0603", "SCIPIC")
-        //mkTeam(botball, "15-0616", "MiracleRobotics")
-        mkTeam(botball, "15-0647", "The Franciszek Leja State School in Grodzisko Gorne")
-        mkTeam(botball, "15-1000", "HTL Saalfelden/St. Johann")
-        mkTeam(botball, "15-1001", "HTL Saalfelden")
-
-        em.refresh(botball)
-        mkSeeding(botball)
-        mkBracket(botball)
-      }
-
-      { //PRIA Open
-        val open = mkTournament("PRIA Open")
-        mkTeam(open, "OP-0001", "ACE-Bots")
-        mkTeam(open, "OP-0002", "GG-OPEN")
-        mkTeam(open, "OP-0003", "Robot0nFire")
-        mkTeam(open, "OP-0004", "Andrej")
-
-        em.refresh(open)
-        mkSeeding(open)
-        mkBracket(open)
-      }
-
-      { //PRIA Aerial
-        val aerial = mkTournament("PRIA Aerial", AERIAL)
-        mkTeam(aerial, "AE-0001", "GG-AERIAL")
-        mkTeam(aerial, "AE-0002", "Johannes Wang")
-        mkTeam(aerial, "AE-0003", "LastMinute-Flight")
-
-        em.refresh(aerial)
-        //TODO this is only superficially a seeding
-        mkSeeding(aerial)
-      }
+  def apply(): Unit = {
+    //tables
+    if (tableRepo.count == 0) {
+      val botball1 = mkTable("Botball GT 1")
+      val botball2 = mkTable("Botball GT 2")
+      val aerial = mkTable("PRIA Aerial")
+      val botballPractice = mkTable("Botball Free-for-all")
     }
+
+    def tournament(name: String, mode: Int = BOTBALL)(init: Tournament => Unit) =
+      if (tournamentRepo.findByName(name) == null) {
+        println(s"new tournament: $name")
+        init(mkTournament(name, mode))
+      }
+
+    tournament("Botball") { botball =>
+      mkTeam(botball, "15-0233", "iBot αlpha")
+      mkTeam(botball, "15-0270", "Hayah International Academy")
+      mkTeam(botball, "15-0362", "Primotic")
+      mkTeam(botball, "15-0364", "Eat, Sleep, Program, Repeat")
+      mkTeam(botball, "15-0367", "TGM Battledroids")
+      mkTeam(botball, "15-0369", "3oT")
+      mkTeam(botball, "15-0385", "HTBLVA Spengergasse")
+      mkTeam(botball, "15-0397", "RPA")
+      mkTeam(botball, "15-0400", "Schiffrad")
+      //mkTeam(botball, "15-0403", "Queen Elizabeth's Grammar School for Boys")
+      //mkTeam(botball, "15-0411", "International School of Islamabad Society")
+      //mkTeam(botball, "15-0423", "Eastbrook Comprehensive School, Daggenham")
+      mkTeam(botball, "15-0536", "Al ru'ya Bilingual School of Kuwait")
+      mkTeam(botball, "15-0600", "Scorp Robotics")
+      mkTeam(botball, "15-0601", "StormRobotics")
+      mkTeam(botball, "15-0602", "items")
+      mkTeam(botball, "15-0603", "SCIPIC")
+      //mkTeam(botball, "15-0616", "MiracleRobotics")
+      mkTeam(botball, "15-0647", "The Franciszek Leja State School in Grodzisko Gorne")
+      mkTeam(botball, "15-1000", "HTL Saalfelden/St. Johann")
+      mkTeam(botball, "15-1001", "HTL Saalfelden")
+
+      em.refresh(botball)
+      mkSeeding(botball)
+      mkBracket(botball)
+    }
+
+    tournament("PRIA Open") { open =>
+      mkTeam(open, "OP-0001", "ACE-Bots")
+      mkTeam(open, "OP-0002", "GG-OPEN")
+      mkTeam(open, "OP-0003", "Robot0nFire")
+      mkTeam(open, "OP-0004", "Andrej")
+
+      em.refresh(open)
+      mkSeeding(open)
+      mkBracket(open)
+    }
+
+    tournament("PRIA Aerial", AERIAL) { aerial =>
+      mkTeam(aerial, "AE-0001", "GG-AERIAL")
+      mkTeam(aerial, "AE-0002", "Johannes Wang")
+      mkTeam(aerial, "AE-0003", "LastMinute-Flight")
+    }
+  }
 }
