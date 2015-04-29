@@ -161,6 +161,9 @@ class InitService {
       mkTeam(alliance, "15-0270 & 15-0362", "Hayah & Primotic")
       mkTeam(alliance, "15-0397 & 15-0647", "RPA & Grdzisko Gorne")
       mkTeam(alliance, "OP-0002 & 15-0400", "GG-OPEN & Schiffrad")
+
+      em.refresh(alliance)
+      mkSeeding(alliance)
     }
   }
 }
