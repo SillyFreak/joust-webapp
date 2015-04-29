@@ -154,10 +154,13 @@ class InitService {
     }
 
     tournament("Botball Alliance") { alliance =>
-      mkTeam(alliance, "15-0000 & 15-0000", "")
-      mkTeam(alliance, "15-0000 & 15-0000", "")
-      mkTeam(alliance, "15-0000 & 15-0000", "")
-      mkTeam(alliance, "15-0000 & 15-0000", "")
+      mkTeam(alliance, "15-1000 & 15-0369", "St. Johann & 3oT")
+      mkTeam(alliance, "15-1001 & 15-0603", "Saalfelden & SCIPIC")
+      mkTeam(alliance, "15-0385 & 15-0602", "Spengergasse & Items")
+      mkTeam(alliance, "15-0600 & 15-0367", "Scorp & Battledroids")
+      mkTeam(alliance, "15-0270 & 15-0362", "Hayah & Primotic")
+      mkTeam(alliance, "15-0397 & 15-0647", "RPA & Grdzisko Gorne")
+      mkTeam(alliance, "OP-0002 & 15-0400", "GG-OPEN & Schiffrad")
     }
   }
 }
