@@ -14,6 +14,7 @@ import at.pria.joust.service.TournamentService.{ TournamentInfo => TInfo }
 import org.hibernate.validator.constraints.NotEmpty
 import org.springframework.data.repository.CrudRepository
 
+import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -52,6 +53,9 @@ class Team {
   @BeanProperty var p2doc: Int = _
   @BeanProperty var p3doc: Int = _
   @BeanProperty var onsite: Int = _
+  //TODO nullable & Integer only for ECER 2015  - schema update
+  @Column(nullable = true)
+  @BeanProperty var paper: Integer = _
 
   @OneToMany(mappedBy = "team")
   @BeanProperty var seedingGames: juList[SeedingGame] = new juArrayList[SeedingGame]
@@ -119,10 +123,11 @@ class Team {
 
   def docScore =
     List(
-      (0.30, 100, p1doc),
-      (0.30, 100, p2doc),
-      (0.10, 100, p3doc),
-      (0.30, 100, onsite))
+      (0.15, 100, p1doc),
+      (0.15, 100, p2doc),
+      (0.05, 100, p3doc),
+      (0.15, 100, onsite),
+      (0.50, 100, if (paper != null) paper.intValue() else 0))
       .foldLeft(0d) { case (sum, (weight, max, score)) => sum + weight * score / max }
   @Transient def getDocScore() = docScore
 

@@ -49,7 +49,7 @@ class SeedingController {
 
     val team = tInfo.team(in.teamId)
     in.item match {
-      case period @ ("p1doc" | "p2doc" | "p3doc" | "onsite") =>
+      case period @ ("p1doc" | "p2doc" | "p3doc" | "onsite" | "paper") =>
         tInfo.scoreDocumentation(in.teamId, period, in.score)
       case "practiceCall" => slotService.addPracticeSlot(team)
       case "s0Call"       => slotService.addSeedingSlot(team.seedingGames(0))

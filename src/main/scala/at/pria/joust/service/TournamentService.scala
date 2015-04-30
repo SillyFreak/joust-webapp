@@ -58,6 +58,7 @@ class TournamentService {
         case "p2doc"  => team.p2doc = score
         case "p3doc"  => team.p3doc = score
         case "onsite" => team.onsite = score
+        case "paper"  => team.paper = score
       }
       teamRepo.save(team)
     }

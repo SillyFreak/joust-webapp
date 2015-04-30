@@ -18,6 +18,7 @@
                     <th th:text="#{teams.doc_p(2)}">P2 Doc</th>
                     <th th:text="#{teams.doc_p(3)}">P3 Doc</th>
                     <th th:text="#{teams.doc_onsite}">Onsite Doc</th>
+                    <th th:text="#{teams.doc_paper}">Paper Score</th>
                     <th colspan="2" th:text="#{teams.seeding(1)}">S1</th>
                     <th colspan="2" th:text="#{teams.seeding(2)}">S2</th>
                     <th colspan="2" th:text="#{teams.seeding(3)}">S3</th>
@@ -61,6 +62,13 @@
                             <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
                             <input type="hidden" id="item" name="item" th:value="onsite" />
                             <input type="number" min="0" id="score" name="score" th:value="*{onsite}" />
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/seeding/__${tName}__/}" method="post">
+                            <input type="hidden" id="teamId" name="teamId" th:value="*{id}" />
+                            <input type="hidden" id="item" name="item" th:value="paper" />
+                            <input type="number" min="0" id="score" name="score" th:value="*{paper ?: ''}" />
                         </form>
                     </td>
 <!--/*/ <th:block th:each="game : *{seedingGames}" th:object="${game}"> /*/-->
